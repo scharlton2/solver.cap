@@ -392,7 +392,7 @@ C     Date:
 C     Modified by: jmfulford
 C     Last modified:  9.03.1999 altered FLGERR array handling and corrected
 C                     print statement
-C
+C     Modified by gfkoltun for 2021 version
 C
       SUBROUTINE HARDCPY (PUNIT,PNO,HTITLE,CGNSOUT)
 C
@@ -439,7 +439,10 @@ c  220 FORMAT (/,12X,'+- Fall --+ +---- Losses ---+',4X,'Appr. Section',
      #      ,'ach  C-discharge coefficient  eff.-effective',/,'VH-vel'
      #     ,'ocity head  alph-velocity coefficient  n-Manning''s roug'
      #      ,'hness coef.',/,'energy-specific energy  F-Froude number'
-     #      ,'  entry,(1-2),(2-3)-part of reach',//,'      @Error code'
+     #      ,//,'Note: For flow types 1-3, the C values shown were '
+     #      ,'adjusted for channel',/,'contraction, if necessary, ' 
+     #      ,'according to fig. 19 in TWRI 3-A3 (p. 38).',//
+     #      ,'      @Error code'     
      #      ,'s:  -1,1-7 fatal error; 8-15 warning; 0 no error')
   250 FORMAT(//,10X,'---------Warning Messages-------------',/)
 C     format statements for m-s unit output
@@ -461,6 +464,8 @@ C
       IF(MOD(INUM,NLINES).NE.0)PAGE=PAGE+1
       IBEGIN=0
       IEND=0
+C     ******* gfk - temporarily added line below to allocate arrays ****
+      CGNSOUT=1
       
       IF (CGNSOUT.EQ.1) THEN
         ALLOCATE(DISCHARGE(NQ,NTW))
@@ -837,16 +842,18 @@ C
 C-----local variables
       CHARACTER*6 VERS
 C
-      DATA VERS/'20011c'/
+      DATA VERS/'2021'/
 C     version 97-08 a was compiled in 12-98 and is documented in the
 C     wrir 98-4166 
 C     version 97-08 b was compiled in 9-1999 minor fixes made    
 C     version 2011c was compiled in December 2011 to run as batch or as interactive
+C     version 2021 is a revision of 2011c (that was mislabled as 20011c). This
+C                  version includes several major bug fixes (by Greg Koltun)
 C
 C-----Formats:
-700   FORMAT (A1,'CAP -USGS culvert analysis program VER ',A6,26X,
+700   FORMAT (A1,'CAP - USGS culvert analysis program VER ',A6,25X,
      #        'page',I3,/)
-701   FORMAT (/,'   CAP -USGS culvert analysis program VER ',A6,/)
+701   FORMAT (/,'   CAP - USGS culvert analysis program VER ',A6,/)
 C
       IF(PNO.GE.0)THEN
         WRITE(PUNIT,700)CHAR(12),VERS,PNO

@@ -137,7 +137,7 @@ C     Programmed by: W Kirby original code from WSPRO
 C     Date:
 C     Modified by: JM Fulford
 C                  6.9.97 - uses arctyp code in material code wspro location
-C
+C     Modified by gfkoltun for 2021 version
 C
       SUBROUTINE CULPAD
      I                 (TCR,D,B,ARAD)
@@ -147,9 +147,21 @@ C
 C        REGRESSION EQNS BASED ON DIMENSIONS TABULATED IN FHWA - CDS-4
 C
 C  PARAMETERS --
-C     ARCTYP -- 2,4 = CMP .LE. 18"CR,  5 = CMP-31",
+C     CMPA is corrugated metal pipe arch (no plates)
+C     CMSPPA is corrugated metal structural plate pipe arch
+C     RCP is reinforced concrete pipe
+C
+C     ARCTYP -- 
+C     1 = RCP
+C     2 = mitered CMSPPA (default CRR = 18")
+C     3 = aluminum CMSPPA 
+C     4 = CMPSPPA with corner radius (CR) <= 18"
+C     5 = CMPSPPA with corner radius (CR) = 31"
+C     6 = CMPSPPA with corner radius (CR) = 47"
+C     7 = CMPA 
+C     2,4 = CMP .LE. 18"CR,  5 = CMP-31",
 C                 6 = CMP-47",  3 = ALUM. 31.8",   1 = R.C.P.
-C     ARAD(3,4,5) = APPROX BOTTOM, TOP, CORNER RADII  =  OUTPUT.
+C     ARAD(1,2,3) = APPROX BOTTOM, TOP, CORNER RADII  =  OUTPUT.
 C
 C-----Arguments:
       INTEGER TCR
@@ -162,32 +174,171 @@ C
       SPAN=B*12.0
       RISE=D*12.0
 C
-      ARCTYP = (TCR - 300)/10    
+      ARCTYP = (TCR - 300)/10 
+C Added checks on computed/entered radii to warn user if they are outside the
+C range of values used to develop the equations for estimating radii
 C
+C ARAD(1) = bottom radius, ARAD(2) = top radius, and ARAD(3) = corner radius
       IF(ARCTYP.EQ.2.OR.ARCTYP.EQ.4) THEN
-        ARAD(3) = 18.
-        IF (RISE.LT.55.) ARAD(3) = 1.141+0.205*RISE
-        ARAD(2) = 0.594 + 0.498*SPAN
-        ARAD(1) = 7.00 - 2.036*RISE + 2.741*SPAN
+        IF (ARAD(3).LT.1.0) THEN
+            ARAD(3) = 18.
+            IF (RISE.LT.55.) THEN
+              ARAD(3) = 1.1072+0.1655*RISE+0.00195*(RISE-30.0417)**2.
+              IF ((ARAD(3).LT.3.5).OR.(ARAD(3).GT.11.)) THEN
+                  WRITE(*,300) ARAD(3),ARCTYP
+                  CALL EROCUL(-121,0)
+              ENDIF
+            ENDIF
+        ENDIF
+        IF (ARAD(2).LT.1.0) THEN
+            IF (RISE.LT.55.) THEN
+              ARAD(2) = 0.594+(0.498*SPAN)
+              IF ((ARAD(2).LT.10.06).OR.(ARAD(2).GT.42.63)) THEN
+                  WRITE(*,200) ARAD(2),ARCTYP,10.06,42.63
+                  CALL EROCUL(-120,0)
+              ENDIF
+            ELSE
+              ARAD(2) = -0.183064+(0.504094*SPAN)
+              IF ((ARAD(2).LT.36.8).OR.(ARAD(2).GT.85.1)) THEN
+                  WRITE(*,200) ARAD(2),ARCTYP,36.8,85.1
+                  CALL EROCUL(-120,0)
+              ENDIF              
+            ENDIF
+        ENDIF
+        IF (ARAD(1).LT.1.0) THEN 
+            IF (RISE.LT.55.) THEN
+              ARAD(1) = -4.1281+(2.2269*SPAN)-(0.6477*ABS(SPAN-42.))
+              IF ((ARAD(1).LT.19.12).OR.(ARAD(1).GT.154.5)) THEN
+                  WRITE(*,100) ARAD(1),ARCTYP,19.12,154.5
+                  CALL EROCUL(-119,0)
+              ENDIF 
+            ELSE
+              ARAD(1) = -641.6505-(16.04132*SPAN)+(34.36891*RISE)
+              IF ((ARAD(1).LT.76.3).OR.(ARAD(1).GT.314.7)) THEN
+                  WRITE(*,100) ARAD(1),ARCTYP,76.3,314.7
+                  CALL EROCUL(-119,0)
+              ENDIF 
+            ENDIF
+        ENDIF
       ELSE IF (ARCTYP.EQ.5) THEN
         ARAD(3) = 31.
-        ARAD(2) = -0.346 + 0.505*SPAN
-        ARAD(1) = -956.6 + 29.39*RISE - 13.49*SPAN
-      ELSE IF (ARCTYP.EQ.4) THEN
+        IF (ARAD(2).LT.1.0) ARAD(2) = -0.3673+0.505*SPAN
+        IF (ARAD(1).LT.1.0) THEN
+            ARAD(1) = -954.4966-(13.4897*SPAN)+(29.3799*RISE)
+        ENDIF 
+        IF ((ARAD(2).LT.80.1).OR.(ARAD(2).GT.124.)) THEN
+           WRITE(*,200) ARAD(2),ARCTYP,80.1,124.
+           CALL EROCUL(-120,0)
+        ENDIF
+        IF ((ARAD(1).LT.192.6).OR.(ARAD(1).GT.374.3)) THEN
+          WRITE(*,100) ARAD(1),ARCTYP,192.6,374.3
+          CALL EROCUL(-119,0)
+        ENDIF
+      ELSE IF (ARCTYP.EQ.6) THEN
         ARAD(3) = 47.
-        ARAD(2) = -3.27 + 0.521*SPAN
-        ARAD(1) =  -982.3  + 18.44*RISE  - 7.805*SPAN
+        IF (ARAD(2).LT.1.0) THEN
+            ARAD(2) = -3.2662+0.5208*SPAN
+        ENDIF
+        IF (ARAD(1).LT.1.0) THEN
+           ARAD(1) = -982.5186-(7.8061*SPAN)+(18.4433*RISE)
+        ENDIF  
+        IF ((ARAD(2).LT.122.5).OR.(ARAD(2).GT.188.2)) THEN
+           WRITE(*,200) ARAD(2),ARCTYP,122.5,188.2
+           CALL EROCUL(-120,0)
+        ENDIF
+        IF ((ARAD(1).LT.223.6).OR.(ARAD(1).GT.392.3)) THEN
+          WRITE(*,100) ARAD(1),ARCTYP,223.6,392.3
+        ENDIF
       ELSE IF (ARCTYP.EQ.3) THEN
-        ARAD(3) = 31.8
-        ARAD(2) = -0.696 + 0.522*SPAN
-        ARAD(1)  =  363.3  - 9.639*RISE  +  5.398*SPAN
+        ARAD(3) = 31.75
+        IF (ARAD(2).LT.1.0) THEN
+            IF (RISE.LE.103.) THEN
+              ARAD(2) = 28.8139+0.9352*SPAN-0.9034*RISE
+              IF ((ARAD(2).LT.41.5).OR.(ARAD(2).GT.100.4)) THEN
+                  WRITE(*,200) ARAD(2),ARCTYP,41.5,100.4
+                  CALL EROCUL(-120,0)
+              ENDIF              
+            ELSE
+              ARAD(2) = 26.4555+0.9241*SPAN-0.8427*RISE
+              IF ((ARAD(2).LT.82.6).OR.(ARAD(2).GT.134.8)) THEN
+                  WRITE(*,200) ARAD(2),ARCTYP,82.6,134.8
+                  CALL EROCUL(-120,0)
+              ENDIF
+            ENDIF
+        ENDIF
+        IF (ARAD(1).LT.1.0) THEN
+            IF (RISE.LE.103.) THEN
+              ARAD(1) = -5.9001+1.4149*SPAN
+              IF ((ARAD(1).LT.69.9).OR.(ARAD(1).GT.309.5)) THEN
+                  WRITE(*,100) ARAD(1),ARCTYP,69.9,309.5
+                  CALL EROCUL(-119,0)
+              ENDIF 
+            ELSE
+              ARAD(1) = -676.9436-7.5948*SPAN+18.7191*RISE
+              IF ((ARAD(1).LT.159.3).OR.(ARAD(1).GT.310.8)) THEN
+                  WRITE(*,100) ARAD(1),ARCTYP,159.3,310.8
+                  CALL EROCUL(-119,0)
+              ENDIF 
+            ENDIF
+        ENDIF
       ELSE IF (ARCTYP.EQ.1) THEN
-        ARAD(3) = 0.598 + 0.243*RISE
-        ARAD(2) = 1.21  +  0.499*SPAN
-        ARAD(1)  =  -60.13  + 2.106*SPAN  +  0.583*ABS(SPAN-95.)
+        IF (ARAD(3).LT.1.0) ARAD(3) = 0.5985+0.2431*RISE
+        IF (ARAD(2).LT.1.0) ARAD(2) = 1.21+0.499*SPAN
+        IF (ARAD(1).LT.1.0) THEN
+            ARAD(1) = -60.13+2.106*SPAN+0.583*ABS(SPAN-95.)
+        ENDIF
+        IF ((ARAD(3).LT.4.03).OR.(ARAD(3).GT.26.87)) THEN
+           WRITE(*,300) ARAD(3),ARCTYP,4.03,26.87
+           CALL EROCUL(-121,0)
+        ENDIF  
+        IF ((ARAD(2).LT.10.62).OR.(ARAD(2).GT.85.63)) THEN
+           WRITE(*,200) ARAD(2),ARCTYP,10.62,85.63
+           CALL EROCUL(-120,0)
+        ENDIF
+        IF ((ARAD(1).LT.22.87).OR.(ARAD(1).GT.329.)) THEN
+          WRITE(*,100) ARAD(1),ARCTYP,22.87,329.
+          CALL EROCUL(-119,0)
+        ENDIF
+      ELSE IF (ARCTYP.EQ.7) THEN
+        IF (ARAD(2).LT.1.0) ARAD(2) = 0.2203+0.499*SPAN
+        IF (ARAD(3).LT.1.0) THEN
+            IF (SPAN.LE.57.) THEN
+              ARAD(3) = 0.7357+0.1831*SPAN
+            ELSE IF (SPAN.GE.87.) THEN
+              ARAD(3) = 3.2575+0.2201*SPAN
+            ELSE
+              WRITE(*,*)'WARNING - corner rounding should be specified'
+              WRITE(*,*)'Corner radius assumed to be 21 inches.'
+              ARAD(3) = 21.
+            ENDIF
+        ENDIF
+        IF (ARAD(1).LT.1.0) THEN
+          ARAD(1) = 8.8716+2.5464*SPAN-6.0731*ARAD(3)
+        ENDIF
+        IF ((ARAD(3).LT.3.5).OR.(ARAD(3).GT.41.)) THEN
+           WRITE(*,300) ARAD(3),ARCTYP,3.5,41.
+           CALL EROCUL(-121,0)
+        ENDIF  
+        IF ((ARAD(2).LT.8.625).OR.(ARAD(2).GT.85.)) THEN
+           WRITE(*,200) ARAD(2),ARCTYP,8.625,85.
+           CALL EROCUL(-120,0)
+        ENDIF
+        IF ((ARAD(1).LT.26.625).OR.(ARAD(1).GT.190.)) THEN
+          WRITE(*,100) ARAD(1),ARCTYP,26.625,190.
+          CALL EROCUL(-119,0)
+        ENDIF
       ELSE
         WRITE(*,*)'Pipe archtype code invalid',ARCTYP
       ENDIF
+100   FORMAT(' WARNING - Bottom radius (',F8.3,' in.) is outside calibra
+     #tion range',/,'           for pipe-arch type = ',I1,' [',
+     #F8.3,' - ',F8.3,']')
+200   FORMAT(' WARNING - Top radius (',F8.3,' in.) is outside calibratio
+     #n range',/,'           for pipe-arch type = ',I1,' [',
+     #F8.3,' - ',F8.3,']')
+300   FORMAT(' WARNING - Corner radius (',F8.3,' in.) is outside calibra
+     #tion range',/,'           for pipe-arch type = ',I1,' [',
+     #F8.3,' - ',F8.3,']')
 C
       RETURN
       END

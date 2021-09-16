@@ -8,7 +8,8 @@ C     Date:
 C     Modified by: JM Fulford
 C     Last modified:  Dec 28, 2011, changed to allow command line input of file names
 C       section ids and file header text and the older DOS interactive user inputs
-C       expanded the string size allowed (APPROX.INC) for XSNAM to 132 char 
+C       expanded the string size allowed (APPROX.INC) for XSNAM to 132 char
+C     Modified by gfkoltun for 2021 version      
 C
       LOGICAL FUNCTION IXSGEO()
 C
@@ -33,17 +34,20 @@ c     section to be input on command line. Does not trap errors.  Added GETARG c
         IXSGEO=.TRUE.
         ERR=0
       ELSE
-        WRITE(*,*)'Input file name containing approach section geometry'
+        WRITE(*,*)'Enter file name containing approach sect. geometry:'
  200    CONTINUE
         READ(*,'(A)') XSNAM
         IF(XSNAM(1:1).EQ.'#') GOTO 300
-        WRITE(*,*) 'file requested is ',XSNAM  
-        OPEN(UNIT=XSNIT,FILE=XSNAM,STATUS='OLD',ERR=300)
+        WRITE(*,*) 'file requested is '//TRIM(XSNAM) 
+C       ERR statement below used to point to 300, changed to 100 to give
+C       the user additional chances to correctly specify name. (gfk)
+        OPEN(UNIT=XSNIT,FILE=XSNAM,STATUS='OLD',ERR=100)
         IXSGEO=.TRUE.
         ERR=0  
  100    CONTINUE
         IF(ERR.EQ.1) THEN
-          WRITE(*,*) XSNAM,' not found: enter filename or # to quit'
+          WRITE(*,*) TRIM(XSNAM)//' not found: enter filename or # to qu
+     #it'
           GO TO 200
         ENDIF
       ENDIF

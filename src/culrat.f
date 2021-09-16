@@ -375,6 +375,8 @@ C             put out five type flow
             IF(TFLW.EQ.65) THEN
 C             step inum counter to include extra output
               INUM=INUM+1
+C           gfk - added line below to prevent having a zero array index stored in H4TWID
+              H4TWID(INUM)=J
               CNTRS(INUM)=CNTRS(INUM-1)
               CULCRTD(INUM)=CULCRTD(INUM-1)
               H4E(INUM)=H4E(INUM-1)
@@ -1463,7 +1465,7 @@ C       inverts the coefficient.  For type 1,2&3 flows.
 C       returns zero when it is unable to interpolate a value
 C     Programmed by: JM Fulford
 C     Date:
-C     Modified by:
+C     Modified by: gfkoltun for 2021 version
 C     Last modified:
 C
       REAL FUNCTION CADJST
@@ -1484,6 +1486,7 @@ C-----Local variables:
 C
       H=(H1-ZDROP)/D
 Cwrite      WRITE(*,*)'TC, QG, D3',TC,QG,D3,NHP,A1,AC
+C     Test below is true if coeff and height data supplied on *C1
       IF(NHP.GE.1) THEN
         N=NHP-1
         J=0
@@ -1505,43 +1508,58 @@ Cwrite      WRITE(*,*)'TC, QG, D3',TC,QG,D3,NHP,A1,AC
       ELSE
 C       determine coefficients from graphs in TWRI
 Cwrite        WRITE(*,*)'IN CADJST'
-C        IF(TC.EQ.1)THEN
+C        Test below is true for box culverts
          IF(TC.GT.9.AND.TC.LT.20) THEN
 C         determine discharge coefficient for box culverts
           IF(TYPFW.LT.3)THEN
+C           Do this if flow type = 1 or 2
             IF(NHP.EQ.0)THEN
+C             If *C1 specified
               C=CB12
             ELSE
               C=0.95
             ENDIF
           ELSE
-C           box culverts - equation from fig.23 in TWRI
+C           Do this if flow type equal 3
+C           box culverts - equation for fig.23 in TWRI (checked by gfk)
             F=CQ/(AC*SQRT(D3*32.2))
             C=0.71364867+F*(0.38017909-0.14345278*F)
 Cread       READ(*,*)IXXK
           ENDIF
-          C=C*KWR*KWING
+C         Don't apply coefficient if flow type = 1 or 2, *C1 card used
+          IF ((TYPFLW.LE.2).AND.(NHP.GE.0)) THEN
+C           Don't alter C
+          ELSE
+            C=C*KWR*KWING
+          ENDIF
           IF(C.GE.0.98) C=0.98
         ELSE
+C         Use discharge coefficients for H=0.4 when H<0.4 TWRI figs. 20 and 25.
+C         This prevents interpolation to values smaller than indicated mins.
+          IF(H.LT.0.4) H=0.4
 C         determine discharge coefficient for pipe & pipe archs culverts
+C         Note that KPROJ previously set to 1.0 for all concrete pipes
           IF(INLET.EQ.3.OR.INLET.EQ.4)THEN
 C           tongue & groove or bellmouth concrete pipe
             C=0.95
           ELSE IF(INLET.EQ.2)THEN
 C           mitered entrance, flush with sloping embankment fig.25 TWRI
             C=0.73620+(0.54049-0.49769*H+0.089097*H*H)*H
-C           adjust for projection if corrugated metal pipe            
-            IF(TC.EQ.22.OR.TC.EQ.32.OR.TC.EQ.42) C=C*KPROJ
-          ELSE
+            C=C*KPROJ
+          ELSE ! inlet=1
 C           pipe culverts with square entrance, flush with vertical headwall
-            C=0.88821+(0.21047-0.29299*H+0.078988*H*H)*H
+            C=0.88821+(0.21047-0.29299*H+0.078988*H*H)*H 
             C=C*KWR*KPROJ
           ENDIF
         ENDIF
       ENDIF
-C     adjustment for channel contraction
+C     adjustment for channel contraction for types 1-3 flow
+      IF(TYPFW.LE.3)THEN
+C     Note: equation is eqn from TWRI B3-CA3 pg38 written in terms of the culvert area
+C           (AC) and the approach area (A1)
       IF(AC.GE.0.2*A1.AND.A1.NE.0.0) C=1.25*(C-0.196+(AC*(0.98-C)/A1))
 Cread      READ(*,*)IXXK
+      ENDIF
       IF(C.GT.0.98) C=0.98
       CADJST=C
 C
@@ -1573,8 +1591,10 @@ C
       ELSE IF (THETA.EQ.0) THEN
         WINGWALL=1.0
       ELSE
+C       Convert theta to radians
         THETA=THETA/57.2958
         ANG=COS(THETA)
+C       Following calculation approximates fig. 24
         IF(ANG.LT.0.5)THEN
           WINGWALL=1.0594+0.3062*ANG
         ELSE
@@ -2041,7 +2061,7 @@ C-----Purpose:
 C       print out culvert section properties for culvert program
 C     Programmed by: JM Fulford
 C     Date:
-C     Modified by:
+C     Modified by: gfkoltun for 2021 version
 C     Last modified:
 C
       SUBROUTINE WCULTB(OTNIT,PNO,HTITLE)
@@ -2059,8 +2079,9 @@ C-----PARAMETER
       PARAMETER (NPAGE=60)
 C
 C-----Local variables:
-      INTEGER I,IPAGE,ISTART,NOI,TCR
+      INTEGER I,IPAGE,ISTART,NOI,TCR,PC
       CHARACTER*15 CTYPE(6)
+      REAL INCH_TO_CM
 C
 C-----Data initializations:
       DATA CTYPE /
@@ -2087,6 +2108,7 @@ C-----Formats:
   109 FORMAT (23X,F4.2,2X,F7.2,8X,F4.2,2X,F7.2)
   110 FORMAT (4X,'Pipe arch radii (inches):  ',F6.1,'(bottom)',F6.1,
      #        '(top)',F6.1,'(corner)')
+  111 FORMAT (15X,'(r or w)/B  KR or KW  Ktheta  Kproj    n      Inlet')    
   119 FORMAT(' ',2X)
   204 FORMAT (/,9X,'Barrel',36X,'Top',8X,'Wetted',/,9X,'depth',8X,
      # 'Area',8X,'Conveyance',6X,'width',6X,'perimeter',/,11X,'(m)',
@@ -2114,7 +2136,15 @@ C       vert. ellipse
       ELSE  
         WRITE (OTNIT,101) CTYPE(TCR)
       ENDIF
-      WRITE (OTNIT,102)
+      IF(TCR.EQ.1) THEN
+         WRITE (OTNIT,111) 
+      ELSE
+         WRITE (OTNIT,102)
+      ENDIF
+C     Determine the pipe code: 1 = concrete and >1 = metal
+      PC = TC - 10*NINT((REAL(TC)/10.))
+C     Set KPROJ to 1.0 for concrete pipes
+      IF (PC.EQ.1) KPROJ=1.0
       WRITE (OTNIT,103) RND,KWR,KWING,KPROJ,NRUFF,INLET
       IF (TC.EQ.3) THEN
         IF(SI.EQ.0.OR.SI.EQ.3)THEN
@@ -2127,7 +2157,7 @@ C       vert. ellipse
         IF(IPAGE.GT.NOI) IPAGE=NOI
       ENDIF
       WRITE (OTNIT,106)
-      WRITE (OTNIT,107) CB12,C46
+      WRITE (OTNIT,107) CB12,C46IN
       WRITE (OTNIT,108)
       WRITE (OTNIT,109) (CP(I),HP(I),C5(I),H5(I),I=1,4)
       IF(SI.EQ.0.OR.SI.EQ.3)THEN

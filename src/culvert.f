@@ -5,6 +5,7 @@ C     Programmed by: JM Fulford
 C     Revised Dec 2011 to allow all inputs on command line and to allow interactive input of file names and section ids
 C     For command line inputs the order is:  1-Output file name, 2-Culvert data file, 3-culvert id, 4-Approach data file, 
 C          5-approach id, 6-output header string
+C     Modified by gfkoltun for 2021 version      
 C
       PROGRAM CLTST
       
@@ -42,7 +43,8 @@ C       read setting from CGNS file
 C       output to stdout
         OTNIT=6
         IREPORT=1
-        PNO=0
+C       Versions before 2011 started at page 0. I modified to start at page 1 (gfk)
+        PNO=1
         CALL VERSON(OTNIT,PNO)
         ERR=2
 
@@ -81,7 +83,7 @@ C       read file names, section ids and header text in this section
  101    CONTINUE
         IF (ICVGEO()) THEN
           CALL GETARG(3,CLID)
-          PNO=0
+          PNO=1
           CALL VERSON(OTNIT,PNO)
           ERR=2
           IF (ICVPRP(CLID,BASEL)) ERR=0   
@@ -91,7 +93,7 @@ C       read file names, section ids and header text in this section
             IF (IXSPRP(XSCID,BASEL)) ERR=0
           ENDIF
         ENDIF
-        PNO=0
+        PNO=1
         CALL GETARG(6,HTITLE)
 
 C       write culvert table to output
@@ -120,10 +122,10 @@ C       query the user with DOS command line text queries as in version 97-08b
         RERUN=BLKOUT(1:3)
         OTNIT=9
         WRITE(*,*) 'SPECIFY TYPE OF PROGRAM OUTPUT, 1-detailed report;'
-     #   ,'2-table'
+     #   ,' 2-report & table'
         READ(*,'(I1)')IREPORT
         WRITE(*,*)' '
-        WRITE(*,*)'ENTER OUTPUT FILE NAME'
+        WRITE(*,*)'Enter output file name:'
  202    CONTINUE
         READ(*,'(A)')DUMPY
         ERR=1
@@ -131,24 +133,24 @@ C       query the user with DOS command line text queries as in version 97-08b
         ERR=0
  201    CONTINUE
         IF(ERR.EQ.1)THEN
-          WRITE(*,*)'enter appropiate new file name '
+          WRITE(*,*)'File exists or can''t be opened - enter new name:'
           GO TO 202
         ENDIF
 
-        WRITE(*,*)'ENTER HEADER TITLE FOR OUTPUT FILE'
+        WRITE(*,*)'Enter header title for output file:'
         READ(*,'(A80)')HTITLE
 
         IF(IREPORT.EQ.2)THEN
-          WRITE(*,*)'ENTER TABLE ID NUMBER(8 INTEGERS)'
+          WRITE(*,*)'Enter table ID number (8 digits):'
           READ(*,*) GSN
         ENDIF
 
         IF (ICVGEO()) THEN
 C       open culvert data file
  211      CONTINUE
-          WRITE(*,*) 'Enter culvert section id'
+          WRITE(*,*) 'Enter culvert section id:'
           READ(*,'(A16)') CLID
-          PNO=0
+          PNO=1
           CALL VERSON (OTNIT,PNO)
           IF(.NOT.ICVPRP(CLID,BASEL)) THEN
             ERR=2
@@ -158,13 +160,13 @@ C       open culvert data file
             IF (RERUN(1:1).EQ.'N'.OR.RERUN(1:1).EQ.'n') ERR=1
           ELSE
             ERR=0
-            WRITE(*,*)'CULVERT SECTION ',CLID,' FOUND'
+            WRITE(*,*)'CULVERT SECTION '//TRIM(CLID)//' FOUND'
           ENDIF
           IF (ERR.EQ.2) GOTO 211
           IF (ERR.NE.0) GOTO 999
           IF (IXSGEO()) THEN
  212        CONTINUE
-            WRITE(*,*) 'Enter approach section id'
+            WRITE(*,*) 'Enter approach section id:'
             READ(*,'(A16)')XSCID
             BASEX=BASEL
             IF (.NOT.IXSPRP(XSCID,BASEX)) THEN
@@ -178,11 +180,11 @@ C       open culvert data file
               IF (RERUN(1:1).EQ.'n'.OR.RERUN(1:1).EQ.'N') ERR=1
             ELSE
               ERR=0
-              WRITE(*,*)'approach section', XSCID,' found'
+              WRITE(*,*)'Approach section '//TRIM(XSCID)//' found'
             ENDIF
             IF(ERR.EQ.2) GOTO 212
             IF(ERR.EQ.1) GOTO 200
-            PNO=0
+            PNO=1
 
 C           write culvert table to output
             CALL WCULTB(OTNIT,PNO,HTITLE)

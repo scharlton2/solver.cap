@@ -79,6 +79,8 @@ C     Last modified: Dec 28, 2011, changed to allow command line input of file n
 C       section ids and file header text and the older DOS interactive user inputs
 C       expanded the string size allowed (see culvrt.inc) for CULNAM to 132 chars.
 C
+C     Minor modifications by gfkoltun for 2021 version
+C
       LOGICAL FUNCTION ICVGEO()
 C
 C      IMPLICIT NONE
@@ -105,17 +107,18 @@ c     section to be input on command line. Does not trap errors.  Added GETARG c
         ERR=0
         ICVGEO=.TRUE.
       ELSE
-        WRITE(*,*)'Input file name containing culvert geometry'
+        WRITE(*,*)'Enter file name containing culvert geometry:'
  200    CONTINUE
         READ(*,'(A)') CULNAM     
         IF(CULNAM(1:1).EQ.'#') GOTO 300
-        WRITE(*,*) 'file requested is ',CULNAM
+        WRITE(*,*) 'file requested is '//TRIM(CULNAM)
         OPEN(UNIT=CULNIT,FILE=CULNAM,STATUS='OLD',ERR=100)
         ERR=0
         ICVGEO=.TRUE.
  100    CONTINUE
         IF(ERR.EQ.1) THEN
-          WRITE(*,*) CULNAM,' not found: enter filename or # to quit'
+          WRITE(*,*) TRIM(CULNAM)//' not found: enter filename or # to q
+     #uit'
           CLOSE (UNIT=CULNIT)
           GO TO 200
         ENDIF
@@ -134,7 +137,7 @@ C-----Purpose:
 C       read wspro data file containing culvert data records
 C     Programmed by: JM Fulford
 C     Date:
-C     Modified by:
+C     Modified by: gfkoltun for 2021 version
 C     Last modified:
 C
       SUBROUTINE RCVGEO
@@ -171,7 +174,7 @@ C-----Externals:
 C
 C-----Local Variables:
       INTEGER FLG,NCHAR,MAX,I,CQFG,CSFG,IO,NCNT,CXFG,ERR1,ERR2,NC5
-      INTEGER READY,ERRIO,NCONVRT
+      INTEGER READY,ERRIO,NCONVRT,ITOP,IBOT,PC
       REAL VAR(24),XCTR,BEVD,RNDD,LPRJCT
       CHARACTER*80 CBUF
       CHARACTER*16 BLKOUT,ID
@@ -265,15 +268,21 @@ C     reads CG, *C1, *C5, *CS, *CX, *CQ, *CN, *CC, *C3 records
         IF(CODE.EQ.'CG ')THEN
           IF(NCNT.GE.1)THEN
             TC=INT(VAR(1))
+            PC = (TC - 100*(TC/100))/10
+C           TCR = shape code: 1=box; 2=circular or ellip; 3=pipe-arch; 4=nonstd
             TCR=TC/100
             IF(TCR.GE.1.AND.TCR.LT.4) THEN
-C             shape code 2 or 3, circular, elliptical or pipe arch shapes            
+C             shape code 1, 2, or 3: box, circular, elliptical or pipe arch shapes 
+C           If there are 3 or more values and shape is box or pipe-arch
               IF(NCNT.GE.3.AND.TCR.EQ.1.OR.NCNT.GE.3.AND.TCR.EQ.3) THEN
                 READY=READY+1
+C           If there are two or more values and shape is circular
               ELSE IF(NCNT.GE.2.AND.TCR.EQ.2)THEN
                 READY=READY+1
+C               If rise>0 and span<0.0001 set span = rise
                 IF(VAR(2).GT.0.0.AND.VAR(3).LE.0.0001) THEN
                   VAR(3)=VAR(2)
+C               If span>0 and rise<=0.0001 set rise=span
                 ELSE IF (VAR(3).GT.0.0.AND.VAR(2).LE.0.0001) THEN
                   VAR(2)=VAR(3)
                 ENDIF
@@ -290,7 +299,7 @@ C             shape code 2 or 3, circular, elliptical or pipe arch shapes
             ARAD(3)=VAR(6)
           ENDIF
         ELSE IF(CODE.EQ.'*C1')THEN
-C         nhp is initialized to -1 if *C1 exists, nhp >=0
+C         nhp is initialized to -1. if *C1 exists, nhp >=0
 C          WRITE(*,*)'NCNT AT C1',NCNT
           IF(NCNT.GT.1)THEN
             NHP=NCNT/2
@@ -335,6 +344,9 @@ C          READ(*,*)IIXX
               CALL EROCUL(ERR,I)
             ENDIF
           ENDIF
+C         C46IN was added so that output of user entered coeffs will
+C         be correct.
+          C46IN=C46
           ERR1=0
           ERR2=0
           IF(NC5.GT.4) NC5=4
@@ -417,51 +429,57 @@ C          READ(*,*)IIXX
         ELSE IF(CODE.EQ.'*C3') THEN
 C          WRITE(*,*)'VAR(1) - VAR(4)',VAR(1),VAR(2),VAR(3),VAR(4)
 C          READ(*,*)IXXXK
-          IF(INLET.GT.0)THEN
-            ERR1=-110
-            CALL EROCUL(ERR1,I)
-            RNDD=0.0
-            BEVD=0.0
-            LPRJCT=0.0
-          ENDIF
-          IF(VAR(3).GT.0) THEN
-            THETA=VAR(3)
-            KWING=WINGWALL(VAR(3))
-          ENDIF
-          IF(VAR(1).GT.1.0)THEN
-            KWR=VAR(1)
-          ELSE IF(VAR(2).GT.1.0) THEN
-            KWR=VAR(2)
+C         Note: NHP is less than zero only if a *C1 record was not already read (if *C1 record was read,
+C               ignore all parameters except the inlet type)    
+           IF (NHP.LT.0) THEN
+C         Note: INLET is negative if not already set
+              IF(INLET.GT.0)THEN
+                ERR1=-110
+                CALL EROCUL(ERR1,I)
+                RNDD=0.0
+                BEVD=0.0
+                LPRJCT=0.0
+              ENDIF
+              IF(VAR(3).GT.0) THEN
+                THETA=VAR(3)
+                KWING=WINGWALL(VAR(3))
+              ENDIF
+              IF(VAR(1).GT.1.0)THEN
+                KWR=VAR(1)
+              ELSE IF(VAR(2).GT.1.0) THEN
+                KWR=VAR(2)
+              ENDIF
+              IF(VAR(5).GT.0) KPROJ=VAR(5)
+              IF(KWING.LT.1.0)THEN
+                ERR1=-104
+                CALL EROCUL (ERR1,I)
+                KWING=1.0
+              ENDIF
+              IF(VAR(1).LT.1.0)THEN
+C           rounding coefficient error
+                ERR1=-102
+                CALL EROCUL (ERR1,I)
+              ENDIF
+              IF(VAR(2).LT.1.0)THEN
+C           beveling coefficient error
+                ERR1=-103
+                CALL EROCUL (ERR1,I)
+              ENDIF
+              IF(KPROJ.GT.1.0)THEN
+                ERR1=-106
+                CALL EROCUL (ERR1,I)
+                KPROJ=1.0
+              ENDIF
           ENDIF
           INLET=INT(VAR(4))
-          IF(VAR(5).GT.0) KPROJ=VAR(5)
-          IF(KWING.LT.1.0)THEN
-            ERR1=-104
-            CALL EROCUL (ERR1,I)
-            KWING=1.0
-          ENDIF
-          IF(VAR(1).LT.1.0)THEN
-C           rounding coefficient error
-            ERR1=-102
-            CALL EROCUL (ERR1,I)
-          ENDIF
-          IF(VAR(2).LT.1.0)THEN
-C           beveling coefficient error
-            ERR1=-103
-            CALL EROCUL (ERR1,I)
-          ENDIF
-          IF(KPROJ.GT.1.0)THEN
-            ERR1=-106
-            CALL EROCUL (ERR1,I)
-            KPROJ=1.0
-          ENDIF
           IF(INLET.LT.1.0.OR.INLET.GT.4.0)THEN
-            ERR1=-105
-            CALL EROCUL (ERR1,I)
-            INLET=1
+              ERR1=-105
+              CALL EROCUL (ERR1,I)
+              INLET=1
           ENDIF
         ELSE IF(CODE.EQ.'*CC') THEN
-          IF(INLET.LE.0) THEN
+C         Note that inlet is negative if not already set
+            IF(INLET.LE.0) THEN
             THETA=VAR(3)
             RNDD=VAR(1)
             BEVD=VAR(2)
@@ -469,16 +487,16 @@ C           beveling coefficient error
             INLET=INT(VAR(4))
             IF(VAR(5).GT.0) LPRJCT=VAR(5)
             IF(INLET.LT.1.OR.INLET.GT.4) THEN
-              ERR1=-105
-              CALL EROCUL (ERR1,I)
-              INLET=1
+                ERR1=-105
+                CALL EROCUL (ERR1,I)
+                INLET=1
             ENDIF 
             INLET=-INLET
-          ELSE
+            ELSE
 C           ignore the *CC record if *C3 is entered for culvert
             ERR1=-110
             CALL EROCUL(ERR1,I)
-          ENDIF
+            ENDIF
         ELSE IF(CODE.EQ.'*CF') THEN
           IF(NCNT.GE.1) READY=READY+100000
           TFLW=INT(VAR(1))
@@ -490,7 +508,11 @@ C           ignore the *CC record if *C3 is entered for culvert
       GO TO 15
 C
 999   CONTINUE
-C     
+C     If the material code was set to 2 set the inlet code to mitered (even if set otherwise
+C     on a *CC or *C3 record)   
+      IF (PC.EQ.2) INLET=-2
+C     If inlet type > 0 and there is a *C1 card or C46 has been specified then error 
+C     otherwise set inlet to non-neg value
       IF(INLET.GT.0.AND.NHP.GT.-1.OR.INLET.GT.0.AND.C46.GT.0.) THEN
 C        both *C1 and *C3 or *C5 and *C3 are entered, 
 C        *C3 record is ignored except for INLET code warning message
@@ -500,8 +522,26 @@ C        *C3 record is ignored except for INLET code warning message
          INLET = IABS(INLET)
       ENDIF  
       IF(INLET.LE.0) INLET=1
-
-      CALL CALCC3FROMCC(RNDD,BEVD,D,LPRJCT)
+      
+C     Calculate C3 parameters based on span for box culverts and rise for all others
+      IF(TCR.EQ.1) THEN
+        CALL CALCC3FROMCC(RNDD,BEVD,B,LPRJCT)  
+      ELSE
+C       The code in the if statement added to compute the rise for a
+C       nonstandard culvert. The rise is assumed to be the difference 
+C       between the min and max Y coordinate, converted to in or cm
+        IF (TCR.EQ.4) THEN
+          ITOP=IXMAX(GCUL,NCS)
+          IBOT=IXMIN(GCUL,NCS)
+          D=GCUL(ITOP)-GCUL(IBOT)
+          IF ((SI.EQ.0).OR.(SI.EQ.2)) THEN
+            D=D*12.
+          ELSE
+            D=D*100.
+          ENDIF
+        ENDIF
+        CALL CALCC3FROMCC(RNDD,BEVD,D,LPRJCT) 
+      ENDIF
 
       IF(SI.EQ.1.OR.SI.EQ.3)THEN
 C       convert from m/s to ft/s units
@@ -514,7 +554,7 @@ C       convert from inch to ft
 
       DR=D  
 C     Compute default C46 if no C46 is read from input data
-      IF(C46.LE.0) C46 = QC46(TCR,KWR,RND,THETA,INLET,KPROJ)
+      IF(C46.LE.0) C46 = QC46(TC,BEVD,KWR,RND,THETA,INLET,KPROJ)
 C
       DATUM=BASEL
       IF(HFLW.EQ.-999.) HFLW=1.5*DR+ZDROP+BASEL
@@ -580,7 +620,7 @@ C         CG and *CS records in file
       ENDIF
 C
       RETURN
-      END
+        END
 C
 C=====RCVGEO eof=================================================================
 C=====QC46 bof=================================================================
@@ -590,30 +630,46 @@ C      computes default C46 discharge coefficients according to the TWRI
 C      chapter A3, "Measurement of Peak Discharge at Culverts by Indirect
 C      Methods", pg 42 and 43 using table 5.
 C     Programmed by: JM Fulford
+C     Modified by gfkoltun for 2021 version
 C
-      REAL FUNCTION QC46(TC,KWR,RND,THETA,INLET,KPROJ)
+      REAL FUNCTION QC46(TCR,BEVD,KWR,RND,THETA,INLET,KPROJ)
 c
+
 C-----Arguments:
-      INTEGER INLET,TC
-      REAL KWR,THETA,KPROJ
+      INTEGER INLET,TCR,TC,MC
+      REAL BEVD,KWR,THETA,KPROJ
 C
 C-----Local variables:
 C
       QC46=1.0
+C     Note that TC equals:
+C     1 for circular, 2 for box, 3 for pipe arch, and 4 for other      
+      TC=TCR/100
+C     Change from QC46 to C46 below to allow coefficient to be computed 
+C     and potentially adjusted if pipe is projecting
       IF (INLET.EQ.2)THEN
 C       mitered pipe
-        QC46=0.74
+        C46=0.74
       ELSE IF(INLET.EQ.4)THEN
 C       flared pipe ends
         QC46=0.90
       ELSE IF(THETA.LT.75.0.OR.TC.GT.1)THEN
+C       Eqn below approximately reproduces table 5 but decreases when RND>0.14 !!!
         C46=0.84 + 2.125*RND - 8.035*RND*RND
+C       Set lower limit of 0.87 for C46 when theta ge 30 and culvert is circular
         IF(THETA.GE.30.AND.C46.LT.0.87.AND.TC.EQ.1) C46=0.87
       ELSE IF(THETA.GE.75.0.AND.TC.EQ.1)THEN
         C46=(1.47 - 0.008*THETA)*KWR
       ENDIF
-      IF(INLET.NE.4)THEN
-        QC46=KPROJ*C46
+C     Compute the material code to facilitate test for concrete pipes with beveling
+      MC=(TCR-(100*(TCR/100)))/10
+      IF (INLET.NE.4) THEN
+        IF ((MC.EQ.1).AND.(BEVD>0.)) THEN
+C         Don't apply projection correction to beveled concrete pipes
+          QC46=C46
+        ELSE
+          QC46=KPROJ*C46
+        ENDIF
       ENDIF
 C
       RETURN
@@ -661,7 +717,7 @@ C-----Arguments:
 C
 C-----Local variables:
       REAL Y,Y2,Y3
-C
+C     Following code implements (sort of) fig. 22
       IF(THETA.LE.0.0) THEN
         KBEV=1.0
       ELSE IF(THETA.LE.30.) THEN
@@ -675,6 +731,7 @@ C
         Y2=0.998997 + 3.6457*RND - 25.459*RND*RND + 40.508*RND*RND*RND
         Y3=1.0 + 4.8351*RND - 18.307*RND*RND -19.827*RND*RND*RND
         KBEV=Y2 + (THETA-45.0)*(Y3-Y2)/15.0
+C     Use values for theta=60 when theta>60
       ELSE IF (THETA.GT.60) THEN
         KBEV=1.0+4.8351*RND - 18.307*RND*RND - 19.827*RND*RND*RND
       ENDIF
@@ -689,7 +746,8 @@ C
 C-----Purpose:
 C       computes the coefficient adjustment for projecting pipes
 C-----Programmed by: JM Fulford
-C       
+C     Modified by gfkoltun for 2021 version
+C
       REAL FUNCTION KPRJCT(LPRJCT)
 C
 C-----Arguments:
@@ -697,6 +755,9 @@ C-----Arguments:
 C
 C-----Local variables:
 C
+C     KPRJCT reaches its minimum value at LPRJCT=1 so set larger values to 1
+      IF(LPRJCT.GT.1.0) LPRJCT=1.0
+      
       IF(LPRJCT.LT.0.1)THEN
         KPRJCT = 0.99909 - 0.78182*LPRJCT
       ELSE IF(LPRJCT.GE.0.1)THEN
@@ -876,7 +937,7 @@ C-----Purpose:
 C        writes culvert openning and reading errors, all fatal
 C     Programmed by: JM Fulford
 C     Date:
-C     Modified by:
+C     Modified by: gfkoltun for 2021 version
 C     Last modified:
 C
       SUBROUTINE EROCUL
@@ -887,7 +948,7 @@ C-----Arguments:
 C
 C-----Local variables
       INTEGER PRTNO
-      CHARACTER*45 ERRMESS(31)
+      CHARACTER*45 ERRMESS(34)
 C
 C-----PARAMETER
       INTEGER ERRIO
@@ -910,7 +971,7 @@ C-----Initializations:
      #' Culvert data incomplete, check data -- FATAL',
      #' NBBL, no. of barrels <1, default of 1 used  ',
      #' KR <1, default of 1 used                    '/
-      DATA (ERRMESS(I), I=16,31) /
+      DATA (ERRMESS(I), I=16,34) /
      #' KW <1, default of 1 used                    ',
      #' THETA <0 or >90, default of 0 used          ',
      #' INLET code not valid, default of 1 used     ',
@@ -926,7 +987,10 @@ C-----Initializations:
      #' No *CN record, ----------------------- FATAL',
      #' No *CX record, ----------------------- FATAL',
      #' No *CQ record, ----------------------- FATAL',
-     #' *C3 record ignored except inlet code-WARNING'
+     #' *C3 record ignored except inlet code-WARNING',
+     #' Computed BOTRAD outside calib. range-WARNING',
+     #' Computed TOPRAD outside calib. range-WARNING',
+     #' Computed CORRAD outside calib. range-WARNING'      
      # /
 C
 C-----FORMAT
@@ -943,7 +1007,7 @@ C
         IO=ABS(ERRIO)
         IF(PRTNO.LE.3)THEN
 Cwrite          WRITE(*,100)NUMBER,ERRMESS(PRTNO)
-        ELSE IF(PRTNO.NE.5) THEN
+        ELSE IF((PRTNO.LT.32).AND.(PRTNO.NE.5)) THEN
           WRITE(*,101)ERRMESS(PRTNO)
         ENDIF
       ENDIF
@@ -1123,6 +1187,7 @@ C       slightly altered versions of the ones used by WSPRO
         I=I+1
         IF(ARAD(I).LE.0) FLG=1
         IF(FLG.NE.1.AND.I.LT.3) GO TO 20
+C       CULPAD is called unless all radii are non-zero
         IF(FLG.EQ.1) CALL CULPAD(TC,D,B,ARAD)
         DO I=2,TBSIZE
           DC=FLOAT(I-1)*D/(FLOAT(TBSIZE-1))

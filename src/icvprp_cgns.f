@@ -107,7 +107,7 @@ C-----Purpose:
 C       read culvert data from CGNS file
 C     Programmed by: Keisuke Inoue
 C     Date:
-C     Modified by:
+C     Modified by: gfkoltun for 2021 version
 C     Last modified:
 C
       SUBROUTINE RCVGEO_CGNS(DATUM,DR,B,WEB,N,SCUL,GCUL,NCS,ERR)
@@ -141,11 +141,13 @@ C-----Externals:
       EXTERNAL WINGWALL, QC46,KBEV,KRND,KPRJCT
 
       CHARACTER*10 ITOSTR,FTOSTR
+      INTEGER IXMIN,IXMAX
       EXTERNAL ITOSTR,FTOSTR
+      EXTERNAL IXMIN,IXMAX
 C
 C-----Local Variables:
       INTEGER FLG,NCHAR,MAX,I,CQFG,CSFG,IO,NCNT,CXFG,ERR1,ERR2,NC5
-      INTEGER READY,ERRIO,NCONVRT,IER
+      INTEGER READY,ERRIO,NCONVRT,IER,ITOP,IBOT
       INTEGER SHAPE_TYPE,MATERIAL,EDGE_TYPE,PROJ_TYPE,ALI_TYPE
       INTEGER WW_TYPE,C1_ENABLE,C5_ENABLE,DISC_METHOD
       REAL DUMMYIDS(MAXTW)
@@ -519,58 +521,15 @@ C     Read data that corresponds to *CC or *C3 from CGNS file
 C     -------------------------------------------------------
 
       CALL CG_IRIC_READ_INTEGER_F('discharge_method', DISC_METHOD, IER)
-      IF (DISC_METHOD == 0) THEN
-C       Specify inlet geometry (Use *CC record)
-
-        CALL CG_IRIC_READ_INTEGER_F('edg_type', EDGE_TYPE, IER)
-
-        IF (EDGE_TYPE == 1) THEN
-C         No Edging
-          INLET = 1
-        ELSE IF (EDGE_TYPE == 2) THEN
-C         Rounding
-          INLET = 1
-          CALL CG_IRIC_READ_REALSINGLE_F('edg_rc', RNDD, IER)
-        ELSE IF (EDGE_TYPE == 3) THEN
-C         Beveled
-          INLET = 1
-          CALL CG_IRIC_READ_REALSINGLE_F('edg_wb', BEVD, IER)
-          CALL CG_IRIC_READ_REALSINGLE_F('edg_ab', THETA0, IER)
-          IF (THETA0 > 0) THEN
-            THETA = THETA0
-            KWING = WINGWALL(THETA)
-          ENDIF
-        ELSE IF (EDGE_TYPE == 4) THEN
-C         Mitered end
-          INLET = 2
-        ELSE IF (EDGE_TYPE == 5) THEN
-C         Bell mouth or tongue and groove
-          INLET = 3
-        ELSE IF (EDGE_TYPE == 6) THEN
-C         Flared pipe
-          INLET = 4
-        ENDIF
-
-        CALL cg_iric_read_integer_f('proj_type', PROJ_TYPE, IER)
-
-        IF (PROJ_TYPE == 1) THEN
-C         Flush
-          LPRJCT = 0
-        ELSE IF (PROJ_TYPE == 2) THEN
-C         Equal Projection
-          CALL CG_IRIC_READ_REALSINGLE_F('proj_l', LPRJCT, IER)
-        ELSE IF (PROJ_TYPE == 3) THEN
-C         Unequal Projection
-          CALL CG_IRIC_READ_REALSINGLE_F('proj_l1', LPROJ1, IER)
-          CALL CG_IRIC_READ_REALSINGLE_F('proj_l2', LPROJ2, IER)
-          LPRJCT = (LPROJ1 + LPROJ2) * 0.5
-        ENDIF
-        
-        WRITE(ERRIO,101) '*CC       ' // TRIM(FTOSTR(RNDD)) // ',' //
-     #    TRIM(FTOSTR(BEVD)) // ',' // TRIM(FTOSTR(THETA0)) // ',' //
-     #    TRIM(ITOSTR(INLET)) // ',' // TRIM(FTOSTR(LPRJCT))
-
-      ELSE IF (DISC_METHOD == 1) THEN
+      
+C     The order of the IF statements was reversed from the original. 
+C     At present, the use of *CC or *C3 is mutually exclusive in iRIC
+C     however, that is not the case for manually coded input. If both
+C     record types are coded, *C3 must precede *CC. The order was 
+C     changed to ensure that occurs should there be a future change
+C     to iRIC that permits both. 
+      
+      IF (DISC_METHOD == 1) THEN
 C       Specify parameters (Use *C3 record)
 
 C       Wingwalls
@@ -659,6 +618,57 @@ C         beveling coefficient error
      #    // TRIM(ITOSTR(INLET)) // ',' // TRIM(FTOSTR(KPROJ))
         END IF
 
+      ELSE IF (DISC_METHOD == 0) THEN
+C       Specify inlet geometry (Use *CC record)
+
+        CALL CG_IRIC_READ_INTEGER_F('edg_type', EDGE_TYPE, IER)
+
+        IF (EDGE_TYPE == 1) THEN
+C         No Edging
+          INLET = 1
+        ELSE IF (EDGE_TYPE == 2) THEN
+C         Rounding
+          INLET = 1
+          CALL CG_IRIC_READ_REALSINGLE_F('edg_rc', RNDD, IER)
+        ELSE IF (EDGE_TYPE == 3) THEN
+C         Beveled
+          INLET = 1
+          CALL CG_IRIC_READ_REALSINGLE_F('edg_wb', BEVD, IER)
+          CALL CG_IRIC_READ_REALSINGLE_F('edg_ab', THETA0, IER)
+          IF (THETA0 > 0) THEN
+            THETA = THETA0
+            KWING = WINGWALL(THETA)
+          ENDIF
+        ELSE IF (EDGE_TYPE == 4) THEN
+C         Mitered end
+          INLET = 2
+        ELSE IF (EDGE_TYPE == 5) THEN
+C         Bell mouth or tongue and groove
+          INLET = 3
+        ELSE IF (EDGE_TYPE == 6) THEN
+C         Flared pipe
+          INLET = 4
+        ENDIF
+
+        CALL cg_iric_read_integer_f('proj_type', PROJ_TYPE, IER)
+
+        IF (PROJ_TYPE == 1) THEN
+C         Flush
+          LPRJCT = 0
+        ELSE IF (PROJ_TYPE == 2) THEN
+C         Equal Projection
+          CALL CG_IRIC_READ_REALSINGLE_F('proj_l', LPRJCT, IER)
+        ELSE IF (PROJ_TYPE == 3) THEN
+C         Unequal Projection
+          CALL CG_IRIC_READ_REALSINGLE_F('proj_l1', LPROJ1, IER)
+          CALL CG_IRIC_READ_REALSINGLE_F('proj_l2', LPROJ2, IER)
+          LPRJCT = (LPROJ1 + LPROJ2) * 0.5
+        ENDIF
+        
+        WRITE(ERRIO,101) '*CC       ' // TRIM(FTOSTR(RNDD)) // ',' //
+     #    TRIM(FTOSTR(BEVD)) // ',' // TRIM(FTOSTR(THETA0)) // ',' //
+     #    TRIM(ITOSTR(INLET)) // ',' // TRIM(FTOSTR(LPRJCT))
+
 
       ENDIF
 
@@ -685,7 +695,25 @@ C     Normalize INLET value
       INLET = IABS(INLET)
       IF (INLET <= 0) INLET=1
 
-      CALL CALCC3FROMCC(RNDD,BEVD,D,LPRJCT)
+C     Calculate C3 parameters based on span for box culverts and rise for all others
+      IF(TCR.EQ.1) THEN
+        CALL CALCC3FROMCC(RNDD,BEVD,B,LPRJCT)  
+      ELSE
+C       The code in the if statement added to compute the rise for a
+C       nonstandard culvert. The rise is assumed to be the difference 
+C       between the min and max Y coordinate, converted to in or cm
+        IF (TCR.EQ.4) THEN
+          ITOP=IXMAX(GCUL,NCS)
+          IBOT=IXMIN(GCUL,NCS)
+          D=GCUL(ITOP)-GCUL(IBOT)
+          IF ((SI.EQ.0).OR.(SI.EQ.2)) THEN
+            D=D*12.
+          ELSE
+            D=D*100.
+          ENDIF
+        ENDIF          
+        CALL CALCC3FROMCC(RNDD,BEVD,D,LPRJCT) 
+      ENDIF
 
       IF (SI.EQ.1 .OR. SI.EQ.3) THEN
 C       convert from m/s to ft/s units
@@ -699,7 +727,7 @@ C       convert from inch to ft
       DR=D  
 
 C     Compute default C46 if no C46 is read from input data
-      IF(C46.LE.0) C46 = QC46(TCR,KWR,RND,THETA,INLET,KPROJ)
+      IF(C46.LE.0) C46 = QC46(TCR,BEVD,KWR,RND,THETA,INLET,KPROJ)
 C
       DATUM=BASEL
       IF(HFLW.EQ.-999.) HFLW=1.5*DR+ZDROP+BASEL

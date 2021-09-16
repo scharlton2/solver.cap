@@ -1,6 +1,7 @@
 C=====CULVRT.INC bof========================================================
 C
 C     modified Dec 28, 2011 to increase CULNAM from 80 to 132 chars
+C     modified for 2021 version to add C46IN
 C-----Parameters
       INTEGER TBSIZE, MXCOEF,MXCV
       PARAMETER (TBSIZE=31, MXCOEF=4, MXCV=50)
@@ -10,11 +11,12 @@ C-----Common block
       REAL CULD(TBSIZE),CULA(TBSIZE),CULK(TBSIZE),CULT(TBSIZE),THETA
      #    ,CULWP(TBSIZE),C5(MXCOEF),H5(MXCOEF),CP(MXCOEF),HP(MXCOEF)
      #    ,CB12,C46,KWR,RND,KWING,NRUFF,CLSRD,KPROJ,CLEN,ARAD(3),CWIDTH
+     #    ,C46IN
       CHARACTER*16 VRTID
       CHARACTER*132 CULNAM
       COMMON / CULVRT / TC,CULNIT,CULD,CULA,CULK,CULT,C5,H5,CP,HP,
      #       CB12,C46,VRTID,KWR,RND,KWING,CULWP,NRUFF,NHP,NH5,CLSRD,CLEN
-     #       ,INLET,KPROJ,CULNAM,ARAD,CWIDTH,SI,THETA
+     #       ,INLET,KPROJ,CULNAM,ARAD,CWIDTH,SI,THETA,C46IN
       SAVE /CULVRT/
 C
 C
@@ -32,6 +34,7 @@ C     CP     - culvert discharge coefficient for flow type 3
 C     HP     - culvert depth for CP at same index
 C     CB12   - culvert discharge coefficient for flow types 1-3
 C     C46    - culvert discharge coefficient for flow type 4-6
+C     C46IN  - input value of culvert discharge coefficient for flow type 4-6
 C     KWR     -entrance rounding or beveling adjustment to discharge coefficient
 C             (pg 39 TWRI & pg 40 TWRI)
 C     KWING  -wingwall adjustment to discharge coefficient (pg 42 TWRI)
