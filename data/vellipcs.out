@@ -1,0 +1,145 @@
+CAP -USGS culvert analysis program VER 97-08c                          page  0
+
+CV   EX01 10.,0.,41.,6.05,6.28,1                                                
+*CS       -3.5,10.05  -3.473,9.55  -3.389,9.05 -3.21,8.456                      
+*CS       -3.031,8.05 -2.882,7.779 -2.732,7.55 -2.315,7.05 -1.694,6.55          
+*CS       -1.218,6.3  -0.778,6.15  -0.389,6.075   0.,6.05   0.389,6.075         
+*CS        0.778,6.15  1.218,6.3   1.694,6.55  2.315,7.05  2.732,7.55           
+*CS        2.882,7.779 3.031,8.05  3.21,8.456  3.389,9.05                       
+*CS        3.473,9.55  3.5,10.05   3.473,10.55 3.389,11.05                      
+*CS        3.21,11.644 3.031,12.05 2.882,12.321 2.732,12.55 2.315,13.05         
+*CS        1.694,13.55 1.218,13.8  0.778,13.95  0.389,14.025                    
+*CS        0,14.05    -0.389,14.025 -0.778,13.95 -1.218,13.8  -1.694,13.55      
+*CS       -2.315,13.05 -2.732,12.55 -2.882,12.321 -3.031,12.05                  
+*CS       -3.21,11.644 -3.389,11.05 -3.473,10.55 -3.5,10.05                     
+*CF       6                                                                     
+*CX       8.14                                                                  
+*CQ       20., 21.5, 22.5, 25.                                                  
+*CN       0.015                                                                 
+*PD       0.   20.0 1.0                                                         
+     No *C5,*C1 for nonstandard culvert --WARNING
+XS   AP01 57.4                                                                  
+GR        0.,9. 0.,6.4 1.,6.6 2.,6.6 3.,6.5 5.,6.5 6.,6.7 7.,7                  
+GR        8.,8.1 10.,9.                                                         
+N         0.025                                                                 
+EX                                                                              
+CAP -USGS culvert analysis program VER 97-08c                          page  1
+
+Vertical elliptical culvert section example using *CS records                   
+               CULVERT SECTION PROPERTIES - ID: EX01            
+
+                    Culvert section type: nonstandard    
+               (r or w)/D  KR or KW  Ktheta  Kproj    n      Inlet
+                   0.00      1.00   1.00   1.00   0.015       1
+
+                    <<User supplied discharge coefficients>>
+                      CB12 = 0.00          C46 = 0.84
+                      For type123 flow     For type 5 flow
+                         C    (h1-z)/D        C    (h1-z)/D
+                       0.00     0.00        0.00     0.00
+                       0.00     0.00        0.00     0.00
+                       0.00     0.00        0.00     0.00
+                       0.00     0.00        0.00     0.00
+
+         Barrel                                    Top        Wetted
+         depth        Area        Conveyance      width      perimeter
+           (ft)       (sq.ft)        (cfs)          (ft)        (ft)
+          0.00          0.0            0.0        0.00           0.0
+          0.27          0.4           13.4        2.50           2.6
+          0.53          1.2           59.5        3.47           3.7
+          0.80          2.3          140.4        4.13           4.5
+          1.07          3.4          254.9        4.74           5.3
+          1.33          4.8          404.2        5.19           6.0
+          1.60          6.2          585.0        5.60           6.7
+          1.87          7.7          797.2        5.92           7.3
+          2.13          9.4         1037.7        6.18           7.9
+          2.40         11.0         1303.2        6.41           8.5
+          2.67         12.8         1593.0        6.58           9.1
+          2.93         14.5         1901.9        6.74           9.6
+          3.20         16.4         2229.8        6.85          10.2
+          3.47         18.2         2572.4        6.93          10.7
+          3.73         20.0         2927.5        6.97          11.2
+          4.00         21.9         3291.4        7.00          11.8
+          4.27         23.8         3661.0        6.97          12.3
+          4.53         25.6         4033.5        6.93          12.9
+          4.80         27.5         4404.1        6.85          13.4
+          5.07         29.3         4770.6        6.74          13.9
+          5.33         31.1         5126.7        6.58          14.5
+          5.60         32.8         5472.7        6.41          15.1
+          5.87         34.5         5799.0        6.18          15.6
+          6.13         36.1         6104.7        5.92          16.2
+          6.40         37.6         6382.0        5.60          16.9
+          6.67         39.1         6619.3        5.19          17.5
+          6.93         40.4         6818.5        4.74          18.2
+          7.20         41.6         6951.4        4.13          19.0
+          7.47         42.6         7028.4        3.47          19.9
+          7.73         43.4         6992.3        2.50          21.0
+          8.00         43.8         6582.8        0.00          23.6
+CAP -USGS culvert analysis program VER 97-08c                          page  2
+
+Vertical elliptical culvert section example using *CS records                   
+                          APPROACH SECTION PROPERTIES - ID: AP01            
+
+        Water                                Top                Critical
+       Surface      Area      Conveyance    width    Alpha     discharge
+       el.(ft)*    (sq.ft)      (cfs)        (ft)                (cfs)
+          6.40         0.0           0.0       0.0    1.00           0.0
+          7.23         4.6         183.1       7.2    1.00          20.6
+          8.07        10.9         677.5       8.0    1.00          72.2
+          8.90        18.3        1363.4       9.8    1.00         141.6
+          9.73        26.6        2337.4      10.0    1.00         245.9
+         10.57        34.9        3429.9      10.0    1.00         370.2
+         11.40        43.2        4595.6      10.0    1.00         510.4
+         12.23        51.6        5814.0      10.0    1.00         664.8
+         13.07        59.9        7071.5      10.0    1.00         832.2
+         13.90        68.2        8359.0      10.0    1.00        1011.8
+         14.73        76.6        9670.0      10.0    1.00        1202.6
+         15.57        84.9       10999.8      10.0    1.00        1404.2
+         16.40        93.2       12344.9      10.0    1.00        1615.9
+         17.23       101.6       13702.5      10.0    1.00        1837.2
+         18.07       109.9       15070.5      10.0    1.00        2067.9
+         18.90       118.2       16447.4      10.0    1.00        2307.4
+         19.73       126.6       17831.8      10.0    1.00        2555.6
+         20.57       134.9       19222.6      10.0    1.00        2812.1
+         21.40       143.3       20619.0      10.0    1.00        3076.6
+         22.23       151.6       22020.2      10.0    1.00        3348.9
+         23.07       159.9       23425.7      10.0    1.00        3628.8
+         23.90       168.3       24834.8      10.0    1.00        3916.2
+         24.73       176.6       26247.3      10.0    1.00        4210.7
+         25.57       184.9       27662.6      10.0    1.00        4512.2
+         26.40       193.2       29080.6      10.0    1.00        4820.7
+
+       *elevation referenced to common vertical datum
+     Approach section located too close --WARNING
+CAP -USGS culvert analysis program VER 97-08c                          page  3
+
+Vertical elliptical culvert section example using *CS records                   
+                     CULVERT                               APPROACH SECTION
+ I.D. EX01                  Mannings n     0.015        I.D. AP01            
+ Height        8.00 ft           Width       7.0ft      Station        57.4 ft
+ Station       10.0 ft          Length     41.0 ft      Minimum el.     6.40ft
+ Inlet el.      6.28ft       Outlet el.     6.05ft
+
+         Discharge  Flow     Water Surface Elevations (feet) Critical  Error
+   no.     (cfs)    type     appr.   inlet   outlet   exit     Dc       code@
+    1         20.0   3         8.20    8.13    8.14    8.14      1.2    0
+    2         21.5   3         8.21    8.13    8.14    8.14      1.2    0
+    3         22.5   3         8.22    8.13    8.14    8.14      1.2    0
+    4         25.0   3         8.24    8.12    8.14    8.14      1.3    0
+
+             Fall (ft)     Losses (ft)       Appr. Section  Control Section
+  no.   C   entry  eff.  entry(1-2) (2-3)    VH  alph   F    energy    F
+   1   0.96  0.06  0.08  0.01  0.00  0.02   0.04 1.00  0.24     8.22  0.32
+   2   0.96  0.07  0.09  0.01  0.00  0.02   0.05 1.00  0.26     8.23  0.34
+   3   0.96  0.08  0.10  0.01  0.01  0.03   0.05 1.00  0.27     8.24  0.36
+   4   0.96  0.10  0.13  0.01  0.01  0.03   0.06 1.00  0.29     8.26  0.40
+________________________________________________________________________________
+Abrevs. used: appr.-approach  C-discharge coefficient  eff.-effective
+VH-velocity head  alph-velocity coefficient  n-Manning's roughness coef.
+energy-specific energy  F-Froude number  entry,(1-2),(2-3)-part of reach
+
+      @Error codes:  -1,1-7 fatal error; 8-15 warning; 0 no error
+
+
+          ---------Warning Messages-------------
+

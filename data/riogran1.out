@@ -1,0 +1,134 @@
+CAP -USGS culvert analysis program VER 97-08c                          page  0
+
+CV   BAR1 14.,0.,50.,0.62,1.00,1                                                
+CG        327,106.,186.                                                         
+*C3       1.,1.,0.,2                                                            
+*C5       0.74, 0.405,1.4, 0.432,1.6, 0.451,1.8, 0.469,2.0                      
+*CF       6                                                                     
+*CX       5.41                                                                  
+*CQ       800, 820, 840, 860                                                    
+*CN       0.032                                                                 
+     *C3 record ignored except inlet code-WARNING
+XS   APP1 124.                                                                  
+GR        18.,9.04 21.,7.9 24.,6.3 27.,4.1 30.,2.2 33.,2.0 36.,2.0              
+GR        39.,2.2 42.,2.2 45.,2.3 45.,9.04                                      
+N         0.035                                                                 
+CAP -USGS culvert analysis program VER 97-08c                          page  1
+
+Rio Grande Conveyance Channel multi-culvert barrel 1                            
+               CULVERT SECTION PROPERTIES - ID: BAR1            
+
+                    Culvert section type: pipe-arch      
+               (r or w)/D  KR or KW  Ktheta  Kproj    n      Inlet
+                   0.00      1.00   1.00   1.00   0.032       2
+
+                    <<User supplied discharge coefficients>>
+                      CB12 = 0.00          C46 = 0.74
+                      For type123 flow     For type 5 flow
+                         C    (h1-z)/D        C    (h1-z)/D
+                       0.00     0.00        0.41     1.40
+                       0.00     0.00        0.43     1.60
+                       0.00     0.00        0.45     1.80
+                       0.00     0.00        0.47     2.00
+
+         Barrel                                    Top        Wetted
+         depth        Area        Conveyance      width      perimeter
+           (ft)       (sq.ft)        (cfs)          (ft)        (ft)
+          0.00          0.0            0.0        0.00           0.0
+          0.29          1.5           23.6        7.66           7.7
+          0.59          4.3          105.8       10.81          10.9
+          0.88          7.8          253.7       13.20          13.4
+          1.18         11.9          480.9       14.39          14.7
+          1.47         16.2          778.2       14.94          15.5
+          1.77         20.7         1133.2       15.27          16.2
+          2.06         25.2         1537.4       15.45          16.8
+          2.36         29.8         1982.1       15.50          17.4
+          2.65         34.3         2457.7       15.21          18.0
+          2.94         38.8         2947.2       15.08          18.6
+          3.24         43.2         3452.5       14.92          19.2
+          3.53         47.6         3969.0       14.73          19.8
+          3.83         51.9         4492.0       14.52          20.4
+          4.12         56.1         5017.5       14.28          21.1
+          4.42         60.3         5541.1       14.02          21.7
+          4.71         64.4         6058.9       13.72          22.4
+          5.01         68.3         6566.8       13.39          23.1
+          5.30         72.2         7060.8       13.03          23.7
+          5.59         76.0         7536.5       12.62          24.5
+          5.89         79.7         7989.9       12.18          25.2
+          6.18         83.2         8416.2       11.69          26.0
+          6.48         86.5         8810.5       11.14          26.8
+          6.77         89.7         9167.5       10.54          27.6
+          7.07         92.7         9480.9        9.86          28.5
+          7.36         95.5         9743.3        9.10          29.5
+          7.66         98.1         9945.1        8.22          30.5
+          7.95        100.4        10073.2        7.20          31.7
+          8.24        102.3        10106.1        5.93          33.1
+          8.54        103.8         9997.8        4.24          34.9
+          8.83        104.7         9378.3        0.00          39.2
+CAP -USGS culvert analysis program VER 97-08c                          page  2
+
+Rio Grande Conveyance Channel multi-culvert barrel 1                            
+                          APPROACH SECTION PROPERTIES - ID: APP1            
+
+        Water                                Top                Critical
+       Surface      Area      Conveyance    width    Alpha     discharge
+       el.(ft)*    (sq.ft)      (cfs)        (ft)                (cfs)
+          2.00         0.0           0.0       3.0    1.00           0.0
+          2.79        10.2         313.8      15.9    1.00          46.3
+          3.58        23.3        1142.0      17.2    1.00         154.1
+          4.38        37.4        2331.6      18.4    1.00         302.8
+          5.17        52.4        3833.1      19.5    1.00         487.7
+          5.96        68.2        5614.3      20.5    1.00         705.4
+          6.75        84.9        7633.6      21.8    1.00         950.5
+          7.54       102.8        9913.7      23.3    1.00        1224.9
+          8.33       121.9       12423.9      25.1    1.00        1524.1
+          9.12       142.7       15264.4      27.0    1.00        1860.9
+          9.92       164.0       18715.7      27.0    1.00        2294.4
+         10.71       185.4       22328.3      27.0    1.00        2757.2
+         11.50       206.8       26079.6      27.0    1.00        3247.4
+         12.29       228.2       29951.0      27.0    1.00        3763.7
+         13.08       249.5       33927.4      27.0    1.00        4304.8
+         13.88       270.9       37996.1      27.0    1.00        4869.6
+         14.67       292.3       42146.5      27.0    1.00        5457.2
+         15.46       313.7       46369.6      27.0    1.00        6066.6
+         16.25       335.0       50657.6      27.0    1.00        6697.2
+         17.04       356.4       55003.9      27.0    1.00        7348.2
+         17.83       377.8       59402.8      27.0    1.00        8019.0
+         18.62       399.2       63849.3      27.0    1.00        8709.1
+         19.42       420.5       68338.9      27.0    1.00        9418.0
+         20.21       441.9       72867.9      27.0    1.00       10145.0
+         21.00       463.3       77432.8      27.0    1.00       10889.9
+
+       *elevation referenced to common vertical datum
+CAP -USGS culvert analysis program VER 97-08c                          page  3
+
+Rio Grande Conveyance Channel multi-culvert barrel 1                            
+                     CULVERT                               APPROACH SECTION
+ I.D. BAR1                  Mannings n     0.032        I.D. APP1            
+ Height        8.83 ft           Width      15.5ft      Station       124.0 ft
+ Station       14.0 ft          Length     50.0 ft      Minimum el.     2.00ft
+ Inlet el.      1.00ft       Outlet el.     0.62ft
+
+         Discharge  Flow     Water Surface Elevations (feet) Critical  Error
+   no.     (cfs)    type     appr.   inlet   outlet   exit     Dc       code@
+    1        800.0   3         8.54    6.77    5.41    5.41      4.7    0
+    2        820.0   2         8.72    6.87    5.43    5.41      4.8    0
+    3        840.0   2         8.87    6.96    5.50    5.41      4.9    0
+    4        860.0   2         9.02    7.06    5.57    5.41      5.0    0
+
+             Fall (ft)     Losses (ft)       Appr. Section  Control Section
+  no.   C   entry  eff.  entry(1-2) (2-3)    VH  alph   F    energy    F
+   1   0.93  3.13  2.71  0.39  0.37  0.66   0.61 1.00  0.50     7.73  0.98
+   2   0.92  3.28  2.84  0.42  0.37  0.68   0.60 1.00  0.49     7.85  1.00
+   3   0.92  3.37  2.91  0.45  0.37  0.69   0.59 1.00  0.48     7.97  1.00
+   4   0.92  3.45  2.99  0.47  0.36  0.69   0.59 1.00  0.47     8.08  1.00
+________________________________________________________________________________
+Abrevs. used: appr.-approach  C-discharge coefficient  eff.-effective
+VH-velocity head  alph-velocity coefficient  n-Manning's roughness coef.
+energy-specific energy  F-Froude number  entry,(1-2),(2-3)-part of reach
+
+      @Error codes:  -1,1-7 fatal error; 8-15 warning; 0 no error
+
+
+          ---------Warning Messages-------------
+

@@ -1,0 +1,136 @@
+CAP -USGS culvert analysis program VER 97-08c                          page  0
+
+CV   EX01 10.,0.,41.,6.05,6.28,1                                                
+CG        213,30.                                                               
+*C3       1,1,0,3,1                                                             
+*C5       0.96, 0.50,1.4, 0.55,1.6, 0.58,1.8, 0.61,2.0                          
+*CF       6                                                                     
+*CX       8.14                                                                  
+*CQ       20., 21.5, 22.5, 25.                                                  
+*CN       0.015                                                                 
+*PD       0.   20.0 1.0                                                         
+     *C3 record ignored except inlet code-WARNING
+XS   AP01 57.4                                                                  
+GR        0.,9. 0.,6.4 1.,6.6 2.,6.6 3.,6.5 5.,6.5 6.,6.7 7.,7                  
+GR        8.,8.1 10.,9.                                                         
+N         0.025                                                                 
+EX                                                                              
+CAP -USGS culvert analysis program VER 97-08c                          page  1
+
+Mercer Creek culvert example                                                    
+               CULVERT SECTION PROPERTIES - ID: EX01            
+
+                    Culvert section type: circular/pipe  
+               (r or w)/D  KR or KW  Ktheta  Kproj    n      Inlet
+                   0.00      1.00   1.00   1.00   0.015       3
+
+                    <<User supplied discharge coefficients>>
+                      CB12 = 0.00          C46 = 0.96
+                      For type123 flow     For type 5 flow
+                         C    (h1-z)/D        C    (h1-z)/D
+                       0.00     0.00        0.50     1.40
+                       0.00     0.00        0.55     1.60
+                       0.00     0.00        0.58     1.80
+                       0.00     0.00        0.61     2.00
+
+         Barrel                                    Top        Wetted
+         depth        Area        Conveyance      width      perimeter
+           (ft)       (sq.ft)        (cfs)          (ft)        (ft)
+          0.00          0.0            0.0        0.00           0.0
+          0.08          0.1            0.7        0.90           0.9
+          0.17          0.1            3.2        1.25           1.3
+          0.25          0.3            7.4        1.50           1.6
+          0.33          0.4           13.6        1.70           1.9
+          0.42          0.5           21.5        1.86           2.1
+          0.50          0.7           31.2        2.00           2.3
+          0.58          0.9           42.6        2.11           2.5
+          0.67          1.1           55.5        2.21           2.7
+          0.75          1.2           69.8        2.29           2.9
+          0.83          1.4           85.4        2.36           3.1
+          0.92          1.6          102.3        2.41           3.3
+          1.00          1.8          120.1        2.45           3.4
+          1.08          2.0          138.8        2.48           3.6
+          1.17          2.2          158.3        2.49           3.8
+          1.25          2.5          178.2        2.50           3.9
+          1.33          2.7          198.5        2.49           4.1
+          1.42          2.9          219.0        2.48           4.3
+          1.50          3.1          239.5        2.45           4.4
+          1.58          3.3          259.7        2.41           4.6
+          1.67          3.5          279.4        2.36           4.8
+          1.75          3.7          298.4        2.29           5.0
+          1.83          3.9          316.5        2.21           5.1
+          1.92          4.0          333.2        2.11           5.3
+          2.00          4.2          348.4        2.00           5.5
+          2.08          4.4          361.6        1.86           5.8
+          2.17          4.5          372.3        1.70           6.0
+          2.25          4.7          379.9        1.50           6.2
+          2.33          4.8          383.4        1.25           6.5
+          2.42          4.9          380.7        0.90           6.9
+          2.50          4.9          356.4        0.00           7.9
+CAP -USGS culvert analysis program VER 97-08c                          page  2
+
+Mercer Creek culvert example                                                    
+                          APPROACH SECTION PROPERTIES - ID: AP01            
+
+        Water                                Top                Critical
+       Surface      Area      Conveyance    width    Alpha     discharge
+       el.(ft)*    (sq.ft)      (cfs)        (ft)                (cfs)
+          6.40         0.0           0.0       0.0    1.00           0.0
+          7.23         4.6         183.1       7.2    1.00          20.6
+          8.07        10.9         677.5       8.0    1.00          72.2
+          8.90        18.3        1363.4       9.8    1.00         141.6
+          9.73        26.6        2337.4      10.0    1.00         245.9
+         10.57        34.9        3429.9      10.0    1.00         370.2
+         11.40        43.2        4595.6      10.0    1.00         510.4
+         12.23        51.6        5814.0      10.0    1.00         664.8
+         13.07        59.9        7071.5      10.0    1.00         832.2
+         13.90        68.2        8359.0      10.0    1.00        1011.8
+         14.73        76.6        9670.0      10.0    1.00        1202.6
+         15.57        84.9       10999.8      10.0    1.00        1404.2
+         16.40        93.2       12344.9      10.0    1.00        1615.9
+         17.23       101.6       13702.5      10.0    1.00        1837.2
+         18.07       109.9       15070.5      10.0    1.00        2067.9
+         18.90       118.2       16447.4      10.0    1.00        2307.4
+         19.73       126.6       17831.8      10.0    1.00        2555.6
+         20.57       134.9       19222.6      10.0    1.00        2812.1
+         21.40       143.3       20619.0      10.0    1.00        3076.6
+         22.23       151.6       22020.2      10.0    1.00        3348.9
+         23.07       159.9       23425.7      10.0    1.00        3628.8
+         23.90       168.3       24834.8      10.0    1.00        3916.2
+         24.73       176.6       26247.3      10.0    1.00        4210.7
+         25.57       184.9       27662.6      10.0    1.00        4512.2
+         26.40       193.2       29080.6      10.0    1.00        4820.7
+
+       *elevation referenced to common vertical datum
+CAP -USGS culvert analysis program VER 97-08c                          page  3
+
+Mercer Creek culvert example                                                    
+                     CULVERT                               APPROACH SECTION
+ I.D. EX01                  Mannings n     0.015        I.D. AP01            
+ Height        2.50 ft           Width       2.5ft      Station        57.4 ft
+ Station       10.0 ft          Length     41.0 ft      Minimum el.     6.40ft
+ Inlet el.      6.28ft       Outlet el.     6.05ft
+
+         Discharge  Flow     Water Surface Elevations (feet) Critical  Error
+   no.     (cfs)    type     appr.   inlet   outlet   exit     Dc       code@
+    1         20.0   3         8.61    8.23    8.14    8.14      1.5    0
+    2         21.5   3         8.68    8.25    8.14    8.14      1.6    0
+    3         22.5   3         8.74    8.26    8.14    8.14      1.6    0
+    4         25.0   3         8.88    8.31    8.14    8.14      1.7    0
+
+             Fall (ft)     Losses (ft)       Appr. Section  Control Section
+  no.   C   entry  eff.  entry(1-2) (2-3)    VH  alph   F    energy    F
+   1   0.95  0.47  0.36  0.03  0.01  0.13   0.03 1.00  0.17     8.46  0.52
+   2   0.95  0.54  0.41  0.04  0.01  0.15   0.03 1.00  0.18     8.51  0.56
+   3   0.95  0.60  0.45  0.04  0.01  0.17   0.03 1.00  0.18     8.55  0.59
+   4   0.95  0.74  0.56  0.05  0.01  0.20   0.03 1.00  0.18     8.65  0.65
+________________________________________________________________________________
+Abrevs. used: appr.-approach  C-discharge coefficient  eff.-effective
+VH-velocity head  alph-velocity coefficient  n-Manning's roughness coef.
+energy-specific energy  F-Froude number  entry,(1-2),(2-3)-part of reach
+
+      @Error codes:  -1,1-7 fatal error; 8-15 warning; 0 no error
+
+
+          ---------Warning Messages-------------
+
