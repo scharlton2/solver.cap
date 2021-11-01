@@ -54,7 +54,7 @@
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<File RelativePath="..\cinmod.f"/>
-		<File RelativePath="..\convert.f"/>
+		<File RelativePath="..\convert.f90"/>
 		<File RelativePath="..\culdmp.f"/>
 		<File RelativePath="..\culrat.f"/>
 		<File RelativePath="..\culvert.f"/>
@@ -66,6 +66,5 @@
 		<File RelativePath="..\ixsprp_cgns.f"/>
 		<File RelativePath="..\pipearc.f"/>
 		<File RelativePath="..\shydie.f"/>
-		<File RelativePath="..\shydie_cgns.f"/>
-		</Filter></Files>
+		<File RelativePath="..\shydie_cgns.f"/></Filter></Files>
 	<Globals/></VisualStudioProject>
