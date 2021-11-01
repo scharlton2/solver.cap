@@ -451,7 +451,7 @@ C     note that h1 is reference to the datum in this case
       IF(H1.GT.0.AND.ERR.EQ.0)THEN
         HA=H1
         HB=1.5*D+Z
-111     CONTINUE
+C 111     CONTINUE
         CALL RTMIA(H1E(INUM),F,TYP1FW,HA,HB,TOL,ISTEPS,ERR)
         IF(ERR.EQ.0)THEN
             D2(INUM)=DC
@@ -1127,7 +1127,7 @@ C-----Module data:
 C
 C-----Local variables:
       INTEGER I4
-      REAL KD3,A3,TO,LPART
+      REAL KD3,TO,LPART
 C
 C-----Externals:
       REAL H4EST,TYP4FW,TYP3LEN
@@ -1527,7 +1527,7 @@ C           box culverts - equation for fig.23 in TWRI (checked by gfk)
 Cread       READ(*,*)IXXK
           ENDIF
 C         Don't apply coefficient if flow type = 1 or 2, *C1 card used
-          IF ((TYPFLW.LE.2).AND.(NHP.GE.0)) THEN
+          IF ((TYPFW.LE.2).AND.(NHP.GE.0)) THEN
 C           Don't alter C
           ELSE
             C=C*KWR*KWING
@@ -1676,8 +1676,8 @@ C       compute default values based on TWRI tables
 C
       RETURN
 C
-    3 FORMAT (' ',2X,'TYPE..',I2,5X,'H NOT IN THE RANGE OF H5...H=',F8.
-     14)
+C    3 FORMAT (' ',2X,'TYPE..',I2,5X,'H NOT IN THE RANGE OF H5...H=',F8.
+C     14)
       END
 C
 C=====C5INT bof==============================================================
@@ -2109,7 +2109,7 @@ C-----Formats:
   110 FORMAT (4X,'Pipe arch radii (inches):  ',F6.1,'(bottom)',F6.1,
      #        '(top)',F6.1,'(corner)')
   111 FORMAT (15X,'(r or w)/B  KR or KW  Ktheta  Kproj    n      Inlet')    
-  119 FORMAT(' ',2X)
+C  119 FORMAT(' ',2X)
   204 FORMAT (/,9X,'Barrel',36X,'Top',8X,'Wetted',/,9X,'depth',8X,
      # 'Area',8X,'Conveyance',6X,'width',6X,'perimeter',/,11X,'(m)',
      #       8X,'(sq. m)',8X,'(cms)',10X,'(m)',9X,'(m)')

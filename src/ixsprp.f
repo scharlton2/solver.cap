@@ -156,7 +156,7 @@ C-----Formats:
      #      'Area',6X,'Conveyance',4X,'width',4X,'Alpha',5X,'discharge'
      #   ,/,7X,'el.(ft)*',4X,'(sq.ft)',6X,'(cfs)',8X,'(ft)',16X,'(cfs)')
 101   FORMAT(7X,F7.2,2X,F10.1,2X,F12.1,2X,F8.1,4X,F4.2,2X,F12.1)
-105   FORMAT(' ')
+C 105   FORMAT(' ')
 106   FORMAT(/,7X,'*elevation referenced to common vertical datum')
 202   FORMAT (8X,'Water',32X,'Top',15X,' Critical',/,7X,'Surface',6X,
      #      'Area',6X,'Conveyance',4X,'width',4X,'Alpha',5X,'discharge'

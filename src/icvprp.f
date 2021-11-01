@@ -22,8 +22,8 @@ C-----Module data:
       INCLUDE 'CULVRT.INC'
 C
 C-----Local variables:
-      INTEGER NCS,ERR,I,WEB,ITOP,IBOT,ERR1,TCR,XMNWID,XMXWID,FLG
-      REAL B,D,N,SCUL(MXCV),GCUL(MXCV),TW,WP,DC,DCEL,BEL
+      INTEGER NCS,ERR,I,WEB,ERR1,TCR
+      REAL B,D,N,SCUL(MXCV),GCUL(MXCV)
 C-----Local definitions:
 C     CULNIT - unit number to open wspro file containing culvert data on
 C     TC     - culvert code type; 1-circular, 2-box, 3-pipe arch, 4-nonstand.
@@ -174,7 +174,7 @@ C-----Externals:
 C
 C-----Local Variables:
       INTEGER FLG,NCHAR,MAX,I,CQFG,CSFG,IO,NCNT,CXFG,ERR1,ERR2,NC5
-      INTEGER READY,ERRIO,NCONVRT,ITOP,IBOT,PC
+      INTEGER READY,ERRIO,ITOP,IBOT,PC
       REAL VAR(24),XCTR,BEVD,RNDD,LPRJCT
       CHARACTER*80 CBUF
       CHARACTER*16 BLKOUT,ID

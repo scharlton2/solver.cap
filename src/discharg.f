@@ -147,6 +147,8 @@ C-----Externals:
 C
 C-----Local variables:
 C
+C     Currently no error checking so set ERR=0      
+      ERR=0
       TYP6=1.0993391-HQ1+CONST*(-0.1032313+CONST*
      #     (0.055182648-CONST*0.00098596166))
 C

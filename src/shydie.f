@@ -149,7 +149,7 @@ C        OPEN(UNIT=TBUNT,FILE='OUTFL',STATUS='NEW')
             WRITE(TBUNT,240)TITLES(I)
  5        CONTINUE
         ENDIF
- 2      CONTINUE
+C 2      CONTINUE
         NSA=-1
         N=0
         NRUF=0
@@ -241,7 +241,7 @@ Cwrite            READ(*,*)IXXXK
             WRITE(TBUNT,210) SECID,SRD,DATUM
  210        FORMAT('HY',1X,A16,1X,F10.1,1X,F10.2)
           ENDIF
-          CALL HYDOUT(TBUNT,SRD,KTS,POUT,SECID)
+          CALL HYDOUT(TBUNT,KTS,POUT)
         ELSE IF(TBTYP(1).EQ.3) THEN
           CALL OUTTAB(TBUNT,KTS,NOUT,OPOUT,POUT)
         ELSE IF(TBTYP(1).EQ.1) THEN
@@ -265,7 +265,7 @@ Cwrite            READ(*,*)IXXXK
             DATUM=POUT(13,1)-POUT(14,1)
             WRITE(TBUNT,210) SECID,SRD,DATUM
           ENDIF
-          CALL HYDOUT(TBUNT,SRD,KTS,POUT,SECID)
+          CALL HYDOUT(TBUNT,KTS,POUT)
         ELSE IF(TBTYP(1).EQ.3) THEN
           CALL OUTTAB(TBUNT,KTS,NOUT,OPOUT,POUT)
         ELSE IF(TBTYP(1).EQ.1) THEN
@@ -355,7 +355,7 @@ C           * write property tables *
               DATUM=POUT(13,1)-POUT(14,1)
               WRITE(TBUNT,210) SECID,SRD,DATUM
             ENDIF
-            CALL HYDOUT(TBUNT,SRD,KTS,POUT,SECID)
+            CALL HYDOUT(TBUNT,KTS,POUT)
           ELSE IF(TBTYP(1).EQ.3) THEN
             CALL OUTTAB(TBUNT,KTS,NOUT,OPOUT,POUT)
           ELSE IF(TBTYP(1).EQ.1) THEN
@@ -472,7 +472,7 @@ C     * found WSPRO hydraulic prop card *
         TITLES(NTIT)=CBUF(1:75)
       ELSE IF(CODE.EQ.'SI')THEN
         CALL PCHRR(CBUF(1:75),NCHAR,MAX,NCNT,VAR)
-        SI=VAR(1)
+        SI=INT(VAR(1))
       ELSE
         IF(CODE.EQ.'XS '.OR.CODE.EQ.'XT '.OR.CODE.EQ.'AS '.OR.CODE.EQ.
      #   'BR '.OR.CODE.EQ.'CV '.OR.CODE.EQ.'SD '.OR.CODE.EQ.'XR ')
@@ -503,9 +503,11 @@ C       convert from meter-seconds to feet-seconds
         IF(NCOMP.GT.0)THEN
           DO 10 I=1,NCOMP
             IF(COMP(1,I).EQ.1)THEN
+C             appears to convert square meters to square ft
               COMP(2,I)=COMP(2,I)*(100./30.48)*(100./30.48)
               COMP(3,I)=COMP(3,I)*(100./30.48)*(100./30.48)
             ELSE IF(COMP(1,I).EQ.2)THEN
+C             appears to convert meters to feet
               COMP(2,I)=COMP(2,I)*(100./30.48)
               COMP(3,I)=COMP(3,I)*(100./30.48)
             ENDIF
@@ -569,29 +571,26 @@ C
 C
 C
       SUBROUTINE HYDOUT
-     I                 (TBUNT,RFOOT,NOUT,POUT,XSNAME)
+     I                 (TBUNT,NOUT,POUT)
 C
 C     + + + PURPOSE + + +
 C     Writes sequential file of the hydraulic properties needed for Hydraux.
 C
 C     + + + DUMMY ARGUMENTS + + +
       INTEGER NOUT,TBUNT
-      REAL RFOOT,POUT(17,NOUT)
-      CHARACTER  XSNAME*16
+      REAL POUT(17,NOUT)
 C
 C     + + + ARGUMENT DEFINITIONS + + +
 C     TBUNT -  file unit on which table is written
 C     DATUM - cross section datum
-C     RFOOT - reference distance in river feet.
 C     NOUT  - no. of poihnts at which hydraulic properties are computed
 C     POUT  - array of hydraulic properties
-C     XSNAME - cross section name
 C
 C     + + + LOCAL VARIABLES + + +
       INTEGER I
 C
 C     + + + OUTPUT FORMATS + + +
- 210  FORMAT('HY',1X,A16,1X,F10.1,1X,F10.2)
+C 210  FORMAT('HY',1X,A16,1X,F10.1,1X,F10.2)
  200  FORMAT('DP',1X,F10.2,2(1X,E13.6),3(1X,F5.2),2(1X,F7.1))
 C
 C
@@ -1222,6 +1221,7 @@ C     + + + LOCAL VARIABLES + + +
      #        NFG,SAFG,ONRUF,NDEP,IJ,DFG,ONSA,ERRIO,ERRNO
      #        ,RREC,SINFG,DSFG,NSDEP,ODFG,IOVER,OTNIT
       REAL  VSLOPE,SKEW,VAR(40),YMIN,CORDAT
+      REAL m_to_ft
       CHARACTER  CBUF*77,CHRDUM*77
       CHARACTER*3 CODE,COM,SINJNK
       CHARACTER*16 BLKOUT
@@ -1952,7 +1952,7 @@ C     * found WSPRO hydraulic prop card *
  10    CONTINUE
       ENDIF
 C
- 998  CONTINUE
+C 998  CONTINUE
 C
       RETURN
       END
@@ -2212,7 +2212,8 @@ C     left bank
 C     right bank
       CALL PROPER (S,G,N,NSA,XSA,G(N),NRUF,RUF,SIN,POUT,SUBPRP,KXTEND)
       AN=POUT(3)
-C
+C     assignment below added to ensure that A1 is initialized when IF statement is false
+      A1=A0
       IF(AREA.LE.A0.AND.AREA.LE.AN) THEN
 C       no banks need to be extended
         DONE=0

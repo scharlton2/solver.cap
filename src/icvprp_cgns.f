@@ -9,7 +9,7 @@ C     Programmed by: Keisuke Inoue
         
         CHARACTER*10 buf
  300    FORMAT(I10)
-        WRITE(buf,300), intval
+        WRITE(buf,300) intval
         ITOSTR = TRIM(ADJUSTL(buf))
       END FUNCTION ITOSTR
       
@@ -23,7 +23,7 @@ C     Programmed by: Keisuke Inoue
         
         CHARACTER*10 buf
  301    FORMAT(F10.4)
-        WRITE(buf,301), floatval
+        WRITE(buf,301) floatval
         buf = ADJUSTL(buf)
         
  302    CONTINUE
@@ -49,14 +49,14 @@ C     Programmed by: Keisuke Inoue
 C-----Arguments:
       CHARACTER(LEN=*), INTENT(IN) :: CGNS_FILENAME
       REAL, INTENT(OUT) :: BASEL
-      INTEGER :: IER
+C      INTEGER :: IER
 
       include 'CULVRT.INC'
 
 C-----Local variables:
-      INTEGER :: NCS,ERR,I,WEB,ITOP,IBOT,ERR1,TCR,XMNWID,XMXWID,FLG
-      REAL    :: B,D,N,SCUL(MXCV),GCUL(MXCV),AREA,KONVEY,TW,WP,DC
-      REAL    :: DCEL,BEL
+      INTEGER :: NCS,ERR,I,WEB,ERR1,TCR
+      REAL    :: B,D,N,SCUL(MXCV),GCUL(MXCV),TW
+
 
 C-----local definitions:
 C     culnit - unit number to open wspro file containing culvert data on
@@ -146,21 +146,21 @@ C-----Externals:
       EXTERNAL IXMIN,IXMAX
 C
 C-----Local Variables:
-      INTEGER FLG,NCHAR,MAX,I,CQFG,CSFG,IO,NCNT,CXFG,ERR1,ERR2,NC5
-      INTEGER READY,ERRIO,NCONVRT,IER,ITOP,IBOT
+      INTEGER FLG,I,CQFG,CSFG,CXFG,ERR1,ERR2,NC5
+      INTEGER READY,ERRIO,IER,ITOP,IBOT
       INTEGER SHAPE_TYPE,MATERIAL,EDGE_TYPE,PROJ_TYPE,ALI_TYPE
       INTEGER WW_TYPE,C1_ENABLE,C5_ENABLE,DISC_METHOD
       REAL DUMMYIDS(MAXTW)
-      REAL VAR(24),XCTR,BEVD,RNDD,LPRJCT,DSINV,USINV
+      REAL BEVD,RNDD,LPRJCT,DSINV,USINV
       REAL LPROJ1,LPROJ2
       REAL THETA0,THETA1,THETA2,TMP_KR,TMP_KW
       REAL LCUL1,LCUL2,LCUL3,LMAX,LMIN,HWD
       REAL KWING1,KWING2
       CHARACTER*80 CBUF
-      CHARACTER*3 CODE
+C      CHARACTER*3 CODE
 C
 C-----Formats
- 100  FORMAT(A3,A77)
+C 100  FORMAT(A3,A77)
 C
       ERRIO=0
       DO I=1,3
@@ -361,7 +361,7 @@ C       Use CP
         END DO
 
         CBUF = ''
- 107    FORMAT(F6.2)
+C 107    FORMAT(F6.2)
         DO I=1,NHP
           CBUF = TRIM(ADJUSTL(CBUF)) // ' ' // TRIM(FTOSTR(CP(I))) // 
      #      ',' // TRIM(FTOSTR(HP(I)))
@@ -689,7 +689,7 @@ C     ------------------------------------------------
         WRITE(ERRIO,101) '*CF       ' // TRIM(ITOSTR(TFLW))
       ENDIF
 
-999   CONTINUE
+C 999   CONTINUE
 
 C     Normalize INLET value
       INLET = IABS(INLET)
