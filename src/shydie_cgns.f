@@ -1,3 +1,8 @@
+      module iricio
+          integer:: fid
+          save
+      end module
+
       SUBROUTINE HYDIE_CGNS(SI)
 
       IMPLICIT NONE
@@ -53,6 +58,9 @@ C
       SUBROUTINE WSPCDS_CGNS(S,G,N,NSA,XSA,NRUF,RUF,SRD,
      #  DMAX,RATIO,SI,EDFG)
 
+      use iric
+      use iricio
+
       IMPLICIT NONE
 
 C-----Purpose:
@@ -104,14 +112,14 @@ C
 
  101  FORMAT(A)
 
-      CALL CG_IRIC_READ_REALSINGLE_F('appr_skew'    , SKEW_ANGLE, IER)
-      CALL CG_IRIC_READ_REALSINGLE_F('max_depth'    , DMAX,       IER)
-      CALL CG_IRIC_READ_REALSINGLE_F('spacing_ratio', RATIO,      IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID,'appr_skew'    ,SKEW_ANGLE,IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID,'max_depth'    ,DMAX,      IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID,'spacing_ratio',RATIO,     IER)
       SKEW=COS(3.14159 * SKEW_ANGLE / 180.0)
       
-      CALL CG_IRIC_READ_REALSINGLE_F('srd_approach' , SRD,        IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID,'srd_approach',SRD,        IER)
 
-      CALL CG_IRIC_READ_INTEGER_F('n_type'       , N_TYPE,     IER)
+      CALL CG_IRIC_READ_INTEGER(FID, 'n_type'       , N_TYPE,     IER)
 
       WRITE(ERRIO,101) 'XS   AP01 ' // TRIM(FTOSTR(SRD)) // ',' //
      #  TRIM(FTOSTR(SKEW_ANGLE))
@@ -120,10 +128,10 @@ C
 
       IF (N_TYPE == 0) THEN
 C       Simple
-        CALL CG_IRIC_READ_FUNCTIONALSIZE_F('appr_xs', N, IER)
-        CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE_F('appr_xs',
+        CALL CG_IRIC_READ_FUNCTIONALSIZE(FID, 'appr_xs', N, IER)
+        CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE(FID, 'appr_xs',
      #    S, G, IER)
-        CALL CG_IRIC_READ_REALSINGLE_F('n_simple'   , N_SIMPLE,   IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'n_simple'   , N_SIMPLE, IER)
 
         NRUF=1
         RUF(1,1)=1
@@ -133,12 +141,12 @@ C       Simple
         XSA(1)=0
       ELSE IF (N_TYPE == 1) THEN
 C       Horizontal distribution
-        CALL CG_IRIC_READ_FUNCTIONALSIZE_F('n_h', N, IER)
-        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE_F('n_h',
+        CALL CG_IRIC_READ_FUNCTIONALSIZE(FID, 'n_h', N, IER)
+        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE(FID, 'n_h',
      #    'X', S, IER)
-        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE_F('n_h',
+        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE(FID, 'n_h',
      #    'Y', G, IER)
-        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE_F('n_h',
+        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE(FID, 'n_h',
      #    'NVAL', N_TMP, IER)
 
         NRUF=1
@@ -160,18 +168,18 @@ C       Horizontal distribution
         END DO
       ELSE IF (N_TYPE == 2) THEN
 C       Vertical distribution
-        CALL CG_IRIC_READ_FUNCTIONALSIZE_F('n_h_v', N, IER)
-        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE_F('n_h_v', 'X',
-     #    S, IER)
-        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE_F('n_h_v', 'Y',
-     #    G, IER)
-        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE_F('n_h_v', 
+        CALL CG_IRIC_READ_FUNCTIONALSIZE(FID, 'n_h_v', N, IER)
+        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE(FID, 'n_h_v',
+     #    'X', S, IER)
+        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE(FID, 'n_h_v',
+     #    'Y', G, IER)
+        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE(FID, 'n_h_v',
      #    'BOTD', BOTD, IER)
-        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE_F('n_h_v',
+        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE(FID, 'n_h_v',
      #    'TOPD', TOPD, IER)
-        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE_F('n_h_v',
+        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE(FID, 'n_h_v',
      #    'BOTN', BOTN, IER)
-        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE_F('n_h_v',
+        CALL CG_IRIC_READ_FUNCTIONALWITHNAME_REALSINGLE(FID, 'n_h_v',
      #    'TOPN', TOPN, IER)
         NRUF=2
         RUF(1,1)=1

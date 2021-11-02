@@ -112,6 +112,9 @@ C     Last modified:
 C
       SUBROUTINE RCVGEO_CGNS(DATUM,DR,B,WEB,N,SCUL,GCUL,NCS,ERR)
 
+      use iric
+      use iricio
+
       IMPLICIT NONE
 
 C-----Module data:
@@ -198,7 +201,7 @@ C     -----------------------------------------------
 C     Read data that corresponds to SI from CGNS file
 C     -----------------------------------------------
 
-      CALL cg_iric_read_integer_f('units', SI, IER)
+      CALL CG_IRIC_READ_INTEGER(FID, 'units', SI, IER)
 
  101  FORMAT(A)
       WRITE(ERRIO,101) 'SI        ' // TRIM(ITOSTR(SI))
@@ -207,8 +210,8 @@ C     -----------------------------------------------
 C     Read data that corresponds to CG from CGNS file
 C     -----------------------------------------------
 
-      CALL cg_iric_read_integer_f('shape_type', SHAPE_TYPE, IER)
-      CALL cg_iric_read_integer_f('material', MATERIAL, IER)
+      CALL CG_IRIC_READ_INTEGER(FID, 'shape_type', SHAPE_TYPE, IER)
+      CALL CG_IRIC_READ_INTEGER(FID, 'material', MATERIAL, IER)
 
       IF (SHAPE_TYPE == 0) THEN
 C       Select type
@@ -216,36 +219,36 @@ C       @TODO SHOW ERROR
       ELSE IF (SHAPE_TYPE == 1) THEN
 C       Box
         TCR = 1
-        CALL CG_IRIC_READ_REALSINGLE_F('rise'    , D       , IER)
-        CALL CG_IRIC_READ_REALSINGLE_F('span'    , B       , IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'rise'    , D       , IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'span'    , B       , IER)
       ELSE IF (SHAPE_TYPE == 2) THEN
 C       circular
         TCR = 2
-        CALL CG_IRIC_READ_REALSINGLE_F('diameter', D       , IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'diameter', D       , IER)
         B = D
       ELSE IF (SHAPE_TYPE == 3) THEN
 C       elliptical
         TCR = 2
-        CALL CG_IRIC_READ_REALSINGLE_F('rise'    , D       , IER)
-        CALL CG_IRIC_READ_REALSINGLE_F('span'    , B       , IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'rise'    , D       , IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'span'    , B       , IER)
       ELSE IF (SHAPE_TYPE == 4) THEN
 C       pipe arch
         TCR = 3
-        CALL CG_IRIC_READ_REALSINGLE_F('rise'    , D       , IER)
-        CALL CG_IRIC_READ_REALSINGLE_F('span'    , B       , IER)
-        CALL CG_IRIC_READ_REALSINGLE_F('rbottom' , ARAD(1) , IER)
-        CALL CG_IRIC_READ_REALSINGLE_F('rtop'    , ARAD(2) , IER)
-        CALL CG_IRIC_READ_REALSINGLE_F('rcorner' , ARAD(3) , IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'rise'    , D       , IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'span'    , B       , IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'rbottom' , ARAD(1) , IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'rtop'    , ARAD(2) , IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'rcorner' , ARAD(3) , IER)
       ELSE IF (SHAPE_TYPE == 5) THEN
 C       non-standard
         TCR = 4
 
-        CALL CG_IRIC_READ_FUNCTIONALSIZE_F('coords', NCS, IER)
+        CALL CG_IRIC_READ_FUNCTIONALSIZE(FID, 'coords', NCS, IER)
         IF (NCS > MXCV) THEN
           ERR=-5
           CALL EROCUL (ERR,MXCV)
         ENDIF
-        CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE_F('coords', scul,
+        CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE(FID, 'coords', scul,
      #    gcul, IER)
       ENDIF
 
@@ -256,17 +259,17 @@ C     -----------------------------------------------
 C     Read data that corresponds to CV from CGNS file
 C     -----------------------------------------------
 
-      CALL CG_IRIC_READ_INTEGER_F(   'ali_type'      , ALI_TYPE, IER)
-      CALL CG_IRIC_READ_REALSINGLE_F('srd_culvert'   , CLSRD, IER)
-      CALL CG_IRIC_READ_REALSINGLE_F('l_cul'         , CLEN , IER)
+      CALL CG_IRIC_READ_INTEGER(   FID, 'ali_type'      , ALI_TYPE, IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID, 'srd_culvert'   , CLSRD, IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID, 'l_cul'         , CLEN , IER)
       
-      CALL CG_IRIC_READ_REALSINGLE_F('l_cul1'        , LCUL1 , IER)
-      CALL CG_IRIC_READ_REALSINGLE_F('l_cul2'        , LCUL2 , IER)
-      CALL CG_IRIC_READ_REALSINGLE_F('l_cul3'        , LCUL3 , IER)
-      CALL CG_IRIC_READ_REALSINGLE_F('hw_d'          , HWD   , IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID, 'l_cul1'        , LCUL1 , IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID, 'l_cul2'        , LCUL2 , IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID, 'l_cul3'        , LCUL3 , IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID, 'hw_d'          , HWD   , IER)
       
-      CALL CG_IRIC_READ_REALSINGLE_F('us_invert'     , USINV, IER)
-      CALL CG_IRIC_READ_REALSINGLE_F('ds_invert'     , DSINV, IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID, 'us_invert'     , USINV, IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID, 'ds_invert'     , DSINV, IER)
       
       if (ALI_TYPE == 3) THEN
         LMAX = LCUL1 + LCUL2 + LCUL3
@@ -277,7 +280,7 @@ C     -----------------------------------------------
       BASEL=DSINV
       ZDROP=USINV-DSINV
 
-      CALL cg_iric_read_integer_f('num_barrels', WEB, IER)
+      CALL CG_IRIC_READ_INTEGER(FID, 'num_barrels', WEB, IER)
       WEB = WEB - 1
 
       WRITE(ERRIO,101) 'CV   EX01 ' // TRIM(FTOSTR(CLSRD)) // ',0,' //
@@ -332,13 +335,13 @@ C     ------------------------------------------------
 C     Read data that corresponds to *C1 from CGNS file
 C     ------------------------------------------------
 
-      CALL CG_IRIC_READ_INTEGER_F('c1_enable', C1_ENABLE, IER)
+      CALL CG_IRIC_READ_INTEGER(FID, 'c1_enable', C1_ENABLE, IER)
       IF (C1_ENABLE == 0) THEN
 C       Use default values
       ELSE IF (C1_ENABLE == 1) THEN
 C       Use CB12
         NHP=0
-        CALL CG_IRIC_READ_REALSINGLE_F('cb12', CB12, IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'cb12', CB12, IER)
         IF (CB12 > 0.98 .OR. CB12 < 0.85) THEN
           ERR=-13
           CALL EROCUL (ERR,I)
@@ -347,9 +350,9 @@ C       Use CB12
         WRITE(ERRIO,101) '*C1       ' // TRIM(FTOSTR(CB12))
       ELSE IF (C1_ENABLE == 2) THEN
 C       Use CP
-        CALL CG_IRIC_READ_FUNCTIONALSIZE_F('cp', NHP, IER)
+        CALL CG_IRIC_READ_FUNCTIONALSIZE(FID, 'cp', NHP, IER)
         IF (NHP > 4) NHP = 4
-        CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE_F('cp', HP, CP, IER)
+        CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE(FID, 'cp', HP, CP, IER)
 
         ERR1=0
         ERR2=0
@@ -382,17 +385,17 @@ C     ------------------------------------------------
 C     Read data that corresponds to *C5 from CGNS file
 C     ------------------------------------------------
 
-      CALL CG_IRIC_READ_INTEGER_F('c5_enable', C5_ENABLE, IER)
+      CALL CG_IRIC_READ_INTEGER(FID, 'c5_enable', C5_ENABLE, IER)
 
       IF (C5_ENABLE == 0) THEN
 C       Use default values
       ELSE IF (C5_ENABLE == 1) THEN
 C       Specify values
-        CALL CG_IRIC_READ_REALSINGLE_F('c46', C46, IER)
-        CALL CG_IRIC_READ_FUNCTIONALSIZE_F('c5', NC5, IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'c46', C46, IER)
+        CALL CG_IRIC_READ_FUNCTIONALSIZE(FID, 'c5', NC5, IER)
         IF (IER /= 0) NC5 = -1
         IF (NC5 > 4) NC5 = 4
-        CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE_F('c5', H5, C5, IER)
+        CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE(FID, 'c5', H5, C5, IER)
 
         IF (C46 > 0.98 .OR. C46 < 0.65) THEN
           ERR=-16
@@ -440,14 +443,14 @@ C     ------------------------------------------------
 C     Read data that corresponds to *CX from CGNS file
 C     ------------------------------------------------
 
-      CALL CG_IRIC_READ_FUNCTIONALSIZE_F(
+      CALL CG_IRIC_READ_FUNCTIONALSIZE(FID,
      #  'tailwater_elevation', NTW, IER)
       IF (NTW > MAXTW) THEN
         ERR = -6
         CALL EROCUL (ERR, MAXTW)
       ENDIF
-      CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE_F('tailwater_elevation',
-     #  DUMMYIDS, H4TW, IER)
+      CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE(FID,
+     #  'tailwater_elevation', DUMMYIDS, H4TW, IER)
      
       CBUF = ''
       DO I=0, NTW-1
@@ -475,7 +478,7 @@ C     ------------------------------------------------
 C     Read data that corresponds to *CQ from CGNS file
 C     ------------------------------------------------
 
-      CALL CG_IRIC_READ_FUNCTIONALSIZE_F('discharges', NQ, IER)
+      CALL CG_IRIC_READ_FUNCTIONALSIZE(FID, 'discharges', NQ, IER)
 
       IF (NQ == 0) THEN
 C       Discharge data omitted
@@ -485,7 +488,7 @@ C       Discharge data omitted
         ERR = -7
         CALL EROCUL (ERR, MAXQ)
       ELSE IF (NQ > 0) THEN
-        CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE_F('discharges',
+        CALL CG_IRIC_READ_FUNCTIONAL_REALSINGLE(FID, 'discharges',
      #    DUMMYIDS, Q, IER)
         READY = READY + 1000
 
@@ -511,7 +514,7 @@ C     ------------------------------------------------
 C     Read data that corresponds to *CN from CGNS file
 C     ------------------------------------------------
 
-      CALL CG_IRIC_READ_REALSINGLE_F('n_cul' , N , IER)
+      CALL CG_IRIC_READ_REALSINGLE(FID, 'n_cul' , N , IER)
       WRITE(ERRIO,101) '*CN       ' // TRIM(FTOSTR(N))
 
       READY=READY+10
@@ -520,7 +523,7 @@ C     -------------------------------------------------------
 C     Read data that corresponds to *CC or *C3 from CGNS file
 C     -------------------------------------------------------
 
-      CALL CG_IRIC_READ_INTEGER_F('discharge_method', DISC_METHOD, IER)
+      CALL CG_IRIC_READ_INTEGER(FID,'discharge_method',DISC_METHOD,IER)
       
 C     The order of the IF statements was reversed from the original. 
 C     At present, the use of *CC or *C3 is mutually exclusive in iRIC
@@ -533,19 +536,19 @@ C     to iRIC that permits both.
 C       Specify parameters (Use *C3 record)
 
 C       Wingwalls
-        CALL CG_IRIC_READ_INTEGER_F('ww_type', WW_TYPE, IER)
+        CALL CG_IRIC_READ_INTEGER(FID, 'ww_type', WW_TYPE, IER)
         IF (WW_TYPE == 0) THEN
 C         None
           THETA = 0
         ELSE IF (WW_TYPE == 1) THEN
 C         Equal Angled
-          CALL CG_IRIC_READ_REALSINGLE_F('ww_theta', THETA0, IER)
+          CALL CG_IRIC_READ_REALSINGLE(FID, 'ww_theta', THETA0, IER)
           THETA = THETA0
           KWING = WINGWALL(THETA)
         ELSE IF (WW_TYPE == 2) THEN
 C         Unequal Angled
-          CALL CG_IRIC_READ_REALSINGLE_F('ww_theta1', THETA1, IER)
-          CALL CG_IRIC_READ_REALSINGLE_F('ww_theta2', THETA2, IER)
+          CALL CG_IRIC_READ_REALSINGLE(FID, 'ww_theta1', THETA1, IER)
+          CALL CG_IRIC_READ_REALSINGLE(FID, 'ww_theta2', THETA2, IER)
           THETA = THETA1
           KWING1 = WINGWALL(THETA)
           THETA = THETA2
@@ -555,10 +558,10 @@ C         Unequal Angled
 
 C       Adjustment parameters
 
-        CALL CG_IRIC_READ_INTEGER_F('inlet', INLET, IER)
-        CALL CG_IRIC_READ_REALSINGLE_F('kr', TMP_KR, IER)
-        CALL CG_IRIC_READ_REALSINGLE_F('kw', TMP_KW, IER)
-        CALL CG_IRIC_READ_REALSINGLE_F('kproj', KPROJ, IER)
+        CALL CG_IRIC_READ_INTEGER(FID, 'inlet', INLET, IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'kr', TMP_KR, IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'kw', TMP_KW, IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'kproj', KPROJ, IER)
 
         IF (TMP_KR > 1.0) THEN
           KWR = TMP_KR
@@ -621,7 +624,7 @@ C         beveling coefficient error
       ELSE IF (DISC_METHOD == 0) THEN
 C       Specify inlet geometry (Use *CC record)
 
-        CALL CG_IRIC_READ_INTEGER_F('edg_type', EDGE_TYPE, IER)
+        CALL CG_IRIC_READ_INTEGER(FID, 'edg_type', EDGE_TYPE, IER)
 
         IF (EDGE_TYPE == 1) THEN
 C         No Edging
@@ -629,12 +632,12 @@ C         No Edging
         ELSE IF (EDGE_TYPE == 2) THEN
 C         Rounding
           INLET = 1
-          CALL CG_IRIC_READ_REALSINGLE_F('edg_rc', RNDD, IER)
+          CALL CG_IRIC_READ_REALSINGLE(FID, 'edg_rc', RNDD, IER)
         ELSE IF (EDGE_TYPE == 3) THEN
 C         Beveled
           INLET = 1
-          CALL CG_IRIC_READ_REALSINGLE_F('edg_wb', BEVD, IER)
-          CALL CG_IRIC_READ_REALSINGLE_F('edg_ab', THETA0, IER)
+          CALL CG_IRIC_READ_REALSINGLE(FID, 'edg_wb', BEVD, IER)
+          CALL CG_IRIC_READ_REALSINGLE(FID, 'edg_ab', THETA0, IER)
           IF (THETA0 > 0) THEN
             THETA = THETA0
             KWING = WINGWALL(THETA)
@@ -650,18 +653,18 @@ C         Flared pipe
           INLET = 4
         ENDIF
 
-        CALL cg_iric_read_integer_f('proj_type', PROJ_TYPE, IER)
+        CALL CG_IRIC_READ_INTEGER(FID, 'proj_type', PROJ_TYPE, IER)
 
         IF (PROJ_TYPE == 1) THEN
 C         Flush
           LPRJCT = 0
         ELSE IF (PROJ_TYPE == 2) THEN
 C         Equal Projection
-          CALL CG_IRIC_READ_REALSINGLE_F('proj_l', LPRJCT, IER)
+          CALL CG_IRIC_READ_REALSINGLE(FID, 'proj_l', LPRJCT, IER)
         ELSE IF (PROJ_TYPE == 3) THEN
 C         Unequal Projection
-          CALL CG_IRIC_READ_REALSINGLE_F('proj_l1', LPROJ1, IER)
-          CALL CG_IRIC_READ_REALSINGLE_F('proj_l2', LPROJ2, IER)
+          CALL CG_IRIC_READ_REALSINGLE(FID, 'proj_l1', LPROJ1, IER)
+          CALL CG_IRIC_READ_REALSINGLE(FID, 'proj_l2', LPROJ2, IER)
           LPRJCT = (LPROJ1 + LPROJ2) * 0.5
         ENDIF
         
@@ -676,10 +679,10 @@ C     ------------------------------------------------
 C     Read data that corresponds to *CF from CGNS file
 C     ------------------------------------------------
 
-      CALL CG_IRIC_READ_INTEGER_F('tflw', TFLW, IER)
+      CALL CG_IRIC_READ_INTEGER(FID, 'tflw', TFLW, IER)
       READY=READY+100000
       IF (TFLW == 5) THEN
-        CALL CG_IRIC_READ_REALSINGLE_F('hflw', HFLW, IER)
+        CALL CG_IRIC_READ_REALSINGLE(FID, 'hflw', HFLW, IER)
       ENDIF
 
       IF (TFLW == 5) THEN

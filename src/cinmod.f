@@ -12,6 +12,9 @@ C
 C
 C     + + + PURPOSE + + +
 C
+      USE iric
+      USE iricio
+
       REAL N,KONVEY
 C
       IF (ABS(DEPTH-D).LE.0.000001) THEN

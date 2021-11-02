@@ -49,6 +49,5 @@ C     ARAD   - pipe arch radii, ARAD(1)-bottom, ARAD(2)-top, ARAD(3)-corner
 C     CWIDTH - culvert width, max station - min station or the b variable
 C     THETA  - wingwall angle in degrees
 C     RND    - rounding or beveling ratio 
-C     CGNSID - cgns file handle
 C
 C=====CULVRT.INC eof=========================================================

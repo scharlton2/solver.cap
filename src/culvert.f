@@ -8,14 +8,16 @@ C          5-approach id, 6-output header string
 C     Modified by gfkoltun for 2021 version      
 C
       PROGRAM CLTST
-      
+
+      use iric
+      use iricio
+
       IMPLICIT NONE
 
       include 'CULVRT.INC'
-      include 'cgnslib_f.h'
 
 C-----Local variables:
-      INTEGER OTNIT,GSN,IREPORT,PNO,ERR,CGNSID,IER,CGNSOUT
+      INTEGER OTNIT,GSN,IREPORT,PNO,ERR,IER,CGNSOUT
       CHARACTER*3 RERUN
       CHARACTER*16 XSCID,CLID,BLKOUT
       CHARACTER*132 DUMPY
@@ -48,8 +50,7 @@ C       Versions before 2011 started at page 0. I modified to start at page 1 (g
         CALL VERSON(OTNIT,PNO)
         ERR=2
 
-        CALL CG_OPEN_F(DUMPY, CG_MODE_MODIFY, CGNSID, IER)
-        CALL CG_IRIC_INIT_F(CGNSID, IER)
+        CALL CG_IRIC_OPEN(DUMPY, IRIC_MODE_MODIFY, FID, IER)
 
         IF(ICVPRP_CGNS(DUMPY,BASEL)) ERR=0
         CLID ='EX01            '
@@ -71,7 +72,7 @@ C       write flow solutions to output
         CGNSOUT=1
         CALL HARDCPY(OTNIT,PNO,HTITLE,CGNSOUT)
 
-        CALL CG_CLOSE_F(CGNSID, IER)
+        CALL CG_IRIC_CLOSE(FID, IER)
 
       ELSE IF (LEN_TRIM(DUMPY).GT.0) THEN
 C       read file names, section ids and header text in this section
