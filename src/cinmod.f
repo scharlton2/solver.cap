@@ -398,6 +398,9 @@ C                     print statement
 C     Modified by gfkoltun for 2021 version
 C
       SUBROUTINE HARDCPY (PUNIT,PNO,HTITLE,CGNSOUT)
+
+      use iric
+      use iricio
 C
 C-----Arguments:
       INTEGER PUNIT,PNO,CGNSOUT
@@ -642,13 +645,18 @@ C------write footer
  10   CONTINUE
 
       IF (CGNSOUT.EQ.1) THEN
-        CALL CG_IRIC_WRITEGRIDCOORD2D_F(NQ,NTW,DISCHARGE,EXITELEV,IER)
+        CALL CG_IRIC_WRITE_GRID2D_COORDS(FID,NQ,NTW,
+     #    DISCHARGE,EXITELEV,IER)
         TIME=0
-        CALL CG_IRIC_WRITE_SOL_TIME_F(TIME,IER)
-        CALL CG_IRIC_WRITE_SOL_REAL_F('wse_approach',WSE_APPR,IER);
-        CALL CG_IRIC_WRITE_SOL_REAL_F('wse_inlet',WSE_INLET,IER);
-        CALL CG_IRIC_WRITE_SOL_REAL_F('wse_outlet',WSE_OUTLET,IER);
-        CALL CG_IRIC_WRITE_SOL_REAL_F('critical_dc',C_DC,IER);
+        CALL CG_IRIC_WRITE_SOL_TIME(FID,TIME,IER)
+        CALL CG_IRIC_WRITE_SOL_NODE_REAL(FID,'wse_approach',
+     #    WSE_APPR,IER)
+        CALL CG_IRIC_WRITE_SOL_NODE_REAL(FID,'wse_inlet',
+     #    WSE_INLET,IER)
+        CALL CG_IRIC_WRITE_SOL_NODE_REAL(FID,'wse_outlet',
+     #    WSE_OUTLET,IER)
+        CALL CG_IRIC_WRITE_SOL_NODE_REAL(FID,'critical_dc',
+     #    C_DC,IER)
           
         DEALLOCATE(DISCHARGE, EXITELEV)
         DEALLOCATE(WSE_APPR,WSE_INLET,WSE_OUTLET,C_DC)
