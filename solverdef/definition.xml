@@ -1,46 +1,46 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<SolverDefinition 
-    xmlns="www.iric.net/SolverDefinition/1.0"
-    name="cap" caption="Culvert Analysis Program" version="2.0.7" copyright="USGS"
-    release="2021.03.03" 
-    homepage="http://water.usgs.gov/software/CAP/"
-    executable="CAP.exe"
-    iterationtype="time"
-    gridtype="nogrid"
-    >
+<SolverDefinition
+	xmlns="www.iric.net/SolverDefinition/1.0"
+	name="cap" caption="Culvert Analysis Program" version="2.0.7" copyright="USGS"
+	release="2021.03.03" 
+	homepage="http://water.usgs.gov/software/CAP/"
+	executable="CAP.exe"
+	iterationtype="time"
+	gridtype="nogrid"
+>
 	<CalculationCondition>
 		<Tab name="project_info" caption="Project Info">
 			<HBoxLayout>
 				<VBoxLayout>
 					<GroupBox caption="Stream and Flood">
 						<Item name="id" caption="ID">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="streamName" caption="Stream">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="location" caption="Location">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="street_road" caption="Stream/Road">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="flood_date" caption="Flood Date">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 					</GroupBox>
 					<GroupBox caption="Authorship">
 						<Item name="computed_by" caption="Computed By">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="checked_by" caption="Checked By">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="reviewed_by" caption="Reviewed By">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="remarks" caption="Remarks">
-							<Definition valueType="string" multiline="true" />
+							<Definition valueType="string" multiline="true"/>
 						</Item>
 					</GroupBox>
 				</VBoxLayout>
@@ -59,31 +59,31 @@
 					</GroupBox>
 					<GroupBox caption="Survey Information">
 						<Item name="flagged_by" caption="Flagged By">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="flagging_date" caption="Flagging Date">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="surveyed_by" caption="Surveyed By">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="survey_date" caption="Survey Date">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="instrument_type" caption="Instrument Type">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="model" caption="Model">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="serial_num" caption="Serial Number">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="horizontal_datum" caption="Horizontal Datum">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 						<Item name="vertical_datum" caption="Vertical Datum">
-							<Definition valueType="string" />
+							<Definition valueType="string"/>
 						</Item>
 					</GroupBox>
 				</VBoxLayout>
@@ -94,19 +94,19 @@
 				<VBoxLayout withSpacer="true">
 					<Image src="shape_types.png">
 						<SubImage src="shape_box.png">
-							<Condition type="isEqual" target="shape_type" value="1" />
+							<Condition type="isEqual" target="shape_type" value="1"/>
 						</SubImage>
 						<SubImage src="shape_circular.png">
-							<Condition type="isEqual" target="shape_type" value="2" />
+							<Condition type="isEqual" target="shape_type" value="2"/>
 						</SubImage>
 						<SubImage src="shape_elliptical.png">
-							<Condition type="isEqual" target="shape_type" value="3" />
+							<Condition type="isEqual" target="shape_type" value="3"/>
 						</SubImage>
 						<SubImage src="shape_pipearch.png">
-							<Condition type="isEqual" target="shape_type" value="4" />
+							<Condition type="isEqual" target="shape_type" value="4"/>
 						</SubImage>
 						<SubImage src="shape_nonstandard.png">
-							<Condition type="isEqual" target="shape_type" value="5" />
+							<Condition type="isEqual" target="shape_type" value="5"/>
 						</SubImage>
 					</Image>
 				</VBoxLayout>
@@ -128,13 +128,13 @@
 					<GroupBox caption="Size">
 						<Item name="rise" caption="Rise [inches] (RISE)">
 							<SubCaption caption="Rise [centimeters] (RISE)">
-                                <Condition type="or">
-                                    <Condition type="isEqual" target="units" value="1" />
-                                    <Condition type="isEqual" target="units" value="3" />
-                                </Condition>							
+								<Condition type="or">
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
+								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="or" >
+								<Condition type="or">
 									<Condition type="isEqual" target="shape_type" value="1"/>
 									<Condition type="isEqual" target="shape_type" value="3"/>
 									<Condition type="isEqual" target="shape_type" value="4"/>
@@ -143,13 +143,13 @@
 						</Item>
 						<Item name="span" caption="Span [inches] (SPAN)">
 							<SubCaption caption="Span [centimeters] (SPAN)">
-                                <Condition type="or">
-                                    <Condition type="isEqual" target="units" value="1" />
-                                    <Condition type="isEqual" target="units" value="3" />
-                                </Condition>							
+								<Condition type="or">
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
+								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="or" >
+								<Condition type="or">
 									<Condition type="isEqual" target="shape_type" value="1"/>
 									<Condition type="isEqual" target="shape_type" value="3"/>
 									<Condition type="isEqual" target="shape_type" value="4"/>
@@ -159,9 +159,9 @@
 						<Item name="diameter" caption="Diameter [inches] (RISE,SPAN)">
 							<SubCaption caption="Diameter [centimeters] (RISE,SPAN)">
 								<Condition type="or">
-                                    <Condition type="isEqual" target="units" value="1" />
-                                    <Condition type="isEqual" target="units" value="3" />
-                                </Condition>
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
+								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
 								<Condition type="isEqual" target="shape_type" value="2"/>
@@ -170,9 +170,9 @@
 						<Item name="rbottom" caption="R&lt;sub&gt;bottom&lt;/sub&gt; [inches] (BOTRAD)">
 							<SubCaption caption="R&lt;sub&gt;bottom&lt;/sub&gt; [centimeters] (BOTRAD)">
 								<Condition type="or">
-                                    <Condition type="isEqual" target="units" value="1" />
-                                    <Condition type="isEqual" target="units" value="3" />
-                                </Condition>
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
+								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
 								<Condition type="isEqual" target="shape_type" value="4"/>
@@ -181,9 +181,9 @@
 						<Item name="rtop" caption="R&lt;sub&gt;top&lt;/sub&gt; [inches] (TOPRAD)">
 							<SubCaption caption="R&lt;sub&gt;top&lt;/sub&gt; [centimeters] (TOPRAD)">
 								<Condition type="or">
-                                    <Condition type="isEqual" target="units" value="1" />
-                                    <Condition type="isEqual" target="units" value="3" />
-                                </Condition>
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
+								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
 								<Condition type="isEqual" target="shape_type" value="4"/>
@@ -192,24 +192,24 @@
 						<Item name="rcorner" caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD)">
 							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [centimeters] (CORRAD)">
 								<Condition type="or">
-                                    <Condition type="isEqual" target="units" value="1" />
-                                    <Condition type="isEqual" target="units" value="3" />
-                                </Condition>
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
+								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
 								<Condition type="isEqual" target="shape_type" value="4"/>
 							</Definition>
 						</Item>
-						<Item name="coords" caption="Coordinates [feet] (SCUL, GCUL)" >
+						<Item name="coords" caption="Coordinates [feet] (SCUL, GCUL)">
 							<SubCaption caption="Coordinates [meters] (SCUL, GCUL)">
-                                <Condition type="or">
-                                    <Condition type="isEqual" target="units" value="1" />
-                                    <Condition type="isEqual" target="units" value="3" />
-                                </Condition>							
+								<Condition type="or">
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
+								</Condition>
 							</SubCaption>
 							<Definition conditionType="functional" noSort="true">
-								<Parameter caption="X" valueType="real" />
-								<Value caption="Y" valueType="real" />
+								<Parameter caption="X" valueType="real"/>
+								<Value caption="Y" valueType="real"/>
 								<Condition type="isEqual" target="shape_type" value="5"/>
 							</Definition>
 						</Item>
@@ -230,7 +230,7 @@
 									<Enumeration value="5" caption="Corrugated metal pipe with corner radius 31 inch (J=5)"/>
 									<Enumeration value="6" caption="Corrugated metal pipe with corner radius 47 inch (J=6)"/>
 								</Enumerations>
-								<Condition type="or" >
+								<Condition type="or">
 									<Condition type="isEqual" target="shape_type" value="2"/>
 									<Condition type="isEqual" target="shape_type" value="3"/>
 									<Condition type="isEqual" target="shape_type" value="4"/>
@@ -247,16 +247,16 @@
 				<VBoxLayout withSpacer="true">
 					<Image src="alignment_types.png">
 						<SubImage src="alignment_unskewed.png">
-							<Condition type="isEqual" target="ali_type" value="1" />
+							<Condition type="isEqual" target="ali_type" value="1"/>
 						</SubImage>
 						<SubImage src="alignment_skewed.png">
-							<Condition type="isEqual" target="ali_type" value="2" />
+							<Condition type="isEqual" target="ali_type" value="2"/>
 						</SubImage>
 						<SubImage src="alignment_mitered.png">
-							<Condition type="isEqual" target="ali_type" value="3" />
+							<Condition type="isEqual" target="ali_type" value="3"/>
 						</SubImage>
 					</Image>
-					<Image src="alignment_ncul.png" />
+					<Image src="alignment_ncul.png"/>
 				</VBoxLayout>
 				<VBoxLayout withSpacer="true">
 					<GroupBox caption="Type">
@@ -275,12 +275,12 @@
 						<Item name="srd_culvert" caption="SRD&lt;sub&gt;culvert&lt;/sub&gt; [feet]">
 							<SubCaption caption="SRD&lt;sub&gt;culvert&lt;/sub&gt; [meters]">
 								<Condition type="or">
-                                    <Condition type="isEqual" target="units" value="1" />
-                                    <Condition type="isEqual" target="units" value="3" />
-                                </Condition>
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
+								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="or" >
+								<Condition type="or">
 									<Condition type="isEqual" target="ali_type" value="1"/>
 									<Condition type="isEqual" target="ali_type" value="2"/>
 									<Condition type="isEqual" target="ali_type" value="3"/>
@@ -290,12 +290,12 @@
 						<Item name="srd_approach" caption="SRD&lt;sub&gt;approach&lt;/sub&gt; [feet]">
 							<SubCaption caption="SRD&lt;sub&gt;approach&lt;/sub&gt; [meters]">
 								<Condition type="or">
-                                    <Condition type="isEqual" target="units" value="1" />
-                                    <Condition type="isEqual" target="units" value="3" />
-                                </Condition>
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
+								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="or" >
+								<Condition type="or">
 									<Condition type="isEqual" target="ali_type" value="1"/>
 									<Condition type="isEqual" target="ali_type" value="2"/>
 									<Condition type="isEqual" target="ali_type" value="3"/>
@@ -310,14 +310,14 @@
 								<Label caption="L&lt;sub&gt;cul&lt;/sub&gt; [feet] (CVLENG)" row="0" col="0">
 									<SubCaption caption="L&lt;sub&gt;cul&lt;/sub&gt; [meters] (CVLENG)">
 										<Condition type="or">
-											<Condition type="isEqual" target="units" value="1" />
-											<Condition type="isEqual" target="units" value="3" />
+											<Condition type="isEqual" target="units" value="1"/>
+											<Condition type="isEqual" target="units" value="3"/>
 										</Condition>
 									</SubCaption>
 								</Label>
-								<Item name="l_cul" row="0" col="1" >
+								<Item name="l_cul" row="0" col="1">
 									<Definition valueType="real" default="0">
-										<Condition type="or" >
+										<Condition type="or">
 											<Condition type="isEqual" target="ali_type" value="1"/>
 											<Condition type="isEqual" target="ali_type" value="2"/>
 										</Condition>
@@ -327,8 +327,8 @@
 								<Label caption="L&lt;sub&gt;cul1&lt;/sub&gt; [feet] (CVLENG)" row="1" col="0">
 									<SubCaption caption="L&lt;sub&gt;cul1&lt;/sub&gt; [meters] (CVLENG)">
 										<Condition type="or">
-											<Condition type="isEqual" target="units" value="1" />
-											<Condition type="isEqual" target="units" value="3" />
+											<Condition type="isEqual" target="units" value="1"/>
+											<Condition type="isEqual" target="units" value="3"/>
 										</Condition>
 									</SubCaption>
 								</Label>
@@ -341,8 +341,8 @@
 								<Label caption="L&lt;sub&gt;cul2&lt;/sub&gt; [feet] (CVLENG)" row="2" col="0">
 									<SubCaption caption="L&lt;sub&gt;cul2&lt;/sub&gt; [meters] (CVLENG)">
 										<Condition type="or">
-											<Condition type="isEqual" target="units" value="1" />
-											<Condition type="isEqual" target="units" value="3" />
+											<Condition type="isEqual" target="units" value="1"/>
+											<Condition type="isEqual" target="units" value="3"/>
 										</Condition>
 									</SubCaption>
 								</Label>
@@ -355,8 +355,8 @@
 								<Label caption="L&lt;sub&gt;cul3&lt;/sub&gt; [feet] (CVLENG)" row="3" col="0">
 									<SubCaption caption="L&lt;sub&gt;cul3&lt;/sub&gt; [meters] (CVLENG)">
 										<Condition type="or">
-											<Condition type="isEqual" target="units" value="1" />
-											<Condition type="isEqual" target="units" value="3" />
+											<Condition type="isEqual" target="units" value="1"/>
+											<Condition type="isEqual" target="units" value="3"/>
 										</Condition>
 									</SubCaption>
 								</Label>
@@ -369,8 +369,8 @@
 								<Label caption="Headwater Depth [inches] (d&lt;sub&gt;2&lt;/sub&gt;)" row="4" col="0">
 									<SubCaption caption="Headwater Depth [centimeters] (d&lt;sub&gt;2&lt;/sub&gt;)">
 										<Condition type="or">
-											<Condition type="isEqual" target="units" value="1" />
-											<Condition type="isEqual" target="units" value="3" />
+											<Condition type="isEqual" target="units" value="1"/>
+											<Condition type="isEqual" target="units" value="3"/>
 										</Condition>
 									</SubCaption>
 								</Label>
@@ -387,12 +387,12 @@
 						<Item name="us_invert" caption="U/S Invert [feet] (USINV)">
 							<SubCaption caption="U/S Invert [meters] (USINV)">
 								<Condition type="or">
-									<Condition type="isEqual" target="units" value="1" />
-									<Condition type="isEqual" target="units" value="3" />
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
 								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="or" >
+								<Condition type="or">
 									<Condition type="isEqual" target="ali_type" value="1"/>
 									<Condition type="isEqual" target="ali_type" value="2"/>
 									<Condition type="isEqual" target="ali_type" value="3"/>
@@ -402,12 +402,12 @@
 						<Item name="ds_invert" caption="D/S Invert [feet] (DSINV)">
 							<SubCaption caption="D/S Invert [meters] (DSINV)">
 								<Condition type="or">
-									<Condition type="isEqual" target="units" value="1" />
-									<Condition type="isEqual" target="units" value="3" />
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
 								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="or" >
+								<Condition type="or">
 									<Condition type="isEqual" target="ali_type" value="1"/>
 									<Condition type="isEqual" target="ali_type" value="2"/>
 									<Condition type="isEqual" target="ali_type" value="3"/>
@@ -416,7 +416,7 @@
 						</Item>
 						<Item name="n_cul" caption="n&lt;sub&gt;cul&lt;/sub&gt; (n in *CN)">
 							<Definition valueType="real" default="0">
-								<Condition type="or" >
+								<Condition type="or">
 									<Condition type="isEqual" target="ali_type" value="1"/>
 									<Condition type="isEqual" target="ali_type" value="2"/>
 									<Condition type="isEqual" target="ali_type" value="3"/>
@@ -452,7 +452,7 @@
   &lt;li&gt;This corresponds to using &quot;*C3&quot; record.&lt;/li&gt;
 &lt;/ul&gt;
 
-" />
+"/>
 			</VBoxLayout>
 		</Tab>
 
@@ -461,10 +461,10 @@
 				<VBoxLayout withSpacer="true">
 					<Image src="edging_types.png">
 						<SubImage src="edging_rounded.png">
-							<Condition type="isEqual" target="edg_type" value="2" />
+							<Condition type="isEqual" target="edg_type" value="2"/>
 						</SubImage>
 						<SubImage src="edging_beveled.png">
-							<Condition type="isEqual" target="edg_type" value="3" />
+							<Condition type="isEqual" target="edg_type" value="3"/>
 						</SubImage>
 					</Image>
 				</VBoxLayout>
@@ -488,12 +488,12 @@
 						<Item name="edg_rc" caption="Radius of Curvature [inches] (R)">
 							<SubCaption caption="Radius of Curvature [centimeters] (R)">
 								<Condition type="or">
-									<Condition type="isEqual" target="units" value="1" />
-									<Condition type="isEqual" target="units" value="3" />
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
 								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="and" >
+								<Condition type="and">
 									<Condition type="isEqual" target="discharge_method" value="0"/>
 									<Condition type="isEqual" target="edg_type" value="2"/>
 								</Condition>
@@ -502,12 +502,12 @@
 						<Item name="edg_wb" caption="Width of Bevel [inches] (W)">
 							<SubCaption caption="Width of Bevel [centimeters] (W)">
 								<Condition type="or">
-									<Condition type="isEqual" target="units" value="1" />
-									<Condition type="isEqual" target="units" value="3" />
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
 								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="and" >
+								<Condition type="and">
 									<Condition type="isEqual" target="discharge_method" value="0"/>
 									<Condition type="isEqual" target="edg_type" value="3"/>
 								</Condition>
@@ -515,7 +515,7 @@
 						</Item>
 						<Item name="edg_ab" caption="Angle of Bevel [degrees] (THETA)">
 							<Definition valueType="real" default="0">
-								<Condition type="and" >
+								<Condition type="and">
 									<Condition type="isEqual" target="discharge_method" value="0"/>
 									<Condition type="isEqual" target="edg_type" value="3"/>
 								</Condition>
@@ -531,7 +531,7 @@
 				<VBoxLayout withSpacer="true">
 					<Image src="projection_types.png">
 						<SubImage src="projection_equal.png">
-							<Condition type="isEqual" target="proj_type" value="2" />
+							<Condition type="isEqual" target="proj_type" value="2"/>
 						</SubImage>
 					</Image>
 				</VBoxLayout>
@@ -551,19 +551,19 @@
 						<Item name="proj_l" caption="L&lt;sub&gt;proj&lt;/sub&gt; [inches] (LPROJ)">
 							<SubCaption caption="L&lt;sub&gt;proj&lt;/sub&gt; [centimeters] (LPROJ)">
 								<Condition type="or">
-									<Condition type="isEqual" target="units" value="1" />
-									<Condition type="isEqual" target="units" value="3" />
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
 								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="and" >
+								<Condition type="and">
 									<Condition type="isEqual" target="discharge_method" value="0"/>
 									<Condition type="isEqual" target="proj_type" value="2"/>
 								</Condition>
 							</Definition>
 						</Item>
 					</GroupBox>
-					<Label caption="The projection length LPROJ is a function of projection geometry&lt;br&gt;relative to the headwater elevation.&lt;br&gt;Determine LPROJ according to Bodhaine (1968), p. 41-42." />
+					<Label caption="The projection length LPROJ is a function of projection geometry&lt;br&gt;relative to the headwater elevation.&lt;br&gt;Determine LPROJ according to Bodhaine (1968), p. 41-42."/>
 				</VBoxLayout>
 			</HBoxLayout>
 		</Tab>
@@ -573,10 +573,10 @@
 				<VBoxLayout withSpacer="true">
 					<Image src="wingwalls_types.png">
 						<SubImage src="wingwalls_equal.png">
-							<Condition type="isEqual" target="ww_type" value="1" />
+							<Condition type="isEqual" target="ww_type" value="1"/>
 						</SubImage>
 						<SubImage src="wingwalls_unequal.png">
-							<Condition type="isEqual" target="ww_type" value="2" />
+							<Condition type="isEqual" target="ww_type" value="2"/>
 						</SubImage>
 					</Image>
 				</VBoxLayout>
@@ -596,7 +596,7 @@
 					<GroupBox caption="Angles">
 						<Item name="ww_theta" caption="Theta [degrees] (THETA)">
 							<Definition valueType="real" default="0">
-								<Condition type="and" >
+								<Condition type="and">
 									<Condition type="isEqual" target="discharge_method" value="1"/>
 									<Condition type="isEqual" target="ww_type" value="1"/>
 								</Condition>
@@ -604,7 +604,7 @@
 						</Item>
 						<Item name="ww_theta1" caption="Theta&lt;sub&gt;1&lt;/sub&gt; [degrees] (THETA)">
 							<Definition valueType="real" default="0">
-								<Condition type="and" >
+								<Condition type="and">
 									<Condition type="isEqual" target="discharge_method" value="1"/>
 									<Condition type="isEqual" target="ww_type" value="2"/>
 								</Condition>
@@ -612,14 +612,14 @@
 						</Item>
 						<Item name="ww_theta2" caption="Theta&lt;sub&gt;2&lt;/sub&gt; [degrees] (THETA)">
 							<Definition valueType="real" default="0">
-								<Condition type="and" >
+								<Condition type="and">
 									<Condition type="isEqual" target="discharge_method" value="1"/>
 									<Condition type="isEqual" target="ww_type" value="2"/>
 								</Condition>
 							</Definition>
 						</Item>
 					</GroupBox>
-					<Label caption="When Type=&quot;Unequal Angled&quot;, k&lt;sub&gt;theta&lt;/sub&gt; is calculated as &lt;br&gt;the average value of k&lt;sub&gt;theta&lt;/sub&gt; values for each angles.&lt;br&gt;&lt;br&gt;For unequal wingwall angles and Type 4 flow, the user&lt;br&gt;will need to manually compute and average C value (C46)&lt;br&gt;and either compute discharge by hand computation or by&lt;br&gt;setting the C46 value in this program.&lt;br&gt;&lt;br&gt;You can input C46 value on &quot;Coefficients&quot; page." />
+					<Label caption="When Type=&quot;Unequal Angled&quot;, k&lt;sub&gt;theta&lt;/sub&gt; is calculated as &lt;br&gt;the average value of k&lt;sub&gt;theta&lt;/sub&gt; values for each angles.&lt;br&gt;&lt;br&gt;For unequal wingwall angles and Type 4 flow, the user&lt;br&gt;will need to manually compute and average C value (C46)&lt;br&gt;and either compute discharge by hand computation or by&lt;br&gt;setting the C46 value in this program.&lt;br&gt;&lt;br&gt;You can input C46 value on &quot;Coefficients&quot; page."/>
 				</VBoxLayout>
 			</HBoxLayout>
 		</Tab>
@@ -638,21 +638,21 @@
 			</Item>
 			<Item name="kr" caption="Entrance-rounding adjustment (KR)">
 				<Definition valueType="real" default="1">
-					<Condition type="or" >
+					<Condition type="or">
 						<Condition type="isEqual" target="discharge_method" value="1"/>
 					</Condition>
 				</Definition>
 			</Item>
 			<Item name="kw" caption="Entrance-beveling adjustment (KW)">
 				<Definition valueType="real" default="1">
-					<Condition type="or" >
+					<Condition type="or">
 						<Condition type="isEqual" target="discharge_method" value="1"/>
 					</Condition>
 				</Definition>
 			</Item>
 			<Item name="kproj" caption="Projecting-pipe adjustment (KPROJ)">
 				<Definition valueType="real" default="1">
-					<Condition type="or" >
+					<Condition type="or">
 						<Condition type="isEqual" target="discharge_method" value="1"/>
 					</Condition>
 				</Definition>
@@ -678,14 +678,14 @@
 					</Item>
 					<Item name="cp" caption="Coefficient for flow type 3 (HP, CP)">
 						<Definition valueType="functional">
-							<Parameter caption="HP" valueType="real" />
-							<Value caption="CP" valueType="real" />
+							<Parameter caption="HP" valueType="real"/>
+							<Value caption="CP" valueType="real"/>
 							<Condition type="isEqual" target="c1_enable" value="2"/>
 						</Definition>
 					</Item>
 				</GroupBox>
 				<VBoxLayout withSpacer="true" row="0" col="1">
-					<Label caption="0.85 &amp;lt;= CB12 &amp;lt;= 0.98&lt;br&gt;0.65 &amp;lt;= CP &amp;lt;= 0.98&lt;br&gt;The number of CP, HP pairs must be &lt;br&gt;between 1 and 4." />
+					<Label caption="0.85 &amp;lt;= CB12 &amp;lt;= 0.98&lt;br&gt;0.65 &amp;lt;= CP &amp;lt;= 0.98&lt;br&gt;The number of CP, HP pairs must be &lt;br&gt;between 1 and 4."/>
 				</VBoxLayout>
 
 				<GroupBox caption="Flow Types 4 to 6" row="1" col="0">
@@ -704,15 +704,15 @@
 					</Item>
 					<Item name="c5" caption="Coefficient for flow type 5 (H5, C5)">
 						<Definition valueType="functional">
-							<Parameter caption="H5" valueType="real" />
-							<Value caption="C5" valueType="real" />
+							<Parameter caption="H5" valueType="real"/>
+							<Value caption="C5" valueType="real"/>
 							<Condition type="isEqual" target="c5_enable" value="1"/>
 						</Definition>
 					</Item>
 				</GroupBox>
 
 				<VBoxLayout withSpacer="true" row="1" col="1">
-					<Label caption="0.65 &amp;lt;= C46 &amp;lt;= 0.98&lt;br&gt;0.39 &amp;lt;= C5 &amp;lt;= 0.75&lt;br&gt;The number of C5, H5 pairs must be &lt;br&gt;between 1 and 4.&lt;br&gt;&lt;br&gt;For unequal wingwall angles and Type 4&lt;br&gt;flow, the user needs to manually compute&lt;br&gt;an average C46 value and input here." />
+					<Label caption="0.65 &amp;lt;= C46 &amp;lt;= 0.98&lt;br&gt;0.39 &amp;lt;= C5 &amp;lt;= 0.75&lt;br&gt;The number of C5, H5 pairs must be &lt;br&gt;between 1 and 4.&lt;br&gt;&lt;br&gt;For unequal wingwall angles and Type 4&lt;br&gt;flow, the user needs to manually compute&lt;br&gt;an average C46 value and input here."/>
 				</VBoxLayout>
 
 				<GroupBox caption="High head flow" row="2" col="0">
@@ -740,7 +740,7 @@
 			<GroupBox caption="Crosssection and Roughness">
 				<VBoxLayout>
 					<GridLayout>
-						<Label caption="Type" row="0" col="0" />
+						<Label caption="Type" row="0" col="0"/>
 						<Item name="n_type" row="0" col="1">
 							<Definition valueType="integer" option="true" default="0">
 								<Enumerations>
@@ -751,50 +751,50 @@
 							</Definition>
 						</Item>
 
-						<Label caption="Simple: Cross Section (X, Y)" row="1" col="0" />
+						<Label caption="Simple: Cross Section (X, Y)" row="1" col="0"/>
 						<Item name="appr_xs" row="1" col="1">
 							<Definition conditionType="functional">
-								<Parameter caption="X" valueType="real" />
-								<Value caption="Y" valueType="real" />
+								<Parameter caption="X" valueType="real"/>
+								<Value caption="Y" valueType="real"/>
 								<Condition type="isEqual" target="n_type" value="0"/>
 							</Definition>
 						</Item>
 
-						<Label caption="Simple: Roughness  (NVAL(1))" row="2" col="0" />
+						<Label caption="Simple: Roughness  (NVAL(1))" row="2" col="0"/>
 						<Item name="n_simple" row="2" col="1">
 							<Definition valueType="real" default="0">
 								<Condition type="isEqual" target="n_type" value="0"/>
 							</Definition>
 						</Item>
 
-						<Label caption="Horizontal distribution: (X, Y, NVAL)" row="3" col="0" />
+						<Label caption="Horizontal distribution: (X, Y, NVAL)" row="3" col="0"/>
 						<Item name="n_h" row="3" col="1">
 							<Definition conditionType="functional">
-								<Parameter name="X" caption="X" valueType="real" />
-								<Value name="Y" caption="Y" valueType="real" />
-								<Value name="NVAL" caption="NVAL" valueType="real" span="true" />
+								<Parameter name="X" caption="X" valueType="real"/>
+								<Value name="Y" caption="Y" valueType="real"/>
+								<Value name="NVAL" caption="NVAL" valueType="real" span="true"/>
 								<Condition type="isEqual" target="n_type" value="1"/>
 							</Definition>
 						</Item>
 
-						<Label caption="Horizontal + vertical distribution (X, Y, BOTD, TOPD, BOTN, TOPN)" row="4" col="0" />
+						<Label caption="Horizontal + vertical distribution (X, Y, BOTD, TOPD, BOTN, TOPN)" row="4" col="0"/>
 						<Item name="n_h_v" row="4" col="1">
 							<Definition conditionType="functional">
-								<Parameter name="X" caption="X" valueType="real" />
-								<Value name="Y" caption="Y" valueType="real" axis="left" />
-								<Value name="BOTD" caption="BOTD" valueType="real" axis="right" span="true" />
-								<Value name="TOPD" caption="TOPD" valueType="real" axis="right" span="true" />
-								<Value name="BOTN" caption="BOTN" valueType="real" axis="right" span="true" />
-								<Value name="TOPN" caption="TOPN" valueType="real" axis="right" span="true" />
+								<Parameter name="X" caption="X" valueType="real"/>
+								<Value name="Y" caption="Y" valueType="real" axis="left"/>
+								<Value name="BOTD" caption="BOTD" valueType="real" axis="right" span="true"/>
+								<Value name="TOPD" caption="TOPD" valueType="real" axis="right" span="true"/>
+								<Value name="BOTN" caption="BOTN" valueType="real" axis="right" span="true"/>
+								<Value name="TOPN" caption="TOPN" valueType="real" axis="right" span="true"/>
 								<Condition type="isEqual" target="n_type" value="2"/>
 							</Definition>
 						</Item>
 					</GridLayout>
-					<Label caption="&lt;B&gt;Note&lt;/B&gt;: Unit of X, Y, BOTD, TOPD = [feet]" >
+					<Label caption="&lt;B&gt;Note&lt;/B&gt;: Unit of X, Y, BOTD, TOPD = [feet]">
 						<SubCaption caption="&lt;B&gt;Note&lt;/B&gt;: Unit of X, Y, BOTD, TOPD = [meters]">
 							<Condition type="or">
-								<Condition type="isEqual" target="units" value="1" />
-								<Condition type="isEqual" target="units" value="3" />
+								<Condition type="isEqual" target="units" value="1"/>
+								<Condition type="isEqual" target="units" value="3"/>
 							</Condition>
 						</SubCaption>
 					</Label>
@@ -809,8 +809,8 @@
 				<Item name="max_depth" caption="Maximum Depth [feet] (DMAX)">
 					<SubCaption caption="Maximum Depth [meters] (DMAX)">
 						<Condition type="or">
-							<Condition type="isEqual" target="units" value="1" />
-							<Condition type="isEqual" target="units" value="3" />
+							<Condition type="isEqual" target="units" value="1"/>
+							<Condition type="isEqual" target="units" value="3"/>
 						</Condition>
 					</SubCaption>
 					<Definition valueType="real" default="100">
@@ -830,25 +830,25 @@
 						<Item name="discharges" caption="Flow discharges [cfs] (Q)">
 							<SubCaption caption="Flow discharges [cms] (Q)">
 								<Condition type="or">
-									<Condition type="isEqual" target="units" value="1" />
-									<Condition type="isEqual" target="units" value="3" />
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
 								</Condition>
 							</SubCaption>
-							<Definition conditionType="functional" >
-								<Parameter caption="ID" />
-								<Value caption="Discharge" valueType="real" />
+							<Definition conditionType="functional">
+								<Parameter caption="ID"/>
+								<Value caption="Discharge" valueType="real"/>
 							</Definition>
 						</Item>
 						<Item name="tailwater_elevation" caption="Tailwater Elevations [feet] (H4TW)">
 							<SubCaption caption="Tailwater Elevations [meters] (H4TW)">
 								<Condition type="or">
-									<Condition type="isEqual" target="units" value="1" />
-									<Condition type="isEqual" target="units" value="3" />
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
 								</Condition>
 							</SubCaption>
-							<Definition conditionType="functional" >
-								<Parameter caption="ID" />
-								<Value caption="Elevation" valueType="real" />
+							<Definition conditionType="functional">
+								<Parameter caption="ID"/>
+								<Value caption="Elevation" valueType="real"/>
 							</Definition>
 						</Item>
 					</GroupBox>
