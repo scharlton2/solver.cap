@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <SolverDefinition 
     xmlns="www.iric.net/SolverDefinition/1.0"
-    name="cap" caption="Culvert Analysis Program" version="2.0.6" copyright="USGS"
-    release="2020.05.20" 
+    name="cap" caption="Culvert Analysis Program" version="2.0.7" copyright="USGS"
+    release="2021.03.03" 
     homepage="http://water.usgs.gov/software/CAP/"
     executable="CAP.exe"
     iterationtype="time"
@@ -540,7 +540,7 @@
 						<Item name="proj_type" caption="Type">
 							<Definition valueType="integer" option="true" default="1">
 								<Enumerations>
-									<Enumeration value="1" caption="Flush"/>
+									<Enumeration value="1" caption="Flush (No Projection)"/>
 									<Enumeration value="2" caption="With Projection"/>
 								</Enumerations>
 								<Condition type="isEqual" target="discharge_method" value="0"/>
@@ -563,7 +563,7 @@
 							</Definition>
 						</Item>
 					</GroupBox>
-					<Label caption="In case of Unequal projection, please refer to Bodhaine (1968) p. 41 for defining LPROJ" />
+					<Label caption="The projection length LPROJ is a function of projection geometry&lt;br&gt;relative to the headwater elevation.&lt;br&gt;Determine LPROJ according to Bodhaine (1968), p. 41-42." />
 				</VBoxLayout>
 			</HBoxLayout>
 		</Tab>
