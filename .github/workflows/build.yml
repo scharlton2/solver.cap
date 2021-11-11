@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - main_v4
       - master
 
 env:
