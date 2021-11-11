@@ -165,4 +165,3 @@ jobs:
         github_token: ${{secrets.ONLINE_UPDATE_TOKEN}}
         repository: ${{env.ONLINE_UPDATE_REPO}}
         directory: online_update
-        branch: __${{github.event.repository.name}}_${{github.run_number}}        # @todo remove branch
