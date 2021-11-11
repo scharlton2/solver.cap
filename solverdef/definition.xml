@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <SolverDefinition
 	xmlns="www.iric.net/SolverDefinition/1.0"
-	name="cap" caption="Culvert Analysis Program" version="2.0.7" copyright="USGS"
-	release="2021.03.03" 
+	name="cap" caption="Culvert Analysis Program" version="2.0.8" copyright="USGS"
+	release="2021.11.10"
 	homepage="http://water.usgs.gov/software/CAP/"
 	executable="CAP.exe"
 	iterationtype="time"
@@ -167,8 +167,40 @@
 								<Condition type="isEqual" target="shape_type" value="2"/>
 							</Definition>
 						</Item>
-						<Item name="rbottom" caption="R&lt;sub&gt;bottom&lt;/sub&gt; [inches] (BOTRAD)">
-							<SubCaption caption="R&lt;sub&gt;bottom&lt;/sub&gt; [centimeters] (BOTRAD)">
+						<Item name="rbottom" caption="R&lt;sub&gt;bottom&lt;/sub&gt; [inches] (BOTRAD) ‒ Optional">
+							<!-- SI and J!=[3] -->
+							<SubCaption caption="R&lt;sub&gt;bottom&lt;/sub&gt; [centimeters] (BOTRAD) ‒ Optional">
+								<Condition type="or">
+									<Condition type="isEqual" target="units" value="1"/>
+									<Condition type="isEqual" target="units" value="3"/>
+								</Condition>
+							</SubCaption>
+							<!-- English and J=[3] -->
+							<SubCaption caption="R&lt;sub&gt;bottom&lt;/sub&gt; [inches] (BOTRAD) ‒ Entry recommended if RISE ≤ 103 inches">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="0"/>
+										<Condition type="isEqual" target="units" value="2"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="3"/>
+								</Condition>
+							</SubCaption>
+							<!-- SI and J=[3] -->
+							<SubCaption caption="R&lt;sub&gt;bottom&lt;/sub&gt; [centimeters] (BOTRAD) ‒ Entry recommended if RISE ≤ 103 inches">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="1"/>
+										<Condition type="isEqual" target="units" value="3"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="3"/>
+								</Condition>
+							</SubCaption>
+							<Definition valueType="real" default="0">
+								<Condition type="isEqual" target="shape_type" value="4"/>
+							</Definition>
+						</Item>
+						<Item name="rtop" caption="R&lt;sub&gt;top&lt;/sub&gt; [inches] (TOPRAD) ‒ Optional">
+							<SubCaption caption="R&lt;sub&gt;top&lt;/sub&gt; [centimeters] (TOPRAD) ‒ Optional">
 								<Condition type="or">
 									<Condition type="isEqual" target="units" value="1"/>
 									<Condition type="isEqual" target="units" value="3"/>
@@ -178,26 +210,106 @@
 								<Condition type="isEqual" target="shape_type" value="4"/>
 							</Definition>
 						</Item>
-						<Item name="rtop" caption="R&lt;sub&gt;top&lt;/sub&gt; [inches] (TOPRAD)">
-							<SubCaption caption="R&lt;sub&gt;top&lt;/sub&gt; [centimeters] (TOPRAD)">
+						<!-- R-corner -->
+						<!-- English and J=[1,2,7] -->
+						<Item name="rcorner" caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) ‒ Entry of measured value recommended">
+							<!-- SI and J=[1,2,7] -->
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [centimeters] (CORRAD) ‒ Entry of measured value recommended">
 								<Condition type="or">
 									<Condition type="isEqual" target="units" value="1"/>
 									<Condition type="isEqual" target="units" value="3"/>
 								</Condition>
 							</SubCaption>
-							<Definition valueType="real" default="0">
-								<Condition type="isEqual" target="shape_type" value="4"/>
-							</Definition>
-						</Item>
-						<Item name="rcorner" caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD)">
-							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [centimeters] (CORRAD)">
-								<Condition type="or">
-									<Condition type="isEqual" target="units" value="1"/>
-									<Condition type="isEqual" target="units" value="3"/>
+							<!-- English and J=[3] (≝ doesn't display well in iric) -->
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) = 31.75 inches">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="0"/>
+										<Condition type="isEqual" target="units" value="2"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="3"/>
+								</Condition>
+							</SubCaption>
+							<!-- SI and J=[3] (≝ doesn't display well in iric) -->
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [centimeters] (CORRAD) = 31.75 inches">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="1"/>
+										<Condition type="isEqual" target="units" value="3"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="3"/>
+								</Condition>
+							</SubCaption>
+							<!-- English and J=[4] -->
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) ‒ Optional">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="0"/>
+										<Condition type="isEqual" target="units" value="2"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="4"/>
+								</Condition>
+							</SubCaption>
+							<!-- SI and J=[4] -->
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [centimeters] (CORRAD) ‒ Optional">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="1"/>
+										<Condition type="isEqual" target="units" value="3"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="4"/>
+								</Condition>
+							</SubCaption>
+							<!-- English and J=[5] -->
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) = 31 inches">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="0"/>
+										<Condition type="isEqual" target="units" value="2"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="5"/>
+								</Condition>
+							</SubCaption>
+							<!-- SI and J=[5] -->
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [centimeters] (CORRAD) = 31 inches">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="1"/>
+										<Condition type="isEqual" target="units" value="3"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="5"/>
+								</Condition>
+							</SubCaption>
+							<!-- English and J=[6] -->
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) = 47 inches">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="0"/>
+										<Condition type="isEqual" target="units" value="2"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="6"/>
+								</Condition>
+							</SubCaption>
+							<!-- SI and J=[6] -->
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [centimeters] (CORRAD) = 47 inches">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="1"/>
+										<Condition type="isEqual" target="units" value="3"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="6"/>
 								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="isEqual" target="shape_type" value="4"/>
+								<Condition type="and">
+									<Condition type="isEqual" target="shape_type" value="4"/>
+									<Condition type="or">
+										<Condition type="isEqual" target="material" value="1"/>
+										<Condition type="isEqual" target="material" value="2"/>
+										<Condition type="isEqual" target="material" value="4"/>
+										<Condition type="isEqual" target="material" value="7"/>
+									</Condition>
+								</Condition>
 							</Definition>
 						</Item>
 						<Item name="coords" caption="Coordinates [feet] (SCUL, GCUL)">
@@ -224,11 +336,12 @@
 							<Definition valueType="integer" option="true" default="1">
 								<Enumerations>
 									<Enumeration value="1" caption="Concrete Pipe (J=1)"/>
-									<Enumeration value="2" caption="Mitered Corrugated Metal Pipe (J=2)"/>
-									<Enumeration value="3" caption="Aluminum Pipe (J=3)"/>
-									<Enumeration value="4" caption="Corrugated metal pipe with corner radius less than 18 inch (J=4)"/>
-									<Enumeration value="5" caption="Corrugated metal pipe with corner radius 31 inch (J=5)"/>
-									<Enumeration value="6" caption="Corrugated metal pipe with corner radius 47 inch (J=6)"/>
+									<Enumeration value="2" caption="(CMSPPA) Mitered corrugated steel pipe with CORRAD ≤ 18 inches (J=2)"/>
+									<Enumeration value="3" caption="(CMSPPA) Aluminum pipe with CORRAD = 31.75 inches (J=3)"/>
+									<Enumeration value="4" caption="(CMSPPA) Corrugated steel pipe with CORRAD ≤ 18 inches (J=4)"/>
+									<Enumeration value="5" caption="(CMSPPA) Corrugated steel pipe with CORRAD = 31 inches (J=5)"/>
+									<Enumeration value="6" caption="(CMSPPA) Corrugated steel pipe with CORRAD = 47 inches (J=6)"/>
+									<Enumeration value="7" caption="(CMPA) Non-plate corrugated metal (steel or aluminum) pipe (J=7)"/>
 								</Enumerations>
 								<Condition type="or">
 									<Condition type="isEqual" target="shape_type" value="2"/>
