@@ -8,7 +8,7 @@ on:
 
 env:
   # online_update directory
-  PACKAGE_DIR: <PACKAGE_DIR>
+  PACKAGE_DIR: solver.cap
 
   # online_update src directory
   ONLINE_UPDATE_SRC_DIR: online_update\yasu_src                   # @todo simplify

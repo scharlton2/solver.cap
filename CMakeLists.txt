@@ -6,6 +6,7 @@ include(GNUInstallDirs)
 
 # set CMAKE_PREFIX_PATH to the directory containing iriclibConfig.cmake
 # ie -DCMAKE_PREFIX_PATH=d:/Downloads/iricsdk/iriclib-4.0.x/lib/cmake/iriclib
+# or iriclib_DIR:PATH=C:/Users/charlton/iRIC_v4/sdk/c/lib/cmake/iriclib
 find_package(iriclib 4 REQUIRED)
 
 # Change this to ON if solver requires OpenMP
@@ -38,9 +39,38 @@ if(IRIC_SOLVER_USE_OPENMP AND OpenMP_Fortran_FOUND)
   target_link_libraries(CAP PRIVATE OpenMP::OpenMP_Fortran)
 endif()
 
-install(TARGETS CAP DESTINATION "${CMAKE_INSTALL_BINDIR}")
+install(
+  TARGETS
+    CAP
+  DESTINATION
+    "${CMAKE_INSTALL_BINDIR}"
+)
 
-install(FILES solverdef/definition.xml DESTINATION "${CMAKE_INSTALL_BINDIR}")
+install(
+  FILES
+    solverdef/alignment_mitered.png
+    solverdef/alignment_ncul.png
+    solverdef/alignment_skewed.png
+    solverdef/alignment_types.png
+    solverdef/alignment_unskewed.png
+    solverdef/definition.xml
+    solverdef/edging_beveled.png
+    solverdef/edging_rounded.png
+    solverdef/edging_types.png
+    solverdef/projection_equal.png
+    solverdef/projection_types.png
+    solverdef/projection_unequal.png
+    solverdef/shape_box.png
+    solverdef/shape_circular.png
+    solverdef/shape_elliptical.png
+    solverdef/shape_pipearch.png
+    solverdef/shape_types.png
+    solverdef/wingwalls_equal.png
+    solverdef/wingwalls_types.png
+    solverdef/wingwalls_unequal.png
+  DESTINATION
+    "${CMAKE_INSTALL_BINDIR}"
+)
 
 # include(CTest)
 
