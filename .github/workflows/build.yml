@@ -165,3 +165,4 @@ jobs:
         github_token: ${{secrets.ONLINE_UPDATE_TOKEN}}
         repository: ${{env.ONLINE_UPDATE_REPO}}
         directory: online_update
+        branch: master
