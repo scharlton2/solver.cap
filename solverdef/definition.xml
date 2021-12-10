@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SolverDefinition
 	xmlns="www.iric.net/SolverDefinition/1.0"
-	name="cap" caption="Culvert Analysis Program" version="2.0.8" copyright="USGS"
-	release="2021.11.10"
+	name="cap" caption="Culvert Analysis Program" version="2.0.9" copyright="USGS"
+	release="2021.12.10"
 	homepage="http://water.usgs.gov/software/CAP/"
 	executable="CAP.exe"
 	iterationtype="time"
@@ -89,6 +89,7 @@
 				</VBoxLayout>
 			</HBoxLayout>
 		</Tab>
+
 		<Tab name="shape" caption="Shape">
 			<HBoxLayout>
 				<VBoxLayout withSpacer="true">
@@ -156,8 +157,8 @@
 								</Condition>
 							</Definition>
 						</Item>
-						<Item name="diameter" caption="Diameter [inches] (RISE,SPAN)">
-							<SubCaption caption="Diameter [centimeters] (RISE,SPAN)">
+						<Item name="diameter" caption="Diameter [inches] (RISE, SPAN)">
+							<SubCaption caption="Diameter [centimeters] (RISE, SPAN)">
 								<Condition type="or">
 									<Condition type="isEqual" target="units" value="1"/>
 									<Condition type="isEqual" target="units" value="3"/>
@@ -211,9 +212,9 @@
 							</Definition>
 						</Item>
 						<!-- R-corner -->
-						<!-- English and J=[1,2,7] -->
+						<!-- English and J=[1,2,4,7] -->
 						<Item name="rcorner" caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) ‒ Entry of measured value recommended">
-							<!-- SI and J=[1,2,7] -->
+							<!-- SI and J=[1,2,4,7] -->
 							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [centimeters] (CORRAD) ‒ Entry of measured value recommended">
 								<Condition type="or">
 									<Condition type="isEqual" target="units" value="1"/>
@@ -238,26 +239,6 @@
 										<Condition type="isEqual" target="units" value="3"/>
 									</Condition>
 									<Condition type="isEqual" target="material" value="3"/>
-								</Condition>
-							</SubCaption>
-							<!-- English and J=[4] -->
-							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) ‒ Optional">
-								<Condition type="and">
-									<Condition type="or">
-										<Condition type="isEqual" target="units" value="0"/>
-										<Condition type="isEqual" target="units" value="2"/>
-									</Condition>
-									<Condition type="isEqual" target="material" value="4"/>
-								</Condition>
-							</SubCaption>
-							<!-- SI and J=[4] -->
-							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [centimeters] (CORRAD) ‒ Optional">
-								<Condition type="and">
-									<Condition type="or">
-										<Condition type="isEqual" target="units" value="1"/>
-										<Condition type="isEqual" target="units" value="3"/>
-									</Condition>
-									<Condition type="isEqual" target="material" value="4"/>
 								</Condition>
 							</SubCaption>
 							<!-- English and J=[5] -->
@@ -327,29 +308,57 @@
 						</Item>
 					</GroupBox>
 					<GroupBox caption="Other">
-						<Item name="num_barrels" caption="No. of Barrels (NBBL)">
-							<Definition valueType="integer" default="1">
-								<Condition type="isEqual" target="shape_type" value="1"/>
-							</Definition>
-						</Item>
-						<Item name="material" caption="Material (ICODE)">
-							<Definition valueType="integer" option="true" default="1">
-								<Enumerations>
-									<Enumeration value="1" caption="Concrete Pipe (J=1)"/>
-									<Enumeration value="2" caption="(CMSPPA) Mitered corrugated steel pipe with CORRAD ≤ 18 inches (J=2)"/>
-									<Enumeration value="3" caption="(CMSPPA) Aluminum pipe with CORRAD = 31.75 inches (J=3)"/>
-									<Enumeration value="4" caption="(CMSPPA) Corrugated steel pipe with CORRAD ≤ 18 inches (J=4)"/>
-									<Enumeration value="5" caption="(CMSPPA) Corrugated steel pipe with CORRAD = 31 inches (J=5)"/>
-									<Enumeration value="6" caption="(CMSPPA) Corrugated steel pipe with CORRAD = 47 inches (J=6)"/>
-									<Enumeration value="7" caption="(CMPA) Non-plate corrugated metal (steel or aluminum) pipe (J=7)"/>
-								</Enumerations>
-								<Condition type="or">
-									<Condition type="isEqual" target="shape_type" value="2"/>
-									<Condition type="isEqual" target="shape_type" value="3"/>
-									<Condition type="isEqual" target="shape_type" value="4"/>
-								</Condition>
-							</Definition>
-						</Item>
+						<VBoxLayout>
+							<GridLayout>
+								<!-- No. of Barrels (NBBL) -->
+								<Label caption="No. of Barrels (NBBL)" row="0" col="0">
+								</Label>
+								<Item name="num_barrels" row="0" col="1">
+									<Definition valueType="integer" default="1">
+										<Condition type="isEqual" target="shape_type" value="1"/>
+									</Definition>
+								</Item>
+								<!--Material (ICODE) -->
+								<Label caption="Material (ICODE)" row="1" col="0">
+								</Label>
+								<Item name="material" row="1" col="1">
+									<Definition valueType="integer" option="true" default="1">
+										<Enumerations>
+											<Enumeration value="1" caption="Concrete Pipe (J=1)"/>
+											<Enumeration value="2" caption="(CMSPPA) Mitered corrugated steel pipe with CORRAD ≤ 18 inches (J=2)"/>
+											<Enumeration value="3" caption="(CMSPPA) Aluminum pipe with CORRAD = 31.75 inches (J=3)"/>
+											<Enumeration value="4" caption="(CMSPPA) Corrugated steel pipe with CORRAD ≤ 18 inches (J=4)"/>
+											<Enumeration value="5" caption="(CMSPPA) Corrugated steel pipe with CORRAD = 31 inches (J=5)"/>
+											<Enumeration value="6" caption="(CMSPPA) Corrugated steel pipe with CORRAD = 47 inches (J=6)"/>
+											<Enumeration value="7" caption="(CMPA) Non-plate corrugated metal (steel or aluminum) pipe (J=7)"/>
+										</Enumerations>
+										<Condition type="or">
+											<Condition type="isEqual" target="shape_type" value="2"/>
+											<Condition type="isEqual" target="shape_type" value="3"/>
+											<Condition type="isEqual" target="shape_type" value="4"/>
+										</Condition>
+									</Definition>
+								</Item>
+							</GridLayout>
+							<Label caption="Metal pipe arches must be identified as either corrugated metal (aluminum or steel) structural plate pipe arches &lt;br&gt;
+											(CMSPPA) or non-plate corrugated metal pipe arches (CMPA). The Culvert Identification Field Guide (available at &lt;br&gt;
+											&lt;a href='https://connect.ncdot.gov/resources/hydro/Pages/Guidelines-Drainage-Studies.aspx'&gt;https://connect.ncdot.gov/resources/hydro/Pages/Guidelines-Drainage-Studies.aspx&lt;/a&gt;; North Carolina Department of &lt;br&gt;
+											Transportation, 2021) provides helpful identification guidance. &lt;br&gt;
+											&lt;br&gt;
+											Material codes 1 to 6 are consistent with those defined in the USGS CAP User’s Guide (WRIR 98-4166, 1998); &lt;br&gt;
+											material code 7 is added for analysis of CMPA pipes. Refer to the file “CAP_2021_version_notes.txt” (available at &lt;br&gt;
+											&lt;a href='https://water.usgs.gov/software/CAP/'&gt;https://water.usgs.gov/software/CAP/&lt;/a&gt;), which provides detailed guidance for at-site measurements and analysis of &lt;br&gt;
+											standard pipe-arch culverts. &lt;br&gt;
+											&lt;br&gt;
+											CAP computations for pipe-arch culverts with measured dimensions (rise and span) outside the range of standard &lt;br&gt;
+											dimensions for the selected culvert type are flagged with an output warning – such nonstandard culverts &lt;u&gt;should not&lt;/u&gt; &lt;br&gt;
+											be analyzed using the Pipe Arch Shape option (I=3). Instead, pipe-arch culverts with nonstandard rise/span &lt;br&gt;
+											dimensions should be analyzed using the Non-standard Shape option (I=4), which requires measuring and entering &lt;br&gt;
+											the culvert geometry as x-y point coordinates (Note that &lt;u&gt;any&lt;/u&gt; pipe-arch culvert can be analyzed using the Non- &lt;br&gt;
+											standard Shape option, if desired.)">
+								<Condition type="isEqual" target="shape_type" value="4"/>
+							</Label>
+						</VBoxLayout>
 					</GroupBox>
 				</VBoxLayout>
 			</HBoxLayout>
