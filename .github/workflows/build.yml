@@ -16,7 +16,7 @@ env:
   ONLINE_UPDATE_SRC_DIR_DEFAULT: online_update\dev_src            # @todo simplify
 
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: RelWithDebInfo
+  BUILD_TYPE: Release
 
   # CMAKE directories
   SOURCE_DIR: SOURCE
