@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SolverDefinition
 	xmlns="www.iric.net/SolverDefinition/1.0"
-	name="cap" caption="Culvert Analysis Program" version="2.0.9" copyright="USGS"
-	release="2021.12.10"
+	name="cap" caption="Culvert Analysis Program" version="2.0.10" copyright="USGS"
+	release="2021.12.13"
 	homepage="http://water.usgs.gov/software/CAP/"
 	executable="CAP.exe"
 	iterationtype="time"
@@ -340,23 +340,25 @@
 									</Definition>
 								</Item>
 							</GridLayout>
-							<Label caption="Metal pipe arches must be identified as either corrugated metal (aluminum or steel) structural plate pipe arches &lt;br&gt;
-											(CMSPPA) or non-plate corrugated metal pipe arches (CMPA). The Culvert Identification Field Guide (available at &lt;br&gt;
-											&lt;a href='https://connect.ncdot.gov/resources/hydro/Pages/Guidelines-Drainage-Studies.aspx'&gt;https://connect.ncdot.gov/resources/hydro/Pages/Guidelines-Drainage-Studies.aspx&lt;/a&gt;; North Carolina Department of &lt;br&gt;
-											Transportation, 2021) provides helpful identification guidance. &lt;br&gt;
-											&lt;br&gt;
-											Material codes 1 to 6 are consistent with those defined in the USGS CAP User’s Guide (WRIR 98-4166, 1998); &lt;br&gt;
-											material code 7 is added for analysis of CMPA pipes. Refer to the file “CAP_2021_version_notes.txt” (available at &lt;br&gt;
-											&lt;a href='https://water.usgs.gov/software/CAP/'&gt;https://water.usgs.gov/software/CAP/&lt;/a&gt;), which provides detailed guidance for at-site measurements and analysis of &lt;br&gt;
-											standard pipe-arch culverts. &lt;br&gt;
-											&lt;br&gt;
-											CAP computations for pipe-arch culverts with measured dimensions (rise and span) outside the range of standard &lt;br&gt;
-											dimensions for the selected culvert type are flagged with an output warning – such nonstandard culverts &lt;u&gt;should not&lt;/u&gt; &lt;br&gt;
-											be analyzed using the Pipe Arch Shape option (I=3). Instead, pipe-arch culverts with nonstandard rise/span &lt;br&gt;
-											dimensions should be analyzed using the Non-standard Shape option (I=4), which requires measuring and entering &lt;br&gt;
-											the culvert geometry as x-y point coordinates (Note that &lt;u&gt;any&lt;/u&gt; pipe-arch culvert can be analyzed using the Non- &lt;br&gt;
-											standard Shape option, if desired.)">
-								<Condition type="isEqual" target="shape_type" value="4"/>
+							<Label caption="">
+								<SubCaption caption="Metal pipe arches must be identified as either corrugated metal (aluminum or steel) structural plate pipe arches &lt;br&gt;
+								(CMSPPA) or non-plate corrugated metal pipe arches (CMPA). The Culvert Identification Field Guide (available at &lt;br&gt;
+								&lt;a href='https://connect.ncdot.gov/resources/hydro/Pages/Guidelines-Drainage-Studies.aspx'&gt;https://connect.ncdot.gov/resources/hydro/Pages/Guidelines-Drainage-Studies.aspx&lt;/a&gt;; North Carolina Department of &lt;br&gt;
+								Transportation, 2021) provides helpful identification guidance. &lt;br&gt;
+								&lt;br&gt;
+								Material codes 1 to 6 are consistent with those defined in the USGS CAP User’s Guide (WRIR 98-4166, 1998); &lt;br&gt;
+								material code 7 is added for analysis of CMPA pipes. Refer to the file “CAP_2021_version_notes.txt” (available at &lt;br&gt;
+								&lt;a href='https://water.usgs.gov/software/CAP/'&gt;https://water.usgs.gov/software/CAP/&lt;/a&gt;), which provides detailed guidance for at-site measurements and analysis of &lt;br&gt;
+								standard pipe-arch culverts. &lt;br&gt;
+								&lt;br&gt;
+								CAP computations for pipe-arch culverts with measured dimensions (rise and span) outside the range of standard &lt;br&gt;
+								dimensions for the selected culvert type are flagged with an output warning – such nonstandard culverts &lt;u&gt;should not&lt;/u&gt; &lt;br&gt;
+								be analyzed using the Pipe Arch Shape option (I=3). Instead, pipe-arch culverts with nonstandard rise/span &lt;br&gt;
+								dimensions should be analyzed using the Non-standard Shape option (I=4), which requires measuring and entering &lt;br&gt;
+								the culvert geometry as x-y point coordinates (Note that &lt;u&gt;any&lt;/u&gt; pipe-arch culvert can be analyzed using the Non- &lt;br&gt;
+								standard Shape option, if desired.)">
+									<Condition type="isEqual" target="shape_type" value="4"/>
+								</SubCaption>
 							</Label>
 						</VBoxLayout>
 					</GroupBox>
