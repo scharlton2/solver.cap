@@ -9,8 +9,10 @@ C     Modified by gfkoltun for 2021 version
 C
       PROGRAM CLTST
 
+#ifdef __BUILD_FOR_IRIC__
       use iric
       use iricio
+#endif
 
       IMPLICIT NONE
 
@@ -39,6 +41,7 @@ C     open culvert data file
       CALL GETARG (1,DUMPY)
       CGNSOUT=0
       IF (DUMPY == 'Case1.cgn') THEN
+#ifdef __BUILD_FOR_IRIC__
         CGNSOUT=1
 C       read setting from CGNS file
         ERR=1
@@ -73,6 +76,8 @@ C       write flow solutions to output
         CALL HARDCPY(OTNIT,PNO,HTITLE,CGNSOUT)
 
         CALL CG_IRIC_CLOSE(FID, IER)
+
+#endif
 
       ELSE IF (LEN_TRIM(DUMPY).GT.0) THEN
 C       read file names, section ids and header text in this section

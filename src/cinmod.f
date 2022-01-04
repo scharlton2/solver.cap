@@ -12,8 +12,10 @@ C
 C
 C     + + + PURPOSE + + +
 C
+#ifdef __BUILD_FOR_IRIC__
       USE iric
       USE iricio
+#endif
 
       REAL N,KONVEY
 C
@@ -399,8 +401,11 @@ C     Modified by gfkoltun for 2021 version
 C
       SUBROUTINE HARDCPY (PUNIT,PNO,HTITLE,CGNSOUT)
 
+#ifdef __BUILD_FOR_IRIC__
       use iric
       use iricio
+#endif
+
 C
 C-----Arguments:
       INTEGER PUNIT,PNO,CGNSOUT
@@ -418,12 +423,14 @@ C-----Local variables:
       INTEGER ERR,IQ,PAGE,IPAGE,IBEGIN,IEND,ILEFT,I,J,WARN,FLGERR(9)
      #        ,NLINES,PNOH
       
+#ifdef __BUILD_FOR_IRIC__
       DOUBLE PRECISION, allocatable, dimension(:,:)
      #  :: DISCHARGE
       DOUBLE PRECISION, allocatable, dimension(:,:)
      #  :: EXITELEV
       DOUBLE PRECISION, allocatable, dimension(:,:)
      #  :: WSE_APPR,WSE_INLET,WSE_OUTLET,C_DC
+#endif
       DOUBLE PRECISION :: TIME
       INTEGER ITW,IER
 C
@@ -470,9 +477,8 @@ C
       IF(MOD(INUM,NLINES).NE.0)PAGE=PAGE+1
       IBEGIN=0
       IEND=0
-C     ******* gfk - temporarily added line below to allocate arrays ****
-      CGNSOUT=1
       
+#ifdef __BUILD_FOR_IRIC__
       IF (CGNSOUT.EQ.1) THEN
         ALLOCATE(DISCHARGE(NQ,NTW))
         ALLOCATE(EXITELEV(NQ,NTW))
@@ -493,6 +499,7 @@ C     ******* gfk - temporarily added line below to allocate arrays ****
         WSE_OUTLET = 0
         C_DC = 0
       ENDIF
+#endif
       
       DO 10 IPAGE=1,PAGE
         IBEGIN=1+IEND
@@ -531,17 +538,25 @@ C        WRITE(PUNIT,*)IBEGIN,IEND
             WRITE(PUNIT,310)I,ft3_to_m3(Q(IQ)),TYPE(I),ft_to_m(H1E(I)),
      #        ft_to_m(H2),ft_to_m(H3),ft_to_m(H4E(I)),
      #        ft_to_m(CULCRTD(I)),ERRCOD(I)
-            WSE_APPR(IQ,ITW) = ft_to_m(H1E(I))
-            WSE_INLET(IQ,ITW) = ft_to_m(H2)
-            WSE_OUTLET(IQ,ITW) = ft_to_m(H3)
-            C_DC(IQ,ITW) = ft_to_m(CULCRTD(I))
+#ifdef __BUILD_FOR_IRIC__
+            IF (CGNSOUT.EQ.1) THEN
+              WSE_APPR(IQ,ITW) = ft_to_m(H1E(I))
+              WSE_INLET(IQ,ITW) = ft_to_m(H2)
+              WSE_OUTLET(IQ,ITW) = ft_to_m(H3)
+              C_DC(IQ,ITW) = ft_to_m(CULCRTD(I))
+            ENDIF
+#endif
           ELSE
             WRITE(PUNIT,210)I,Q(IQ),TYPE(I),H1E(I),H2,H3,H4E(I)
      #       ,CULCRTD(I),ERRCOD(I)
-            WSE_APPR(IQ,ITW) = H1E(I)
-            WSE_INLET(IQ,ITW) = H2
-            WSE_OUTLET(IQ,ITW) = H3
-            C_DC(IQ,ITW) = CULCRTD(I)
+#ifdef __BUILD_FOR_IRIC__
+            IF (CGNSOUT.EQ.1) THEN
+              WSE_APPR(IQ,ITW) = H1E(I)
+              WSE_INLET(IQ,ITW) = H2
+              WSE_OUTLET(IQ,ITW) = H3
+              C_DC(IQ,ITW) = CULCRTD(I)
+            ENDIF
+#endif
           ENDIF
  15     CONTINUE
 C-------write head2
@@ -644,6 +659,7 @@ C------write footer
         WRITE(PUNIT,240)
  10   CONTINUE
 
+#ifdef __BUILD_FOR_IRIC__
       IF (CGNSOUT.EQ.1) THEN
         CALL CG_IRIC_WRITE_GRID2D_COORDS(FID,NQ,NTW,
      #    DISCHARGE,EXITELEV,IER)
@@ -661,6 +677,8 @@ C------write footer
         DEALLOCATE(DISCHARGE, EXITELEV)
         DEALLOCATE(WSE_APPR,WSE_INLET,WSE_OUTLET,C_DC)
       ENDIF
+#endif
+
 C
 C-----print warning messages at end of output
       DO 30 I=1,9
