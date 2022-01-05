@@ -76,7 +76,9 @@ C       write flow solutions to output
         CALL HARDCPY(OTNIT,PNO,HTITLE,CGNSOUT)
 
         CALL CG_IRIC_CLOSE(FID, IER)
-
+#else
+        WRITE(*,*)'This version does not support i-RIC CGNS files'
+        STOP
 #endif
 
       ELSE IF (LEN_TRIM(DUMPY).GT.0) THEN
