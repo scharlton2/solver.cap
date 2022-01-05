@@ -20,11 +20,11 @@ endif()
 
 # No need to add iric.f90 it will be added automatically by target_link_libraries
 add_executable(CAP
-  src/cinmod.f
+  src/cinmod.F
   src/convert.f90
   src/culdmp.f
   src/culrat.f
-  src/culvert.f
+  src/culvert.F
   src/discharg.f
   src/ellip.f
   src/icvprp.f
@@ -32,6 +32,9 @@ add_executable(CAP
   src/pipearc.f
   src/shydie.f
 )
+
+# add *.F files to the Source Files group in VS IDE
+source_group("Source Files" REGULAR_EXPRESSION *.F)
 
 # build standalone version statically (reqs cmake 3.15)
 if(NOT BUILD_FOR_IRIC)
