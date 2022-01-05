@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.15)
 
 project(CAP Fortran)
 
@@ -32,6 +32,11 @@ add_executable(CAP
   src/pipearc.f
   src/shydie.f
 )
+
+# build standalone version statically (reqs cmake 3.15)
+if(NOT BUILD_FOR_IRIC)
+  set_property(TARGET CAP PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 if(BUILD_FOR_IRIC)
   target_sources(CAP
