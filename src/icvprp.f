@@ -509,15 +509,15 @@ C           ignore the *CC record if *C3 is entered for culvert
 C
 999   CONTINUE
 C     If the material code was set to 2 set the inlet code to mitered (even if set otherwise
-C     on a *CC or *C3 record)   
-      IF (PC.EQ.2) INLET=-2
+C     on a *CC or *C3 record) - DECIDED AGAINST OVERIDE
+C      IF (PC.EQ.2) INLET=-2
 C     If inlet type > 0 and there is a *C1 card or C46 has been specified then error 
 C     otherwise set inlet to non-neg value
       IF(INLET.GT.0.AND.NHP.GT.-1.OR.INLET.GT.0.AND.C46.GT.0.) THEN
 C        both *C1 and *C3 or *C5 and *C3 are entered, 
-C        *C3 record is ignored except for INLET code warning message
-         ERR1 = -118
-         CALL EROCUL(ERR1,I)
+C        *C3 record is ignored except for INLET code warning message - NOT IGNORING *C3
+C         ERR1 = -118
+C         CALL EROCUL(ERR1,I)
       ELSE 
          INLET = IABS(INLET)
       ENDIF  
