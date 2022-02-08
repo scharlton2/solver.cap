@@ -112,7 +112,7 @@
 					</Image>
 				</VBoxLayout>
 				<VBoxLayout>
-					<GroupBox caption="Type">
+					<GroupBox caption="Shape (ICODE)">
 						<Item name="shape_type" caption="Type (ICODE)">
 							<Definition valueType="integer" option="true" default="0">
 								<Enumerations>
@@ -126,7 +126,7 @@
 							</Definition>
 						</Item>
 					</GroupBox>
-					<GroupBox caption="Size">
+					<GroupBox caption="Shape">
 						<Item name="rise" caption="Rise [inches] (RISE)">
 							<SubCaption caption="Rise [centimeters] (RISE)">
 								<Condition type="or">
