@@ -325,12 +325,12 @@
 									<Definition valueType="integer" option="true" default="1">
 										<Enumerations>
 											<Enumeration value="1" caption="Concrete Pipe (J=1)"/>
-											<Enumeration value="2" caption="(CMSPPA) Mitered corrugated steel pipe with CORRAD ≤ 18 inches (J=2)"/>
-											<Enumeration value="3" caption="(CMSPPA) Aluminum pipe with CORRAD = 31.75 inches (J=3)"/>
-											<Enumeration value="4" caption="(CMSPPA) Corrugated steel pipe with CORRAD ≤ 18 inches (J=4)"/>
-											<Enumeration value="5" caption="(CMSPPA) Corrugated steel pipe with CORRAD = 31 inches (J=5)"/>
-											<Enumeration value="6" caption="(CMSPPA) Corrugated steel pipe with CORRAD = 47 inches (J=6)"/>
-											<Enumeration value="7" caption="(CMPA) Non-plate corrugated metal (steel or aluminum) pipe (J=7)"/>
+											<Enumeration value="2" caption="Corrugated metal or other pipe (not concrete) (J=2)"/>
+											<Enumeration value="3" caption="(CMSPPA) Aluminum pipe arch with CORRAD = 31.75 inches (J=3)"/>
+											<Enumeration value="4" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD ≤ 18 inches (J=4)"/>
+											<Enumeration value="5" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD = 31 inches (J=5)"/>
+											<Enumeration value="6" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD = 47 inches (J=6)"/>
+											<Enumeration value="7" caption="(CMPA) Non-plate corrugated steel pipe arch (J=7)"/>
 										</Enumerations>
 										<Condition type="or">
 											<Condition type="isEqual" target="shape_type" value="2"/>
