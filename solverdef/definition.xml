@@ -232,7 +232,7 @@
 								</Condition>
 							</SubCaption>
 							<!-- English and J=[3] (≝ doesn't display well in iric) -->
-							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) = 31.75 inches">
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD)">
 								<Condition type="and">
 									<Condition type="or">
 										<Condition type="isEqual" target="units" value="0"/>
@@ -252,7 +252,7 @@
 								</Condition>
 							</SubCaption>
 							<!-- English and J=[5] -->
-							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) = 31 inches">
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD)">
 								<Condition type="and">
 									<Condition type="or">
 										<Condition type="isEqual" target="units" value="0"/>
@@ -272,7 +272,7 @@
 								</Condition>
 							</SubCaption>
 							<!-- English and J=[6] -->
-							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) = 47 inches">
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD)">
 								<Condition type="and">
 									<Condition type="or">
 										<Condition type="isEqual" target="units" value="0"/>
@@ -292,15 +292,42 @@
 								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="and">
-									<Condition type="isEqual" target="shape_type" value="4"/>
-									<Condition type="or">
-										<Condition type="isEqual" target="material" value="1"/>
-										<Condition type="isEqual" target="material" value="2"/>
-										<Condition type="isEqual" target="material" value="4"/>
-										<Condition type="isEqual" target="material" value="7"/>
+								<Dependency>
+									<Condition type="and">
+										<Condition type="isEqual" target="shape_type" value="4"/>
+										<Condition type="or">
+											<Condition type="isEqual" target="material" value="1"/>
+											<Condition type="isEqual" target="material" value="2"/>
+											<Condition type="isEqual" target="material" value="4"/>
+											<Condition type="isEqual" target="material" value="7"/>
+										</Condition>
 									</Condition>
-								</Condition>
+									<Action type="enable" />
+								</Dependency>
+								<!--Pipe Arch (I=3) and Material (J=3) -->
+								<Dependency>
+									<Condition type="and">
+										<Condition type="isEqual" target="shape_type" value="4"/>
+										<Condition type="isEqual" target="material" value="3"/>
+									</Condition>
+									<Action type="setValue" value="31.75" />
+								</Dependency>
+								<!--Pipe Arch (I=3) and Material (J=5) -->
+								<Dependency>
+									<Condition type="and">
+										<Condition type="isEqual" target="shape_type" value="4"/>
+										<Condition type="isEqual" target="material" value="5"/>
+									</Condition>
+									<Action type="setValue" value="31" />
+								</Dependency>
+								<!--Pipe Arch (I=3) and Material (J=6) -->
+								<Dependency>
+									<Condition type="and">
+										<Condition type="isEqual" target="shape_type" value="4"/>
+										<Condition type="isEqual" target="material" value="6"/>
+									</Condition>
+									<Action type="setValue" value="47" />
+								</Dependency>
 							</Definition>
 						</Item>
 						<Item name="coords" caption="Coordinates [feet] (SCUL, GCUL)">
