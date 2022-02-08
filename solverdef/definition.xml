@@ -196,6 +196,16 @@
 									<Condition type="isEqual" target="material" value="3"/>
 								</Condition>
 							</SubCaption>
+							<!-- English and J=[7] -->
+							<SubCaption caption="R&lt;sub&gt;bottom&lt;/sub&gt; [inches] (BOTRAD) ‒ Entry of measured value recommended">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="0"/>
+										<Condition type="isEqual" target="units" value="2"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="7"/>
+								</Condition>
+							</SubCaption>
 							<Definition valueType="real" default="0">
 								<Condition type="isEqual" target="shape_type" value="4"/>
 							</Definition>
