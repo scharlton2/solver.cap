@@ -49,31 +49,31 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v2
-      with:
-        path: ${{env.SOURCE_DIR}}
+    # - uses: actions/checkout@v2
+    #   with:
+    #     path: ${{env.SOURCE_DIR}}
 
-    - name: Checkout online_update repo
-      uses: actions/checkout@v2
-      with:
-        repository: i-RIC/online_update
-        persist-credentials: false                # required to commit with a Personal access token
-        path: online_update
+    # - name: Checkout online_update repo
+    #   uses: actions/checkout@v2
+    #   with:
+    #     repository: i-RIC/online_update
+    #     persist-credentials: false                # required to commit with a Personal access token
+    #     path: online_update
 
-    - name: Download latest iricsdk
-      shell: pwsh
-      run: |
-        # GET /repos/{owner}/{repo}/releases/latest
-        # see https://docs.github.com/en/rest/reference/repos#get-the-latest-release
-        # see https://docs.github.com/ja/rest/reference/repos#get-the-latest-release
-        $latest = (Invoke-WebRequest -Uri $env:IRICLIB_API_URL/releases/latest -Method GET).Content | ConvertFrom-Json
-        $url = ($latest.assets | Where-Object {$_.name -match "^iricsdk-(?<major>0|[1-9]\d*)\.(?<minor>[0|1-9]\d*)\.(?<patch>[0|1-9]\d*)\.7z$"}).browser_download_url
-        curl -LO $url
-        $7zfile = $matches[0]
-        7z x $7zfile
-        del $7zfile
-        # export environment variable IRICLIB_VERSION for later steps
-        Write-Output "IRICLIB_VERSION=$($matches.major).$($matches.minor).$($matches.patch)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    # - name: Download latest iricsdk
+    #   shell: pwsh
+    #   run: |
+    #     # GET /repos/{owner}/{repo}/releases/latest
+    #     # see https://docs.github.com/en/rest/reference/repos#get-the-latest-release
+    #     # see https://docs.github.com/ja/rest/reference/repos#get-the-latest-release
+    #     $latest = (Invoke-WebRequest -Uri $env:IRICLIB_API_URL/releases/latest -Method GET).Content | ConvertFrom-Json
+    #     $url = ($latest.assets | Where-Object {$_.name -match "^iricsdk-(?<major>0|[1-9]\d*)\.(?<minor>[0|1-9]\d*)\.(?<patch>[0|1-9]\d*)\.7z$"}).browser_download_url
+    #     curl -LO $url
+    #     $7zfile = $matches[0]
+    #     7z x $7zfile
+    #     del $7zfile
+    #     # export environment variable IRICLIB_VERSION for later steps
+    #     Write-Output "IRICLIB_VERSION=$($matches.major).$($matches.minor).$($matches.patch)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
     # - name: Install oneAPI Fortran
     #   shell: cmd
@@ -148,10 +148,11 @@ jobs:
       shell: pwsh
       run: ${{env.SOURCE_DIR}}\.github\workflows\install_qt_fast_windows.ps1
 
-
     - name: directories
       shell: pwsh
       run: |
+        dir
+        dir $env:TEMP
         dir C:\Qt
         dir C:\Qt\Tools
         dir C:\Qt\Tools\QtInstallerFramework
