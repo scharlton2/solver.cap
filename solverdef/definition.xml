@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SolverDefinition
 	xmlns="www.iric.net/SolverDefinition/1.0"
-	name="cap" caption="Culvert Analysis Program" version="2.0.12" copyright="USGS"
-	release="2022.02.07"
+	name="cap" caption="Culvert Analysis Program" version="2.0.13" copyright="USGS"
+	release="2022.02.16"
 	homepage="http://water.usgs.gov/software/CAP/"
 	executable="CAP.exe"
 	iterationtype="time"
@@ -113,10 +113,10 @@
 				</VBoxLayout>
 				<VBoxLayout>
 					<GroupBox caption="Shape (ICODE)">
-						<Item name="shape_type" caption="Type (ICODE)">
+						<Item name="shape_type" caption="Shape (ICODE)">
 							<Definition valueType="integer" option="true" default="0">
 								<Enumerations>
-									<Enumeration value="0" caption="Select type"/>
+									<Enumeration value="0" caption="Select shape"/>
 									<Enumeration value="1" caption="Box (I=1)"/>
 									<Enumeration value="2" caption="Circular (I=2)"/>
 									<Enumeration value="3" caption="Elliptical (I=2)"/>
@@ -126,7 +126,7 @@
 							</Definition>
 						</Item>
 					</GroupBox>
-					<GroupBox caption="Shape">
+					<GroupBox caption="Size">
 						<Item name="rise" caption="Rise [inches] (RISE)">
 							<SubCaption caption="Rise [centimeters] (RISE)">
 								<Condition type="or">
@@ -368,6 +368,23 @@
 											<Enumeration value="5" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD = 31 inches (J=5)"/>
 											<Enumeration value="6" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD = 47 inches (J=6)"/>
 											<Enumeration value="7" caption="(CMPA) Non-plate corrugated steel pipe arch (J=7)"/>
+											<SubEnumerations>
+												<Enumeration value="1" caption="Concrete Pipe (J=1)"/>
+												<Enumeration value="2" caption="Corrugated metal or other pipe (not concrete) (J=2)"/>
+												<Condition type="or">
+													<Condition type="isEqual" target="shape_type" value="2"/>
+													<Condition type="isEqual" target="shape_type" value="3"/>
+												</Condition>
+											</SubEnumerations>
+											<SubEnumerations>
+												<Enumeration value="1" caption="Concrete Pipe (J=1)"/>
+												<Enumeration value="3" caption="(CMSPPA) Aluminum pipe arch with CORRAD = 31.75 inches (J=3)"/>
+												<Enumeration value="4" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD ≤ 18 inches (J=4)"/>
+												<Enumeration value="5" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD = 31 inches (J=5)"/>
+												<Enumeration value="6" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD = 47 inches (J=6)"/>
+												<Enumeration value="7" caption="(CMPA) Non-plate corrugated steel pipe arch (J=7)"/>
+												<Condition type="isEqual" target="shape_type" value="4"/>
+											</SubEnumerations>
 										</Enumerations>
 										<Condition type="or">
 											<Condition type="isEqual" target="shape_type" value="2"/>
