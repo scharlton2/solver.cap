@@ -49,9 +49,9 @@ jobs:
 
     steps:
 
-    # - uses: actions/checkout@v2
-    #   with:
-    #     path: ${{env.SOURCE_DIR}}
+    - uses: actions/checkout@v2
+      with:
+        path: ${{env.SOURCE_DIR}}
 
     # - name: Checkout online_update repo
     #   uses: actions/checkout@v2
