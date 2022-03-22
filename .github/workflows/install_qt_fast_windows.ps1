@@ -4,10 +4,12 @@
 
 $installDir = "C:\Qt"
 
+# Check for newer versions:
+# http://qt.mirror.constant.com/online/qtsdkrepository/windows_x86/desktop/tools_ifw/
 $component_groups += @(
     @{
         components = @(
-            "qt.tools.ifw.42"
+            "qt.tools.ifw.43"
         )
     }
 )

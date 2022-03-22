@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SolverDefinition
 	xmlns="www.iric.net/SolverDefinition/1.0"
-	name="cap" caption="Culvert Analysis Program" version="2.0.11" copyright="USGS"
-	release="2022.01.05"
+	name="cap" caption="Culvert Analysis Program" version="2.0.13" copyright="USGS"
+	release="2022.02.16"
 	homepage="http://water.usgs.gov/software/CAP/"
 	executable="CAP.exe"
 	iterationtype="time"
@@ -112,11 +112,11 @@
 					</Image>
 				</VBoxLayout>
 				<VBoxLayout>
-					<GroupBox caption="Type">
-						<Item name="shape_type" caption="Type (ICODE)">
+					<GroupBox caption="Shape (ICODE)">
+						<Item name="shape_type" caption="Shape (ICODE)">
 							<Definition valueType="integer" option="true" default="0">
 								<Enumerations>
-									<Enumeration value="0" caption="Select type"/>
+									<Enumeration value="0" caption="Select shape"/>
 									<Enumeration value="1" caption="Box (I=1)"/>
 									<Enumeration value="2" caption="Circular (I=2)"/>
 									<Enumeration value="3" caption="Elliptical (I=2)"/>
@@ -196,6 +196,16 @@
 									<Condition type="isEqual" target="material" value="3"/>
 								</Condition>
 							</SubCaption>
+							<!-- English and J=[7] -->
+							<SubCaption caption="R&lt;sub&gt;bottom&lt;/sub&gt; [inches] (BOTRAD) ‒ Entry of measured value recommended">
+								<Condition type="and">
+									<Condition type="or">
+										<Condition type="isEqual" target="units" value="0"/>
+										<Condition type="isEqual" target="units" value="2"/>
+									</Condition>
+									<Condition type="isEqual" target="material" value="7"/>
+								</Condition>
+							</SubCaption>
 							<Definition valueType="real" default="0">
 								<Condition type="isEqual" target="shape_type" value="4"/>
 							</Definition>
@@ -222,7 +232,7 @@
 								</Condition>
 							</SubCaption>
 							<!-- English and J=[3] (≝ doesn't display well in iric) -->
-							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) = 31.75 inches">
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD)">
 								<Condition type="and">
 									<Condition type="or">
 										<Condition type="isEqual" target="units" value="0"/>
@@ -242,7 +252,7 @@
 								</Condition>
 							</SubCaption>
 							<!-- English and J=[5] -->
-							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) = 31 inches">
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD)">
 								<Condition type="and">
 									<Condition type="or">
 										<Condition type="isEqual" target="units" value="0"/>
@@ -262,7 +272,7 @@
 								</Condition>
 							</SubCaption>
 							<!-- English and J=[6] -->
-							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD) = 47 inches">
+							<SubCaption caption="R&lt;sub&gt;corner&lt;/sub&gt; [inches] (CORRAD)">
 								<Condition type="and">
 									<Condition type="or">
 										<Condition type="isEqual" target="units" value="0"/>
@@ -282,15 +292,42 @@
 								</Condition>
 							</SubCaption>
 							<Definition valueType="real" default="0">
-								<Condition type="and">
-									<Condition type="isEqual" target="shape_type" value="4"/>
-									<Condition type="or">
-										<Condition type="isEqual" target="material" value="1"/>
-										<Condition type="isEqual" target="material" value="2"/>
-										<Condition type="isEqual" target="material" value="4"/>
-										<Condition type="isEqual" target="material" value="7"/>
+								<Dependency>
+									<Condition type="and">
+										<Condition type="isEqual" target="shape_type" value="4"/>
+										<Condition type="or">
+											<Condition type="isEqual" target="material" value="1"/>
+											<Condition type="isEqual" target="material" value="2"/>
+											<Condition type="isEqual" target="material" value="4"/>
+											<Condition type="isEqual" target="material" value="7"/>
+										</Condition>
 									</Condition>
-								</Condition>
+									<Action type="enable" />
+								</Dependency>
+								<!--Pipe Arch (I=3) and Material (J=3) -->
+								<Dependency>
+									<Condition type="and">
+										<Condition type="isEqual" target="shape_type" value="4"/>
+										<Condition type="isEqual" target="material" value="3"/>
+									</Condition>
+									<Action type="setValue" value="31.75" />
+								</Dependency>
+								<!--Pipe Arch (I=3) and Material (J=5) -->
+								<Dependency>
+									<Condition type="and">
+										<Condition type="isEqual" target="shape_type" value="4"/>
+										<Condition type="isEqual" target="material" value="5"/>
+									</Condition>
+									<Action type="setValue" value="31" />
+								</Dependency>
+								<!--Pipe Arch (I=3) and Material (J=6) -->
+								<Dependency>
+									<Condition type="and">
+										<Condition type="isEqual" target="shape_type" value="4"/>
+										<Condition type="isEqual" target="material" value="6"/>
+									</Condition>
+									<Action type="setValue" value="47" />
+								</Dependency>
 							</Definition>
 						</Item>
 						<Item name="coords" caption="Coordinates [feet] (SCUL, GCUL)">
@@ -325,12 +362,29 @@
 									<Definition valueType="integer" option="true" default="1">
 										<Enumerations>
 											<Enumeration value="1" caption="Concrete Pipe (J=1)"/>
-											<Enumeration value="2" caption="(CMSPPA) Mitered corrugated steel pipe with CORRAD ≤ 18 inches (J=2)"/>
-											<Enumeration value="3" caption="(CMSPPA) Aluminum pipe with CORRAD = 31.75 inches (J=3)"/>
-											<Enumeration value="4" caption="(CMSPPA) Corrugated steel pipe with CORRAD ≤ 18 inches (J=4)"/>
-											<Enumeration value="5" caption="(CMSPPA) Corrugated steel pipe with CORRAD = 31 inches (J=5)"/>
-											<Enumeration value="6" caption="(CMSPPA) Corrugated steel pipe with CORRAD = 47 inches (J=6)"/>
-											<Enumeration value="7" caption="(CMPA) Non-plate corrugated metal (steel or aluminum) pipe (J=7)"/>
+											<Enumeration value="2" caption="Corrugated metal or other pipe (not concrete) (J=2)"/>
+											<Enumeration value="3" caption="(CMSPPA) Aluminum pipe arch with CORRAD = 31.75 inches (J=3)"/>
+											<Enumeration value="4" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD ≤ 18 inches (J=4)"/>
+											<Enumeration value="5" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD = 31 inches (J=5)"/>
+											<Enumeration value="6" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD = 47 inches (J=6)"/>
+											<Enumeration value="7" caption="(CMPA) Non-plate corrugated steel pipe arch (J=7)"/>
+											<SubEnumerations>
+												<Enumeration value="1" caption="Concrete Pipe (J=1)"/>
+												<Enumeration value="2" caption="Corrugated metal or other pipe (not concrete) (J=2)"/>
+												<Condition type="or">
+													<Condition type="isEqual" target="shape_type" value="2"/>
+													<Condition type="isEqual" target="shape_type" value="3"/>
+												</Condition>
+											</SubEnumerations>
+											<SubEnumerations>
+												<Enumeration value="1" caption="Concrete Pipe (J=1)"/>
+												<Enumeration value="3" caption="(CMSPPA) Aluminum pipe arch with CORRAD = 31.75 inches (J=3)"/>
+												<Enumeration value="4" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD ≤ 18 inches (J=4)"/>
+												<Enumeration value="5" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD = 31 inches (J=5)"/>
+												<Enumeration value="6" caption="(CMSPPA) Corrugated steel pipe arch with CORRAD = 47 inches (J=6)"/>
+												<Enumeration value="7" caption="(CMPA) Non-plate corrugated steel pipe arch (J=7)"/>
+												<Condition type="isEqual" target="shape_type" value="4"/>
+											</SubEnumerations>
 										</Enumerations>
 										<Condition type="or">
 											<Condition type="isEqual" target="shape_type" value="2"/>
@@ -358,6 +412,13 @@
 								the culvert geometry as x-y point coordinates (Note that &lt;u&gt;any&lt;/u&gt; pipe-arch culvert can be analyzed using the Non- &lt;br&gt;
 								standard Shape option, if desired.)">
 									<Condition type="isEqual" target="shape_type" value="4"/>
+								</SubCaption>
+								<SubCaption caption="The inlet type and observed inlet geometric characteristics or the discharge-coefficient adjustments must be specified&lt;br&gt;
+								in the *CC or *C3 and *C5 records. See the CAP User's Guide (WRIR 98-4166, 1998) for more information.">
+									<Condition type="or">
+										<Condition type="isEqual" target="shape_type" value="2"/>
+										<Condition type="isEqual" target="shape_type" value="3"/>
+									</Condition>
 								</SubCaption>
 							</Label>
 						</VBoxLayout>
