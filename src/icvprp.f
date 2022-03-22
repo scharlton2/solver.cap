@@ -643,7 +643,7 @@ C-----Local variables:
 C
       QC46=1.0
 C     Note that TC equals:
-C     1 for circular, 2 for box, 3 for pipe arch, and 4 for other      
+C     1 for box, 2 for circular/elliptical, 3 for pipe arch, and 4 for other      
       TC=TCR/100
 C     Change from QC46 to C46 below to allow coefficient to be computed 
 C     and potentially adjusted if pipe is projecting
