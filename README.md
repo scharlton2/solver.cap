@@ -19,20 +19,16 @@ CAP (version 2021) will be included as a pre-compiled solver beginning in versio
 
 ## A. Documentation
 
-The following user guide is available in electronic format. A Portable Document Format (PDF) file is included in the doc subdirectory of the CAP program distribution.
-<pre>  
-    Fulford, J.M., 1998, User's guide to the U.S. Geological Survey Culvert Analysis  Program,
-    Version 97-08: U.S. Geological Survey Water-Resources Investigations  Report 98-4166, 
-    70 p. (https://doi.org/10.3133/wri984166)
- </pre> 
+The following user guide is available in electronic format. A Portable Document Format (PDF) file is included in the doc subdirectory of the CAP program distribution.<br>
+
+Fulford, J.M., 1998, User's guide to the U.S. Geological Survey Culvert Analysis  Program, Version 97-08: U.S. Geological Survey Water-Resources Investigations  Report 98-4166, 70 p. (https://doi.org/10.3133/wri984166)<br>
+
 Notes about CAP version 2021 and a summary of errors resolved in this version  (including notes on capabilities added in version 2021) are also included in the doc subdirectory of the CAP program distribution.
    
-*The following report provides details on the methods used in the CAP program.
-<pre>
-   Bodhaine, G.L., 1968, Measurement of peak discharges at culverts by indirect methods: U.S. 
-   Geological Survey Techniques of Water-Resources Investigations,  book 3, chap.  A3, 60 p. 
-   (https://pubs.usgs.gov/twri/twri3-a3/) 
-</pre>
+The following report provides details on the methods used in the CAP program.<br>
+
+Bodhaine, G.L., 1968, Measurement of peak discharges at culverts by indirect methods: U.S. Geological Survey Techniques of Water-Resources Investigations,  book 3, chap.  A3, 60 p., (https://pubs.usgs.gov/twri/twri3-a3/) 
+
 ## B. Compiling the Windows standalone version of CAP
 
 In general, to compile CAP, you will need:
