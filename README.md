@@ -1,3 +1,4 @@
+
 # CAP (Culvert Analysis Program)
 
 CAP is a program that can be used to develop stage-discharge relationships for culverts  and to determine peak discharge through culverts from high-water marks. 
@@ -19,19 +20,19 @@ CAP (version 2021) will be included as a pre-compiled solver beginning in versio
 ## A. Documentation
 
 The following user guide is available in electronic format. A Portable Document Format (PDF) file is included in the doc subdirectory of the CAP program distribution.
-   
-&nbsp;&nbsp;&nbsp;&nbsp;Fulford, J.M., 1998, User's guide to the U.S. Geological Survey Culvert Analysis  Program, 
-&nbsp;&nbsp;&nbsp;&nbsp;Version 97-08: U.S. Geological Survey Water-Resources Investigations  Report 98-4166, 
-&nbsp;&nbsp;&nbsp;&nbsp;70 p. (https://doi.org/10.3133/wri984166)
-   
+<pre>  
+    Fulford, J.M., 1998, User's guide to the U.S. Geological Survey Culvert Analysis  Program,
+    Version 97-08: U.S. Geological Survey Water-Resources Investigations  Report 98-4166, 
+    70 p. (https://doi.org/10.3133/wri984166)
+ </pre> 
 Notes about CAP version 2021 and a summary of errors resolved in this version  (including notes on capabilities added in version 2021) are also included in the doc subdirectory of the CAP program distribution.
    
 *The following report provides details on the methods used in the CAP program.
-
-&nbsp;&nbsp;&nbsp;&nbsp;Bodhaine, G.L., 1968, Measurement of peak discharges at culverts by indirect methods: U.S. 
-&nbsp;&nbsp;&nbsp;&nbsp;Geological Survey Techniques of Water-Resources Investigations, &nbsp;&nbsp;&nbsp;&nbsp;book 3, chap.  A3, 60 p. 
-&nbsp;&nbsp;&nbsp;&nbsp;(https://pubs.usgs.gov/twri/twri3-a3/) 
-
+<pre>
+   Bodhaine, G.L., 1968, Measurement of peak discharges at culverts by indirect methods: U.S. 
+   Geological Survey Techniques of Water-Resources Investigations,  book 3, chap.  A3, 60 p. 
+   (https://pubs.usgs.gov/twri/twri3-a3/) 
+</pre>
 ## B. Compiling the Windows standalone version of CAP
 
 In general, to compile CAP, you will need:
@@ -64,8 +65,9 @@ CMake has many options other than Visual Studio, but here we assume that you are
  	
    **Open CMake**. 
 Fill in the top two lines:
-&nbsp;&nbsp;&nbsp;&nbsp;**Where is the source code**: The top level directory (ie cap-main_v4).
-&nbsp;&nbsp;&nbsp;&nbsp;**Where to build the binaries**: A directory of your choosing.
+ 1. **Where is the source code**: The top level directory (ie cap-main_v4).
+ 2. **Where to build the binaries**: A directory of your choosing.
+
  	
    **Click Configure.** 
 From the pulldown menu of the cmake-gui popup, select the 64-bit version of Visual Studio installed on your computer. There typically is no  need to change the default configuration.
@@ -75,13 +77,12 @@ You should now have a Visual Studio solution file (.sln) in the directory chosen
  	
 ### B.4. Compile and install CAP
  
-   Open the Visual Studio solution in the build directory defined in CMake.
+Open the Visual Studio solution in the build directory defined in CMake.
  	
-   The default configuration is "Debug". If you want to create a standalone (executable,	change the configuration to "Release".
+The default configuration is "Debug". If you want to create a standalone (executable,	change the configuration to "Release".
  >Build ALL_BUILD. 
-      CAP is compiled.
- 
-   
+
+ CAP is compiled.  
 ## C. Running CAP
 
 If CAP has been installed in a directory included in the users' PATH, the program can be executed from a command line as follows:
@@ -135,7 +136,7 @@ test  description of test and files                 file name & usage
 </pre>
 ## E. Suggested citation
 
-Fulford, J.M., and Koltun, G.F.,  2022, Culvert Analysis Program - Version 2021, U.S. Geological Survey software release, https://doi.org/10.5066/P9DW3XXX
+Fulford, J.M. and Koltun, G.F.,  2022, Culvert Analysis Program - Version 2021, U.S. Geological Survey software release, https://doi.org/10.5066/P9DW3XXX
 
 ## F. Acknowledgements
 Mark Smith (U.S. Geological Survey Scientist Emeritus) spearheaded the effort to update CAP, including organizing and overseeing the effort to identify known errors/issues with the previous version of CAP and providing valuable input on and review of revisions. Scott Charlton (U.S. Geological Survey) and Keisuke Inoue (Mizuho Instrumentation and Research) contributed some code used in CAP, primarily to provide the interface between CAP and the iRIC numerical simulation platform. 
@@ -145,4 +146,3 @@ Mark Smith (U.S. Geological Survey Scientist Emeritus) spearheaded the effort to
 Inquiries about this software distribution should be directed to:
 
 e-mail:  gfkoltun@usgs.gov or charlton@usgs.gov
-
