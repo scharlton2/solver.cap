@@ -138,7 +138,7 @@ test  description of test and files                 file name & usage
 Fulford, J.M., and Koltun, G.F.,  2021, Culvert Analysis Program - Version 2021, U.S. Geological Survey software release, https://doi.org/10.5066/P9DW3XXX
 
 ## F. Acknowledgements
-Scott Charlton (U.S. Geological Survey) and Keisuke Inoue (Mizuho Instrumentation and Research) contributed some of the code used in CAP, primarily to provide an interface between CAP and the iRIC numerical simulation platform.
+Mark Smith (U.S. Geological Survey Scientist Emeritus) spearheaded the effort to update CAP, including organizing and overseeing the effort to identify known errors/issues with the previous version of CAP and providing valuable input on and review of revisions. Scott Charlton (U.S. Geological Survey) and Keisuke Inoue (Mizuho Instrumentation and Research) contributed some code used in CAP, primarily to provide the interface between CAP and the iRIC numerical simulation platform. 
 
 ## G. Contacts
 
