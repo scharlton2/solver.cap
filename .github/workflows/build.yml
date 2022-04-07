@@ -28,7 +28,6 @@ env:
 
   # github API url
   IRICLIB_API_URL: ${{github.api_url}}/repos/i-RIC/iriclib_v4
-  IFW_API_URL: ${{github.api_url}}/repos/scharlton2/ifw
 
   # QtInstallerFramework version
   IFW_VERSION: 4.3
