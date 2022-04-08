@@ -3,22 +3,22 @@
     "name": "Culvert Analysis Program",
     "organization": "U.S. Geological Survey",
     "description": "This software is being provided free to the public to facilitate indirect determination of peak discharge at culverted stream crossings."
-    "status": "Production",
+    "version": "2021.0.0",   
+	"status": "Release Candidate",
 
     "permissions": {
       "usageType": "openSource",
       "licenses": [
         {
           "name": "Public Domain, CC0-1.0",
-          "URL": "https://code.usgs.gov/gfkoltun/cap/LICENSE.md"
+          "URL": "https://code.usgs.gov/wma/osd/cap/LICENSE.md"
         }
       ]
     },
 
-    "homepageURL": "https://code.usgs.gov/gfkoltun/cap",
-    "downloadURL": "https://code.usgs.gov/gfkoltun/cap/-/archive/main_v4/cap-main_v4.zip",
-    "disclaimerURL": "https://code.usgs.gov/gfkoltun/cap/DISCLAIMER.md",
-    "repositoryURL": "https://code.usgs.gov/gfkoltun/cap",
+    "downloadURL": "https://code.usgs.gov/wma/osd/cap/-/archive/develop/cap-develop.zip",
+    "disclaimerURL": "https://code.usgs.gov/wma/osd/cap/-/blob/develop/DISCLAIMER.md",
+    "repositoryURL": "https://code.usgs.gov/wma/osd/cap",
     "vcs": "git",
 
     "laborHours": 400,
@@ -39,7 +39,7 @@
     },
 
     "date": {
-      "metadataLastUpdated": "2022-01-21"
+      "metadataLastUpdated": "2022-04-08"
     }
   }
 ]
