@@ -3,8 +3,8 @@
     "name": "Culvert Analysis Program",
     "organization": "U.S. Geological Survey",
     "description": "This software is being provided free to the public to facilitate indirect determination of peak discharge at culverted stream crossings.",
-    "version": "2021.0.0",   
-	  "status": "Production",
+    "version": "2021.0.0",
+    "status": "Production",
 
     "permissions": {
       "usageType": "openSource",
