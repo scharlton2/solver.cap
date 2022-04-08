@@ -17,8 +17,8 @@
     },
 
     "homepageURL": "https://code.usgs.gov/wma/osd/cap",
-    "downloadURL": "https://code.usgs.gov/wma/osd/cap/-/archive/main_v4/cap-main_v4.zip",
-    "disclaimerURL": "https://code.usgs.gov/wma/osd/cap/DISCLAIMER.md",
+    "downloadURL": "https://code.usgs.gov/wma/osd/cap/-/archive/2021.0.0/cap-2021.0.0.zip",
+    "disclaimerURL": "https://code.usgs.gov/wma/osd/cap/-/blob/2021.0.0/DISCLAIMER.md",
     "repositoryURL": "https://code.usgs.gov/wma/osd/cap",
     "vcs": "git",
 
@@ -31,7 +31,7 @@
     ],
 
     "languages": [
-      "English"
+      "FORTRAN"
     ],
 
     "contact": {
