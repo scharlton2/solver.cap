@@ -41,9 +41,9 @@ In general, to compile CAP, you will need:
 ### B.1. Download and install CMake
    CMake can be downloaded from https://www.cmake.org/. If you download the binary distribution installer, CMake is installed when you execute it.
 	
-### B.2. Unzip the source code distribution file cap-main_v4.zip
+### B.2. Unzip the source code distribution file cap-2021.0.0.zip
   
-   The directory cap-main_v4 is created when the files are extracted; if this directory already exists, you may want to delete or rename it before extracting the files.
+   The directory cap-2021.0.0 is created when the files are extracted; if this directory already exists, you may want to delete or rename it before extracting the files.
 
    The following directory structure is created (the contents of each directory are shown to the right):
 
@@ -61,7 +61,7 @@ CMake has many options other than Visual Studio, but here we assume that you are
  	
    **Open CMake**. 
 Fill in the top two lines:
- 1. **Where is the source code**: The top level directory (ie cap-main_v4).
+ 1. **Where is the source code**: The top level directory (ie cap-2021.0.0).
  2. **Where to build the binaries**: A directory of your choosing.
 
  	
