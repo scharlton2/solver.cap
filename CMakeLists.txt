@@ -78,9 +78,11 @@ if(BUILD_FOR_IRIC)
       solverdef/edging_beveled.png
       solverdef/edging_rounded.png
       solverdef/edging_types.png
+      solverdef/LICENSE
       solverdef/projection_equal.png
       solverdef/projection_types.png
       solverdef/projection_unequal.png
+      solverdef/README
       solverdef/shape_box.png
       solverdef/shape_circular.png
       solverdef/shape_elliptical.png
