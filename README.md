@@ -47,7 +47,7 @@ In general, to compile CAP, you will need:
 
    The following directory structure is created (the contents of each directory are shown to the right):
 
-   cap-main_v4
+   cap-develop
 
     --data        Sample input and output data files
     --doc         Documentation files 
