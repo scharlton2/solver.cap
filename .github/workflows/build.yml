@@ -8,12 +8,12 @@ on:
       - master
 
 env:
-  # online_update directory
+  # online_update_v4 directory
   PACKAGE_DIR: solver.cap
 
-  # online_update src directory
-  ONLINE_UPDATE_SRC_DIR: online_update\yasu_src                   # @todo simplify
-  ONLINE_UPDATE_SRC_DIR_DEFAULT: online_update\dev_src            # @todo simplify
+  # online_update_v4 src directory
+  ONLINE_UPDATE_SRC_DIR: online_update_v4\dev_v4_src                   # @todo simplify
+  ONLINE_UPDATE_SRC_DIR_DEFAULT: online_update_v4\prod_v4_src          # @todo simplify
 
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
@@ -24,7 +24,7 @@ env:
   INSTALL_DIR: INSTALL
 
   # Repos
-  ONLINE_UPDATE_REPO: i-RIC/online_update
+  ONLINE_UPDATE_REPO: i-RIC/online_update_v4
 
   # github API url
   IRICLIB_API_URL: ${{github.api_url}}/repos/i-RIC/iriclib_v4
@@ -52,12 +52,12 @@ jobs:
       with:
         path: ${{env.SOURCE_DIR}}
 
-    - name: Checkout online_update repo
+    - name: Checkout online_update_v4 repo
       uses: actions/checkout@v2
       with:
-        repository: i-RIC/online_update
+        repository: i-RIC/online_update_v4
         persist-credentials: false                # required to commit with a Personal access token
-        path: online_update
+        path: online_update_v4
 
     - name: Download latest iricsdk
       shell: pwsh
@@ -125,7 +125,7 @@ jobs:
       shell: pwsh
       run: |
         Copy-Item .\${{env.INSTALL_DIR}}\bin\* .\${{env.ONLINE_UPDATE_SRC_DIR}}\packages\${{env.PACKAGE_DIR}}\data\.
-        Set-Location online_update
+        Set-Location online_update_v4
         git status
 
     - name: Run copy_release_and_version.py
@@ -162,5 +162,5 @@ jobs:
       with:
         github_token: ${{secrets.ONLINE_UPDATE_TOKEN}}
         repository: ${{env.ONLINE_UPDATE_REPO}}
-        directory: online_update
+        directory: online_update_v4
         branch: master
