@@ -2,7 +2,8 @@
   {
     "name": "Culvert Analysis Program",
     "organization": "U.S. Geological Survey",
-    "description": "This software is being provided free to the public to facilitate indirect determination of peak discharge at culverted stream crossings."
+    "description": "This software is being provided free to the public to facilitate indirect determination of peak discharge at culverted stream crossings.",
+    "version": "2021.0.0",   
     "status": "Production",
 
     "permissions": {
@@ -10,15 +11,15 @@
       "licenses": [
         {
           "name": "Public Domain, CC0-1.0",
-          "URL": "https://code.usgs.gov/gfkoltun/cap/LICENSE.md"
+          "URL": "https://code.usgs.gov/wma/osd/cap/-/raw/2021.0.0/LICENSE.md"
         }
       ]
     },
 
-    "homepageURL": "https://code.usgs.gov/gfkoltun/cap",
-    "downloadURL": "https://code.usgs.gov/gfkoltun/cap/-/archive/main_v4/cap-main_v4.zip",
-    "disclaimerURL": "https://code.usgs.gov/gfkoltun/cap/DISCLAIMER.md",
-    "repositoryURL": "https://code.usgs.gov/gfkoltun/cap",
+    "homepageURL": "https://code.usgs.gov/wma/osd/cap",
+    "downloadURL": "https://code.usgs.gov/wma/osd/cap/-/archive/2021.0.0/cap-2021.0.0.zip",
+    "disclaimerURL": "https://code.usgs.gov/wma/osd/cap/-/raw/2021.0.0/DISCLAIMER.md",
+    "repositoryURL": "https://code.usgs.gov/wma/osd/cap.git",
     "vcs": "git",
 
     "laborHours": 400,
@@ -26,11 +27,11 @@
     "tags": [
       "culvert",
       "indirect determination of discharge",
-	  "peak discharge"
+      "peak discharge"
     ],
 
     "languages": [
-      "English"
+      "FORTRAN"
     ],
 
     "contact": {
@@ -39,7 +40,7 @@
     },
 
     "date": {
-      "metadataLastUpdated": "2022-01-21"
+      "metadataLastUpdated": "2022-04-08"
     }
   }
 ]
