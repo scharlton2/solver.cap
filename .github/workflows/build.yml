@@ -152,7 +152,7 @@ jobs:
       run: |
         Set-Location .\${{env.ONLINE_UPDATE_SRC_DIR}}\.
         Write-Output "QT_IFW_PATH = 'C:\\Qt\\Tools\\QtInstallerFramework\\$env:IFW_VERSION'" > qt_ifw_path.py
-        &C:\Qt\Tools\QtInstallerFramework\$env:IFW_VERSION\bin\repogen.exe -p packages --update --include $env:PACKAGE_DIR ..\yasu
+        &C:\Qt\Tools\QtInstallerFramework\$env:IFW_VERSION\bin\repogen.exe -p packages --update --include $env:PACKAGE_DIR ..\dev_v4
         Set-Location ..
         git add -A
         git status
@@ -163,4 +163,4 @@ jobs:
         github_token: ${{secrets.ONLINE_UPDATE_TOKEN}}
         repository: ${{env.ONLINE_UPDATE_REPO}}
         directory: online_update_v4
-        branch: master
+        branch: main
