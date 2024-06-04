@@ -71,7 +71,7 @@ jobs:
         Write-Output "IRICLIB_VERSION=$($matches.major).$($matches.minor).$($matches.patch)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Install oneAPI Fortran
-      uses: i-RIC/install-intelfortran-action@v1.2.1
+      uses: i-RIC/install-intelfortran-action@main
       with:
         cache: true
 
