@@ -2,18 +2,19 @@ name: build
 
 on:
   push:
+  pull_request:
     branches:
-      - main
       - main_v4
-      - master
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 env:
   # online_update_v4 directory
   PACKAGE_DIR: solver.cap
 
   # online_update_v4 src directory
-  ONLINE_UPDATE_SRC_DIR: online_update_v4\dev_v4_src                   # @todo simplify
-  ONLINE_UPDATE_SRC_DIR_DEFAULT: online_update_v4\prod_v4_src          # @todo simplify
+  ONLINE_UPDATE_SRC_DIR: online_update_v4\dev_v4_src
+  ONLINE_UPDATE_SRC_DIR_DEFAULT: online_update_v4\prod_v4_src
 
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
@@ -28,15 +29,10 @@ env:
 
   # github API url
   IRICLIB_API_URL: ${{github.api_url}}/repos/i-RIC/iriclib_v4
+  IFW_API_URL: ${{github.api_url}}/repos/scharlton2/ifw
 
   # QtInstallerFramework version
-  IFW_VERSION: 4.3
-
-  # oneAPI
-  # Based on https://github.com/oneapi-src/oneapi-ci/blob/master/.github/workflows/build_all.yml
-  WINDOWS_HPCKIT_URL: https://registrationcenter-download.intel.com/akdlm/irc_nas/17762/w_HPCKit_p_2021.2.0.2901.exe
-  WINDOWS_HPCKIT_FILE: hpckit.exe
-  WINDOWS_HPCKIT_COMPONENTS: intel.oneapi.win.ifort-compiler
+  # IFW_VERSION: 4.3
 
 jobs:
   build:
@@ -48,12 +44,12 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         path: ${{env.SOURCE_DIR}}
 
     - name: Checkout online_update_v4 repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         repository: i-RIC/online_update_v4
         persist-credentials: false                # required to commit with a Personal access token
@@ -65,7 +61,7 @@ jobs:
         # GET /repos/{owner}/{repo}/releases/latest
         # see https://docs.github.com/en/rest/reference/repos#get-the-latest-release
         # see https://docs.github.com/ja/rest/reference/repos#get-the-latest-release
-        $latest = (Invoke-WebRequest -Uri $env:IRICLIB_API_URL/releases/latest -Method GET).Content | ConvertFrom-Json
+        $latest = (Invoke-WebRequest -Uri ${{env.IRICLIB_API_URL}}/releases/latest -Method GET).Content | ConvertFrom-Json
         $url = ($latest.assets | Where-Object {$_.name -match "^iricsdk-(?<major>0|[1-9]\d*)\.(?<minor>[0|1-9]\d*)\.(?<patch>[0|1-9]\d*)\.7z$"}).browser_download_url
         curl -LO $url
         $7zfile = $matches[0]
@@ -75,35 +71,101 @@ jobs:
         Write-Output "IRICLIB_VERSION=$($matches.major).$($matches.minor).$($matches.patch)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Install oneAPI Fortran
-      shell: cmd
+      uses: i-RIC/install-intelfortran-action@v2
+      with:
+        cache: true
+
+    - name: List oneAPI
       run: |
-        curl -fSLo %WINDOWS_HPCKIT_FILE% %WINDOWS_HPCKIT_URL%
-        start /b /wait %WINDOWS_HPCKIT_FILE% -s -x -f hpckit_extracted --log hpckit_extracted.log
-        hpckit_extracted\bootstrapper.exe -s --action install --components=%WINDOWS_HPCKIT_COMPONENTS% --eula=accept --continue-with-optional-error=yes -p=NEED_VS2017_INTEGRATION=0 -p=NEED_VS2019_INTEGRATION=1 --log-dir=.
+        Get-ChildItem -Recurse "C:\Program Files (x86)\Intel\oneAPI"
+
+    - name: Export POCO version
+      run: |
+        Get-ChildItem ${{github.workspace}}\iricsdk | Where-Object {
+          $_.name -match 'poco-(?<version>.*)'
+        }
+        Write-Output "POCO_VER=$($matches.version)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Export HDF5 version
+      run: |
+        Get-ChildItem ${{github.workspace}}\iricsdk | Where-Object {
+          $_.name -match 'hdf5-(?<version>.*)'
+        }
+        Write-Output "HDF5_VER=$($matches.version)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Configure CMake
+      shell: cmd
+      env:
+      # paths for find_package(iriclib, HDF5, PocoFoundation)
+        CMAKE_PREFIX_PATH: ${{github.workspace}}\iricsdk\iriclib-${{env.IRICLIB_VERSION}}\lib\cmake\iriclib;${{github.workspace}}\iricsdk\hdf5-${{env.HDF5_VER}}\cmake\hdf5;${{github.workspace}}\iricsdk\poco-${{env.POCO_VER}}\lib\cmake\Poco
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -S ${{github.workspace}}\${{env.SOURCE_DIR}} -B ${{github.workspace}}\${{env.BUILD_DIR}} -DCMAKE_PREFIX_PATH=${{github.workspace}}\iricsdk\iriclib-${{env.IRICLIB_VERSION}}\lib\cmake\iriclib -DCMAKE_INSTALL_PREFIX=${{github.workspace}}\${{env.INSTALL_DIR}} -DBUILD_FOR_IRIC=ON
+      run: cmake -G "Ninja Multi-Config" -S ${{github.workspace}}\${{env.SOURCE_DIR}} -B ${{github.workspace}}\${{env.BUILD_DIR}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}\${{env.INSTALL_DIR}}
 
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}\${{env.BUILD_DIR}} --config ${{env.BUILD_TYPE}}
 
-    # @todo
-    # - name: Test
-    #   working-directory: ${{github.workspace}}/${{env.BUILD_DIR}}
-    #   # Execute tests defined by the CMake configuration.
-    #   # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-    #   # set paths for dlls
-    #   run: |
-    #     C:\iricdev\lib\setvars.bat  @todo
-    #     "C:\Program Files (x86)\Intel\oneAPI\setvars.bat" intel64 vs2019
-    #     ctest -C ${{env.BUILD_TYPE}}
+    - name: Set up Visual Studio shell
+      if: ${{ false }}
+      uses: egor-tensin/vs-shell@v2
+      with:
+        arch: x64
+
+    - name: Debug build
+      if: ${{ false }}
+      run: |
+        Set-Location ${{github.workspace}}\${{env.BUILD_DIR}}\${{env.BUILD_TYPE}}
+        Get-ChildItem *.exe, *.dll
+
+    - name: Upload build
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: build
+        path: |
+          ${{env.BUILD_DIR}}/
+          !${{env.BUILD_DIR}}/*.mod
+
+    - name: Test
+      working-directory: ${{github.workspace}}/${{env.BUILD_DIR}}
+      # Execute tests defined by the CMake configuration.
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: ctest -C ${{env.BUILD_TYPE}}
+
+    - name: Upload logs
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: logs
+        path: |
+          ${{env.BUILD_DIR}}/**/BuildLog.htm
+          ${{env.BUILD_DIR}}/**/LastTest.log
+
+    - name: Check for dumpbin
+      if: ${{ false }}
+      run: |
+        Set-Location ${{github.workspace}}\${{env.BUILD_DIR}}\${{env.BUILD_TYPE}}
+        Get-ChildItem *.exe, *.dll
+        Get-Command dumpbin
+        dumpbin /IMPORTS *.exe *.dll
 
     - name: Install
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}\${{env.BUILD_DIR}} --config ${{env.BUILD_TYPE}} --target install
+
+    - name: Run dumpbin /IMPORTS
+      run: |
+        Set-Location ${{github.workspace}}/${{env.INSTALL_DIR}}
+        Get-ChildItem *.exe, *.dll
+        Get-Command dumpbin
+        dumpbin /IMPORTS *.exe *.dll
+
+    - name: Upload install
+      uses: actions/upload-artifact@v4
+      with:
+        name: install
+        path: ${{env.INSTALL_DIR}}/
 
     - name: Prepare solver package directories
       shell: pwsh
@@ -135,19 +197,53 @@ jobs:
         Set-Location ..
         git status
 
-    - name: Cache QtInstallerFramework
-      id: cache-qtif
-      uses: actions/cache@v2
-      with:
-        path: C:\Qt
-        key: ${{runner.os}}-qtif-${{env.IFW_VERSION}}
+    # - name: Cache QtInstallerFramework
+    #   id: cache-qtif
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: C:\Qt
+    #     key: ${{runner.os}}-qtif-${{env.IFW_VERSION}}
 
-    - name: Download QtInstallerFramework
-      if: steps.cache-qtif.outputs.cache-hit != 'true'
+    # - name: Download QtInstallerFramework
+    #   if: steps.cache-qtif.outputs.cache-hit != 'true'
+    #   shell: pwsh
+    #   run: ${{env.SOURCE_DIR}}\.github\workflows\install_qt_fast_windows.ps1
+
+    # - name: Cache QtInstallerFramework 2.0
+    #   id: cache-qtif
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: C:\Qt
+    #     key: ${{runner.os}}-qtif-${{env.IFW_VERSION}}
+
+    - name: Download QtInstallerFramework 2.0
+      # if: steps.cache-qtif.outputs.cache-hit != 'true'
       shell: pwsh
-      run: ${{env.SOURCE_DIR}}\.github\workflows\install_qt_fast_windows.ps1
+      run: |
+        # GET /repos/{owner}/{repo}/releases/latest
+        # see https://docs.github.com/en/rest/reference/repos#get-the-latest-release
+        # see https://docs.github.com/ja/rest/reference/repos#get-the-latest-release
+        $latest = (Invoke-WebRequest -Uri $env:IFW_API_URL/releases/latest -Method GET).Content | ConvertFrom-Json
+        $url = ($latest.assets | Where-Object {$_.name -match "^ifw-(?<major>0|[1-9]\d*)\.(?<minor>[0|1-9]\d*)\.7z$"}).browser_download_url
+        curl -LO $url
+        mkdir c:\Qt\Tools\QtInstallerFramework
+        $7zfile = $matches[0]
+        7z x -oc:\Qt\Tools\QtInstallerFramework $7zfile
+        del $7zfile
+        # export environment variable IFW_VERSION for later steps
+        Write-Output "IFW_VERSION=$($matches.major).$($matches.minor)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-    - name: Run repogen.exe
+    - name: Verify QtInstallerFramework
+      shell: pwsh
+      run: |
+        Get-ChildItem C:\
+        Get-ChildItem C:\Qt
+        Get-ChildItem C:\Qt\Tools
+        Get-ChildItem C:\Qt\Tools\QtInstallerFramework
+        Get-ChildItem C:\Qt\Tools\QtInstallerFramework\${{env.IFW_VERSION}}
+        Get-ChildItem C:\Qt\Tools\QtInstallerFramework\${{env.IFW_VERSION}}\bin
+
+    - name: Run QtInstallerFramework repogen.exe
       shell: pwsh
       run: |
         Set-Location .\${{env.ONLINE_UPDATE_SRC_DIR}}\.
@@ -158,6 +254,7 @@ jobs:
         git status
 
     - name: Commit and push branch
+      if: (github.repository == 'i-RIC/solver.cap' && github.ref_name == 'main_v4' && github.ref_type == 'branch')
       uses: actions-js/push@master
       with:
         github_token: ${{secrets.ONLINE_UPDATE_TOKEN}}
