@@ -44,12 +44,12 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         path: ${{env.SOURCE_DIR}}
 
     - name: Checkout online_update_v4 repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         repository: i-RIC/online_update_v4
         persist-credentials: false                # required to commit with a Personal access token
@@ -120,7 +120,7 @@ jobs:
 
     - name: Upload build
       if: ${{ always() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build
         path: |
@@ -135,7 +135,7 @@ jobs:
 
     - name: Upload logs
       if: ${{ always() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: logs
         path: |
@@ -162,7 +162,7 @@ jobs:
         dumpbin /IMPORTS *.exe *.dll
 
     - name: Upload install
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: install
         path: ${{env.INSTALL_DIR}}/
