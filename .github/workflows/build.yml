@@ -258,12 +258,10 @@ jobs:
         git status
 
     - name: Commit and push branch
-      # if: (github.repository == 'i-RIC/solver.cap' && github.ref_name == 'main_v4' && github.ref_type == 'branch')
       if: github.event.inputs.push_update == 'true'
       uses: actions-js/push@master
       with:
         github_token: ${{ secrets.ONLINE_UPDATE_TOKEN }}
         repository: ${{ env.ONLINE_UPDATE_REPO }}
         directory: online_update_v4
-        # branch: main
-        branch: _test_solver_cap.${{ github.run_number }}
+        branch: _solver.cap.${{ github.run_number }}
