@@ -7,6 +7,10 @@ on:
       - main_v4
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      push_update:
+        type: boolean
+        description: 'push to online_update_v4 repo'
 
 env:
   # online_update_v4 directory
@@ -28,8 +32,8 @@ env:
   ONLINE_UPDATE_REPO: i-RIC/online_update_v4
 
   # github API url
-  IRICLIB_API_URL: ${{github.api_url}}/repos/i-RIC/iriclib_v4
-  IFW_API_URL: ${{github.api_url}}/repos/scharlton2/ifw
+  IRICLIB_API_URL: ${{ github.api_url }}/repos/i-RIC/iriclib_v4
+  IFW_API_URL: ${{ github.api_url }}/repos/scharlton2/ifw
 
   # QtInstallerFramework version
   # IFW_VERSION: 4.3
@@ -46,7 +50,7 @@ jobs:
 
     - uses: actions/checkout@v4
       with:
-        path: ${{env.SOURCE_DIR}}
+        path: ${{ env.SOURCE_DIR }}
 
     - name: Checkout online_update_v4 repo
       uses: actions/checkout@v4
@@ -61,7 +65,7 @@ jobs:
         # GET /repos/{owner}/{repo}/releases/latest
         # see https://docs.github.com/en/rest/reference/repos#get-the-latest-release
         # see https://docs.github.com/ja/rest/reference/repos#get-the-latest-release
-        $latest = (Invoke-WebRequest -Uri ${{env.IRICLIB_API_URL}}/releases/latest -Method GET).Content | ConvertFrom-Json
+        $latest = (Invoke-WebRequest -Uri ${{ env.IRICLIB_API_URL }}/releases/latest -Method GET).Content | ConvertFrom-Json
         $url = ($latest.assets | Where-Object {$_.name -match "^iricsdk-(?<major>0|[1-9]\d*)\.(?<minor>[0|1-9]\d*)\.(?<patch>[0|1-9]\d*)\.7z$"}).browser_download_url
         curl -LO $url
         $7zfile = $matches[0]
@@ -81,14 +85,14 @@ jobs:
 
     - name: Export POCO version
       run: |
-        Get-ChildItem ${{github.workspace}}\iricsdk | Where-Object {
+        Get-ChildItem ${{ github.workspace }}\iricsdk | Where-Object {
           $_.name -match 'poco-(?<version>.*)'
         }
         Write-Output "POCO_VER=$($matches.version)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Export HDF5 version
       run: |
-        Get-ChildItem ${{github.workspace}}\iricsdk | Where-Object {
+        Get-ChildItem ${{ github.workspace }}\iricsdk | Where-Object {
           $_.name -match 'hdf5-(?<version>.*)'
         }
         Write-Output "HDF5_VER=$($matches.version)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -97,14 +101,14 @@ jobs:
       shell: cmd
       env:
       # paths for find_package(iriclib, HDF5, PocoFoundation)
-        CMAKE_PREFIX_PATH: ${{github.workspace}}\iricsdk\iriclib-${{env.IRICLIB_VERSION}}\lib\cmake\iriclib;${{github.workspace}}\iricsdk\hdf5-${{env.HDF5_VER}}\cmake\hdf5;${{github.workspace}}\iricsdk\poco-${{env.POCO_VER}}\lib\cmake\Poco
+        CMAKE_PREFIX_PATH: ${{ github.workspace }}\iricsdk\iriclib-${{ env.IRICLIB_VERSION }}\lib\cmake\iriclib;${{ github.workspace }}\iricsdk\hdf5-${{ env.HDF5_VER }}\cmake\hdf5;${{ github.workspace }}\iricsdk\poco-${{ env.POCO_VER }}\lib\cmake\Poco
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -G "Ninja Multi-Config" -S ${{github.workspace}}\${{env.SOURCE_DIR}} -B ${{github.workspace}}\${{env.BUILD_DIR}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}\${{env.INSTALL_DIR}}
+      run: cmake -G "Ninja Multi-Config" -S ${{ github.workspace }}\${{ env.SOURCE_DIR }} -B ${{ github.workspace }}\${{ env.BUILD_DIR }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}\${{ env.INSTALL_DIR }}
 
     - name: Build
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}\${{env.BUILD_DIR}} --config ${{env.BUILD_TYPE}}
+      run: cmake --build ${{ github.workspace }}\${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
 
     - name: Set up Visual Studio shell
       if: ${{ false }}
@@ -115,7 +119,7 @@ jobs:
     - name: Debug build
       if: ${{ false }}
       run: |
-        Set-Location ${{github.workspace}}\${{env.BUILD_DIR}}\${{env.BUILD_TYPE}}
+        Set-Location ${{ github.workspace }}\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}
         Get-ChildItem *.exe, *.dll
 
     - name: Upload build
@@ -124,14 +128,14 @@ jobs:
       with:
         name: build
         path: |
-          ${{env.BUILD_DIR}}/
-          !${{env.BUILD_DIR}}/*.mod
+          ${{ env.BUILD_DIR }}/
+          !${{ env.BUILD_DIR }}/*.mod
 
     - name: Test
-      working-directory: ${{github.workspace}}/${{env.BUILD_DIR}}
+      working-directory: ${{ github.workspace }}/${{ env.BUILD_DIR }}
       # Execute tests defined by the CMake configuration.
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: ctest -C ${{ env.BUILD_TYPE }}
 
     - name: Upload logs
       if: ${{ always() }}
@@ -139,24 +143,24 @@ jobs:
       with:
         name: logs
         path: |
-          ${{env.BUILD_DIR}}/**/BuildLog.htm
-          ${{env.BUILD_DIR}}/**/LastTest.log
+          ${{ env.BUILD_DIR }}/**/BuildLog.htm
+          ${{ env.BUILD_DIR }}/**/LastTest.log
 
     - name: Check for dumpbin
       if: ${{ false }}
       run: |
-        Set-Location ${{github.workspace}}\${{env.BUILD_DIR}}\${{env.BUILD_TYPE}}
+        Set-Location ${{ github.workspace }}\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}
         Get-ChildItem *.exe, *.dll
         Get-Command dumpbin
         dumpbin /IMPORTS *.exe *.dll
 
     - name: Install
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}\${{env.BUILD_DIR}} --config ${{env.BUILD_TYPE}} --target install
+      run: cmake --build ${{ github.workspace }}\${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --target install
 
     - name: Run dumpbin /IMPORTS
       run: |
-        Set-Location ${{github.workspace}}/${{env.INSTALL_DIR}}
+        Set-Location ${{ github.workspace }}/${{ env.INSTALL_DIR }}
         Get-ChildItem *.exe, *.dll
         Get-Command dumpbin
         dumpbin /IMPORTS *.exe *.dll
@@ -165,35 +169,35 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: install
-        path: ${{env.INSTALL_DIR}}/
+        path: ${{ env.INSTALL_DIR }}/
 
     - name: Prepare solver package directories
       shell: pwsh
       run: |
-        if (-Not (Test-Path .\${{env.ONLINE_UPDATE_SRC_DIR}}\packages\${{env.PACKAGE_DIR}}\data)) {
-          New-Item -Type Directory .\${{env.ONLINE_UPDATE_SRC_DIR}}\packages\${{env.PACKAGE_DIR}}\data
+        if (-Not (Test-Path .\${{ env.ONLINE_UPDATE_SRC_DIR }}\packages\${{ env.PACKAGE_DIR }}\data)) {
+          New-Item -Type Directory .\${{ env.ONLINE_UPDATE_SRC_DIR }}\packages\${{ env.PACKAGE_DIR }}\data
         }
-        if (-Not (Test-Path .\${{env.ONLINE_UPDATE_SRC_DIR}}\packages\${{env.PACKAGE_DIR}}\meta)) {
-          New-Item -Type Directory .\${{env.ONLINE_UPDATE_SRC_DIR}}\packages\${{env.PACKAGE_DIR}}\meta
+        if (-Not (Test-Path .\${{ env.ONLINE_UPDATE_SRC_DIR }}\packages\${{ env.PACKAGE_DIR }}\meta)) {
+          New-Item -Type Directory .\${{ env.ONLINE_UPDATE_SRC_DIR }}\packages\${{ env.PACKAGE_DIR }}\meta
         }
-        if (-Not (Test-Path -Path .\${{env.ONLINE_UPDATE_SRC_DIR}}\packages\${{env.PACKAGE_DIR}}\meta\package.xml)) {
-          Copy-Item .\${{env.ONLINE_UPDATE_SRC_DIR_DEFAULT}}\packages\${{env.PACKAGE_DIR}}\meta\package.xml .\${{env.ONLINE_UPDATE_SRC_DIR}}\packages\${{env.PACKAGE_DIR}}\meta\.
+        if (-Not (Test-Path -Path .\${{ env.ONLINE_UPDATE_SRC_DIR }}\packages\${{ env.PACKAGE_DIR }}\meta\package.xml)) {
+          Copy-Item .\${{ env.ONLINE_UPDATE_SRC_DIR_DEFAULT }}\packages\${{ env.PACKAGE_DIR }}\meta\package.xml .\${{ env.ONLINE_UPDATE_SRC_DIR }}\packages\${{ env.PACKAGE_DIR }}\meta\.
         }
-        if (-Not (Test-Path -Path .\${{env.ONLINE_UPDATE_SRC_DIR}}\packages\${{env.PACKAGE_DIR}}\meta\installscript.qs)) {
-          Copy-Item .\${{env.ONLINE_UPDATE_SRC_DIR_DEFAULT}}\packages\${{env.PACKAGE_DIR}}\meta\installscript.qs .\${{env.ONLINE_UPDATE_SRC_DIR}}\packages\${{env.PACKAGE_DIR}}\meta\.
+        if (-Not (Test-Path -Path .\${{ env.ONLINE_UPDATE_SRC_DIR }}\packages\${{ env.PACKAGE_DIR }}\meta\installscript.qs)) {
+          Copy-Item .\${{ env.ONLINE_UPDATE_SRC_DIR_DEFAULT }}\packages\${{ env.PACKAGE_DIR }}\meta\installscript.qs .\${{ env.ONLINE_UPDATE_SRC_DIR }}\packages\${{ env.PACKAGE_DIR }}\meta\.
         }
 
     - name: Copy to package data directory
       shell: pwsh
       run: |
-        Copy-Item .\${{env.INSTALL_DIR}}\bin\* .\${{env.ONLINE_UPDATE_SRC_DIR}}\packages\${{env.PACKAGE_DIR}}\data\.
+        Copy-Item .\${{ env.INSTALL_DIR }}\bin\* .\${{ env.ONLINE_UPDATE_SRC_DIR }}\packages\${{ env.PACKAGE_DIR }}\data\.
         Set-Location online_update_v4
         git status
 
     - name: Run copy_release_and_version.py
       shell: pwsh
       run: |
-        Set-Location .\${{env.ONLINE_UPDATE_SRC_DIR}}\. && python .\copy_release_and_version.py
+        Set-Location .\${{ env.ONLINE_UPDATE_SRC_DIR }}\. && python .\copy_release_and_version.py
         Set-Location ..
         git status
 
@@ -202,19 +206,19 @@ jobs:
     #   uses: actions/cache@v2
     #   with:
     #     path: C:\Qt
-    #     key: ${{runner.os}}-qtif-${{env.IFW_VERSION}}
+    #     key: ${{ runner.os }}-qtif-${{ env.IFW_VERSION }}
 
     # - name: Download QtInstallerFramework
     #   if: steps.cache-qtif.outputs.cache-hit != 'true'
     #   shell: pwsh
-    #   run: ${{env.SOURCE_DIR}}\.github\workflows\install_qt_fast_windows.ps1
+    #   run: ${{ env.SOURCE_DIR }}\.github\workflows\install_qt_fast_windows.ps1
 
     # - name: Cache QtInstallerFramework 2.0
     #   id: cache-qtif
     #   uses: actions/cache@v3
     #   with:
     #     path: C:\Qt
-    #     key: ${{runner.os}}-qtif-${{env.IFW_VERSION}}
+    #     key: ${{ runner.os }}-qtif-${{ env.IFW_VERSION }}
 
     - name: Download QtInstallerFramework 2.0
       # if: steps.cache-qtif.outputs.cache-hit != 'true'
@@ -240,13 +244,13 @@ jobs:
         Get-ChildItem C:\Qt
         Get-ChildItem C:\Qt\Tools
         Get-ChildItem C:\Qt\Tools\QtInstallerFramework
-        Get-ChildItem C:\Qt\Tools\QtInstallerFramework\${{env.IFW_VERSION}}
-        Get-ChildItem C:\Qt\Tools\QtInstallerFramework\${{env.IFW_VERSION}}\bin
+        Get-ChildItem C:\Qt\Tools\QtInstallerFramework\${{ env.IFW_VERSION }}
+        Get-ChildItem C:\Qt\Tools\QtInstallerFramework\${{ env.IFW_VERSION }}\bin
 
     - name: Run QtInstallerFramework repogen.exe
       shell: pwsh
       run: |
-        Set-Location .\${{env.ONLINE_UPDATE_SRC_DIR}}\.
+        Set-Location .\${{ env.ONLINE_UPDATE_SRC_DIR }}\.
         Write-Output "QT_IFW_PATH = 'C:\\Qt\\Tools\\QtInstallerFramework\\$env:IFW_VERSION'" > qt_ifw_path.py
         &C:\Qt\Tools\QtInstallerFramework\$env:IFW_VERSION\bin\repogen.exe -p packages --update --include $env:PACKAGE_DIR ..\dev_v4
         Set-Location ..
@@ -254,10 +258,12 @@ jobs:
         git status
 
     - name: Commit and push branch
-      if: (github.repository == 'i-RIC/solver.cap' && github.ref_name == 'main_v4' && github.ref_type == 'branch')
+      # if: (github.repository == 'i-RIC/solver.cap' && github.ref_name == 'main_v4' && github.ref_type == 'branch')
+      if: github.event.inputs.push_update == 'true'
       uses: actions-js/push@master
       with:
-        github_token: ${{secrets.ONLINE_UPDATE_TOKEN}}
-        repository: ${{env.ONLINE_UPDATE_REPO}}
+        github_token: ${{ secrets.ONLINE_UPDATE_TOKEN }}
+        repository: ${{ env.ONLINE_UPDATE_REPO }}
         directory: online_update_v4
-        branch: main
+        # branch: main
+        branch: _test_solver_cap.${{ github.run_number }}
